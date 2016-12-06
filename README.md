@@ -14,13 +14,13 @@ AMCJL is a standards compliant JavaScript cryptographic library with no external
 
 For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf)
 
-AMCL is provided in *JavaScript* language
+AMCJL is provided in *JavaScript* language
 
 NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
 
 ## Requirement for testing
 
-1. Nodejs
+Nodejs
 
 ## Run tests
 
@@ -31,7 +31,7 @@ $ ./run_test.sh
 ```
 ## Information
 
-AMCL is very simple to build for JavaScript.
+AMCJL is very simple to build for JavaScript.
 
 First - decide the modulus type and curve type you want to use. Edit ROM.js 
 where indicated. You might want to use one of the curves whose details are
