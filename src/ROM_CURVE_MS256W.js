@@ -17,38 +17,16 @@
 	under the License.
 */
 
-/* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
+/* Fixed Data in ROM - Field and Curve parameters */
 
-var UInt64 = function(top,bot) {
-	this.top=top;
-	this.bot=bot;
-};
+var ROM_CURVE_MS256W={
 
-UInt64.prototype={
-	add: function(y)
-	{
-		var t=(this.bot>>>0)+(y.bot>>>0);
-		var low=t >>> 0;
-		var high=(this.top>>>0)+(y.top>>>0);
+// MS256 Weierstrass curve
 
-		this.bot=low;
-		if (low!=t)
-			this.top=(high+1)>>>0;
-		else
-			this.top=high;
+CURVE_A : -3,
+CURVE_B : [0x25581,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+CURVE_Order:[0x51A825,0x202947,0x6020AB,0xEA265C,0x3C8275,0xFFFFE4,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFF],
+CURVE_Gx :[0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+CURVE_Gy :[0xB56C77,0x6306C2,0xC10BF4,0x75894E,0x2C2F93,0xDD6BD0,0x6CCEEE,0xFC82C9,0xE466D7,0x1853C1,0x696F],
 
-		return this;
-	},
-	copy: function()
-	{
-		var r=new UInt64(this.top,this.bot);
-		return r;
-	},
-	shlb: function()
-	{
-		var t=this.bot>>>24;
-		this.top=t+(this.top<<8);
-		this.bot<<=8;
-		return this;
-	}
 };

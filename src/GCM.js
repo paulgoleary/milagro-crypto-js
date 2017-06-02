@@ -49,6 +49,15 @@ var GCM = function() {
 	this.a=new AES();
 };
 
+// GCM constants
+
+GCM.ACCEPTING_HEADER=0;
+GCM.ACCEPTING_CIPHER=1;
+GCM.NOT_ACCEPTING_MORE=2;
+GCM.FINISHED=3;
+GCM.ENCRYPTING=0;
+GCM.DECRYPTING=1;
+
 GCM.prototype={
 
 	precompute: function(H)
@@ -129,7 +138,7 @@ GCM.prototype={
 
 		for (i=0;i<16;i++) {H[i]=0; this.stateX[i]=0;}
 
-		this.a.init(ROM.ECB,nk,key,iv);
+		this.a.init(AES.ECB,nk,key,iv);
 		this.a.ecb_encrypt(H);     /* E(K,0) */
 		this.precompute(H);
 	
@@ -143,20 +152,20 @@ GCM.prototype={
 		}
 		else
 		{
-			this.status=ROM.GCM_ACCEPTING_CIPHER;
+			this.status=GCM.ACCEPTING_CIPHER;
 			this.ghash(iv,niv); /* GHASH(H,0,IV) */
 			this.wrap();
 			for (i=0;i<16;i++) {this.a.f[i]=this.stateX[i];this.Y_0[i]=this.a.f[i];this.stateX[i]=0;}
 			this.lenA[0]=this.lenC[0]=this.lenA[1]=this.lenC[1]=0;
 		}
-		this.status=ROM.GCM_ACCEPTING_HEADER;
+		this.status=GCM.ACCEPTING_HEADER;
 	},
 
 /* Add Header data - included but not encrypted */
 	add_header: function(header,len)
 	{ /* Add some header. Won't be encrypted, but will be authenticated. len is length of header */
 		var i,j=0;
-		if (this.status!=ROM.GCM_ACCEPTING_HEADER) return false;
+		if (this.status!=GCM.ACCEPTING_HEADER) return false;
 
 		while (j<len)
 		{
@@ -167,7 +176,7 @@ GCM.prototype={
 			}
 			this.gf2mul();
 		}
-		if (len%16!==0) this.status=ROM.GCM_ACCEPTING_CIPHER;
+		if (len%16!==0) this.status=GCM.ACCEPTING_CIPHER;
 		return true;
 	},
 
@@ -175,8 +184,8 @@ GCM.prototype={
 	{
 		var i,j=0;
 
-		if (this.status==ROM.GCM_ACCEPTING_HEADER) this.status=ROM.GCM_ACCEPTING_CIPHER;
-		if (this.status!=ROM.GCM_ACCEPTING_CIPHER) return false;
+		if (this.status==GCM.ACCEPTING_HEADER) this.status=GCM.ACCEPTING_CIPHER;
+		if (this.status!=GCM.ACCEPTING_CIPHER) return false;
 		
 		while (j<len)
 		{
@@ -187,7 +196,7 @@ GCM.prototype={
 			}
 			this.gf2mul();
 		}
-		if (len%16!==0) this.status=ROM.GCM_NOT_ACCEPTING_MORE;
+		if (len%16!==0) this.status=GCM.NOT_ACCEPTING_MORE;
 		return true;
 	},
 
@@ -199,8 +208,8 @@ GCM.prototype={
 		var b=[];
 		var cipher=[];
 
-		if (this.status==ROM.GCM_ACCEPTING_HEADER) this.status=ROM.GCM_ACCEPTING_CIPHER;
-		if (this.status!=ROM.GCM_ACCEPTING_CIPHER) return cipher;
+		if (this.status==GCM.ACCEPTING_HEADER) this.status=GCM.ACCEPTING_CIPHER;
+		if (this.status!=GCM.ACCEPTING_CIPHER) return cipher;
 		
 		while (j<len)
 		{
@@ -221,7 +230,7 @@ GCM.prototype={
 			}
 			this.gf2mul();
 		}
-		if (len%16!==0) this.status=ROM.GCM_NOT_ACCEPTING_MORE;
+		if (len%16!==0) this.status=GCM.NOT_ACCEPTING_MORE;
 		return cipher;
 	},
 
@@ -233,8 +242,8 @@ GCM.prototype={
 		var b=[];
 		var plain=[];
 
-		if (this.status==ROM.GCM_ACCEPTING_HEADER) this.status=ROM.GCM_ACCEPTING_CIPHER;
-		if (this.status!=ROM.GCM_ACCEPTING_CIPHER) return plain;
+		if (this.status==GCM.ACCEPTING_HEADER) this.status=GCM.ACCEPTING_CIPHER;
+		if (this.status!=GCM.ACCEPTING_CIPHER) return plain;
 	
 		while (j<len)
 		{
@@ -254,7 +263,7 @@ GCM.prototype={
 			}
 			this.gf2mul();
 		}
-		if (len%16!==0) this.status=ROM.GCM_NOT_ACCEPTING_MORE;
+		if (len%16!==0) this.status=GCM.NOT_ACCEPTING_MORE;
 		return plain;
 	},
 
@@ -272,7 +281,7 @@ GCM.prototype={
 			for (i=0;i<16;i++) this.Y_0[i]^=this.stateX[i];
 			for (i=0;i<16;i++) {tag[i]=this.Y_0[i];this.Y_0[i]=this.stateX[i]=0;}
 		}
-		this.status=ROM.GCM_FINISHED;
+		this.status=GCM.FINISHED;
 		this.a.end();
 		return tag;
 	}

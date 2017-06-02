@@ -17,38 +17,15 @@
 	under the License.
 */
 
-/* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
+/* Fixed Data in ROM - Field and Curve parameters */
 
-var UInt64 = function(top,bot) {
-	this.top=top;
-	this.bot=bot;
+var ROM_FIELD_BN254={
+
+// BN254 Modulus 
+
+Modulus: [0x13,0x0,0x13A700,0x0,0x210000,0x861,0x800000,0xBA344D,0x1,0x648240,0x2523],
+MConst:0x9435E5,
+Fra:[0x2A6DE9,0xE6C06F,0xC2E17D,0x4D3F77,0x97492,0x953F85,0x50A846,0xB6499B,0x2E7C8C,0x761921,0x1B37],
+Frb:[0xD5922A,0x193F90,0x50C582,0xB2C088,0x178B6D,0x6AC8DC,0x2F57B9,0x3EAB2,0xD18375,0xEE691E,0x9EB],
 };
 
-UInt64.prototype={
-	add: function(y)
-	{
-		var t=(this.bot>>>0)+(y.bot>>>0);
-		var low=t >>> 0;
-		var high=(this.top>>>0)+(y.top>>>0);
-
-		this.bot=low;
-		if (low!=t)
-			this.top=(high+1)>>>0;
-		else
-			this.top=high;
-
-		return this;
-	},
-	copy: function()
-	{
-		var r=new UInt64(this.top,this.bot);
-		return r;
-	},
-	shlb: function()
-	{
-		var t=this.bot>>>24;
-		this.top=t+(this.top<<8);
-		this.bot<<=8;
-		return this;
-	}
-};

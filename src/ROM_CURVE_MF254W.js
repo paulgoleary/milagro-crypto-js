@@ -17,38 +17,16 @@
 	under the License.
 */
 
-/* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
+/* Fixed Data in ROM - Field and Curve parameters */
 
-var UInt64 = function(top,bot) {
-	this.top=top;
-	this.bot=bot;
-};
+var ROM_CURVE_MF254W={
 
-UInt64.prototype={
-	add: function(y)
-	{
-		var t=(this.bot>>>0)+(y.bot>>>0);
-		var low=t >>> 0;
-		var high=(this.top>>>0)+(y.top>>>0);
+// MF254 Weierstrass curve
 
-		this.bot=low;
-		if (low!=t)
-			this.top=(high+1)>>>0;
-		else
-			this.top=high;
+CURVE_A : -3,
+CURVE_B : [0xFFD08D,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x3F80],
+CURVE_Order:[0x8DF83F,0x19C4AF,0xC06FA4,0xDA375,0x818BEA,0xFFFFEB,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x3F80],
+CURVE_Gx :[0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+CURVE_Gy :[0xD4EBC,0xDF37F9,0x31AD65,0xF85119,0xB738E3,0x8AEBDF,0x75BD77,0x4AE15A,0x2E5601,0x3FD33B,0x140E],
 
-		return this;
-	},
-	copy: function()
-	{
-		var r=new UInt64(this.top,this.bot);
-		return r;
-	},
-	shlb: function()
-	{
-		var t=this.bot>>>24;
-		this.top=t+(this.top<<8);
-		this.bot<<=8;
-		return this;
-	}
 };
