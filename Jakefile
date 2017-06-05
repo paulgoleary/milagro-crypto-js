@@ -5,10 +5,18 @@ var FILE = require("file"),
 	path = require("path"),
 	jake = require('jake');
 
-var srcdir = './src';
-var targetdir = './target';
+var cwd = process.cwd(),
+	srcdir = cwd + '/src',
+    targetdir = cwd + '/target',
+    includefile = '/include.html',
+    targetsrcdir = '/src',
+    testdir = '/test';
 
+jake.addListener('complete', function () {
+  process.exit();
+});
 
+// Replace pattern into files.
 function Replace(namefile,oldtext,newtext) {
 	for (i = 0; i < 500; i++) {
 		replace({
@@ -20,19 +28,17 @@ function Replace(namefile,oldtext,newtext) {
 	}
 }
 
+// Add file into include file
 function addToInclude(fname,tempTarg) {
 	var incfile = read(tempTarg+'/include.html')
 	if (!(fname in incfile)) {
-		fs.appendFileSync(tempTarg+'/include.html', '<script type=\"text/javascript\" src=\"'+fname+'\"></script>\n');
+		fs.appendFileSync(tempTarg+includefile, '<script type=\"text/javascript\" src=\"'+fname+'\"></script>\n');
 	}
 }
 
-function copyROMfiles(curve,field,tempTarg) {
-	jake.cpR(path.join(srcdir,'ROM_CURVE_'+curve+'.js'), path.join(tempTarg, 'ROM_CURVE_'+curve+'.js'));
-	jake.cpR(path.join(srcdir,'ROM_FIELD_'+field+'.js'), path.join(tempTarg, 'ROM_FIELD_'+field+'.js'));
-}
-
+// Copy file in common with all the configurations
 function copyCommonFiles(tempTarg){
+	tempTarg += targetsrcdir;
 	jake.cpR(path.join(srcdir,'AES.js'), path.join(tempTarg, 'AES.js'));
 	jake.cpR(path.join(srcdir,'GCM.js'), path.join(tempTarg, 'GCM.js'));
 	jake.cpR(path.join(srcdir,'HASH256.js'), path.join(tempTarg, 'HASH256.js'));
@@ -43,8 +49,17 @@ function copyCommonFiles(tempTarg){
 	jake.cpR(path.join(srcdir,'include.html'), path.join(tempTarg, 'include.html'));
 }
 
+// Copy ROM files according with the curve and the field in use
+function copyROMfiles(curve,field,tempTarg) {
+	tempTarg += targetsrcdir;
+	jake.cpR(path.join(srcdir,'ROM_CURVE_'+curve+'.js'), path.join(tempTarg, 'ROM_CURVE_'+curve+'.js'));
+	jake.cpR(path.join(srcdir,'ROM_FIELD_'+field+'.js'), path.join(tempTarg, 'ROM_FIELD_'+field+'.js'));
+}
+
+// Copy and set parameters for files according with the RSA building option.
 function rsaset(tb,tff,nb,base,ml,tempTarg) {
 
+	tempTarg += targetsrcdir;
 	fname='BIG_'+tb+'.js';
 	jake.cpR(path.join(srcdir,'BIG_XXX.js'), path.join(tempTarg, fname));
 	Replace(path.join(tempTarg, fname),'XXX',tb);
@@ -75,8 +90,10 @@ function rsaset(tb,tff,nb,base,ml,tempTarg) {
 	addToInclude(fname,tempTarg)
 }
 
+// Copy and set parameters for files according with the curve chosen.
 function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 
+	tempTarg += targetsrcdir;
 	fname='BIG_'+tb+'.js';
 	jake.cpR(path.join(srcdir,'BIG_XXX.js'), path.join(tempTarg, fname));
 
@@ -165,19 +182,37 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 		addToInclude(fname,tempTarg)
 }
 
+function checkinput(option) {
+
+	if ((option != 'ED25519') && (option != 'GOLDILOCKS') && (option != 'NIST256') && (option != 'BRAINPOOL') && (option != 'ANSSI') &&
+		(option != 'HIFIVE') && (option != 'C25519') && (option != 'NIST384') && (option != 'C41417') && (option != 'NIST521') &&
+		(option != 'MF254W') && (option != 'MF254E') && (option != 'MF254M') && (option != 'MF256W') && (option != 'MF256E') &&
+		(option != 'MF256M') && (option != 'MS255W') && (option != 'MS255E') && (option != 'MS255M') && (option != 'MS256W') &&
+		(option != 'MS256E') && (option != 'MS256M') && (option != 'BN254') && (option != 'BN254CX') && (option != 'BLS383') &&
+		(option != 'RSA2048') && (option != 'RSA3072') && (option != 'RSA4096')) {
+		return -1;
+	} else {
+		return 0;
+	}
+}
+
 desc('default');
 task('default', function () {
-  console.log('type `jake -T` to see the list of all thew tasks.');
+  console.log('Type `jake -T` to see the list of all thew tasks.');
 });
 
 namespace('build', function () {
 	desc('Build library supporting multiple curves. For example jake build:choice[BN254,P256]');
 	task('choice', function () {
 		var tempTarg = targetdir+"/build_"+arguments[0];
-		for (var i=1; i<arguments.length; i++)
+		for (var i=0; i<arguments.length; i++) {
+			if  (checkinput(arguments[i]) != 0)
+				fail('Invalid input');
 			tempTarg += "_"+arguments[i];
+		}
 		console.log('Create target directory'+tempTarg);
-		jake.mkdirP(tempTarg);
+		jake.mkdirP(tempTarg+targetsrcdir);
+		jake.mkdirP(tempTarg+testdir);
 		copyCommonFiles(tempTarg);
 		for (var i=0; i<arguments.length; i++){
 			console.log(arguments[i]);
@@ -292,16 +327,21 @@ namespace('build', function () {
 			}
 		}
 	});
-	desc('Build with default curve BN254CX and RSA4096');
-	task('default', function () {
-		var tempTarg = targetdir+'/build_BN254CX_RSA4096';
-		console.log('Create target directory'+tempTarg);
-		jake.mkdirP(tempTarg);
-		copyCommonFiles(tempTarg);
-		curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
-		copyROMfiles('BN254CX','BN254CX',tempTarg);
-		rsaset('512','4096','64','23','8',tempTarg);
-	});
+	complete();
+});
+
+desc('Build with default curve BN254CX and RSA4096');
+task('build', function () {
+	console.log('Build with default curve BN254CX and RSA4096');
+	var tempTarg = targetdir+'/build_BN254CX_RSA4096';
+	console.log('Create target directory'+tempTarg);
+	jake.mkdirP(tempTarg+targetsrcdir);
+	jake.mkdirP(tempTarg+testdir);
+	copyCommonFiles(tempTarg);
+	curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
+	copyROMfiles('BN254CX','BN254CX',tempTarg);
+	rsaset('512','4096','64','23','8',tempTarg);
+	complete();
 });
 
 task('list', function () {
@@ -340,4 +380,5 @@ task('list', function () {
 	console.log('RSA2048');
 	console.log('RSA3072');
 	console.log('RSA4096\n');
+	complete();
 });
