@@ -6,10 +6,12 @@ var fs = require("fs"),
 
 var cwd = process.cwd(),
 	srcdir = cwd + '/src',
+	testdir = cwd + '/test',
     targetdir = cwd + '/target',
+    testingdir = '/Testing',
     includefile = '/include.html',
     targetsrcdir = '/src',
-    testdir = '/test';
+    targettestdir = '/test';
 
 jake.addListener('complete', function () {
   process.exit();
@@ -38,7 +40,7 @@ function addToInclude(fname,tempTarg) {
 // Copy file in common with all the configurations
 function copyCommonFiles(tempTarg){
 	console.log('Copying common files'.blue);
-	tempTarg += targetsrcdir;
+	tempTarg += targetsrcdir+'/';
 	jake.cpR(srcdir+'/AES.js',tempTarg+'/AES.js');
 	jake.cpR(srcdir+'/GCM.js',tempTarg+'/GCM.js');
 	jake.cpR(srcdir+'/HASH256.js',tempTarg+'/HASH256.js');
@@ -51,7 +53,7 @@ function copyCommonFiles(tempTarg){
 
 // Copy ROM files according with the curve and the field in use
 function copyROMfiles(curve,field,tempTarg) {
-	tempTarg += targetsrcdir;
+	tempTarg += targetsrcdir+'/';
 	jake.cpR(srcdir+'/ROM_CURVE_'+curve+'.js',tempTarg+'/ROM_CURVE_'+curve+'.js');
 	jake.cpR(srcdir+'/ROM_FIELD_'+field+'.js',tempTarg+'/ROM_FIELD_'+field+'.js');
 }
@@ -59,7 +61,7 @@ function copyROMfiles(curve,field,tempTarg) {
 // Copy and set parameters for files according with the RSA building option.
 function rsaset(tb,tff,nb,base,ml,tempTarg) {
 
-	tempTarg += targetsrcdir;
+	tempTarg += targetsrcdir+'/';
 	fname='BIG_'+tb+'.js';
 	jake.cpR(srcdir+'/BIG_XXX.js', tempTarg+fname);
 	Replace(tempTarg+fname,'XXX',tb);
@@ -93,7 +95,7 @@ function rsaset(tb,tff,nb,base,ml,tempTarg) {
 // Copy and set parameters for files according with the curve chosen.
 function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 
-	tempTarg += targetsrcdir;
+	tempTarg += targetsrcdir+'/';
 	fname='BIG_'+tb+'.js';
 	jake.cpR(srcdir+'/BIG_XXX.js', tempTarg+fname);
 
@@ -147,7 +149,7 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 		Replace(tempTarg+fname,'YYY',tf);
 		Replace(tempTarg+fname,'XXX',tb);
 		addToInclude(fname,tempTarg)
-	}
+
 		fname='FP4_'+tf+'.js';
 		jake.cpR(srcdir+'/FP4_YYY.js', tempTarg+fname);
 		Replace(tempTarg+fname,'YYY',tf);
@@ -180,6 +182,19 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 		Replace(tempTarg+fname,'XXX',tb);
 		Replace(tempTarg+fname,'ZZZ',tc);
 		addToInclude(fname,tempTarg)
+	}
+}
+
+// Copy and set parameters for files according with the curve chosen.
+function testset(tb,tf,tc,tempTarg) {
+
+	fname = tempTarg+targettestdir+'/'+'test_ECDH_'+tc+'.js';
+	jake.cpR(testdir+'/test_ECDH_.js', fname);
+
+	Replace(fname,'XXX',tb);
+	Replace(fname,'YYY',tf);
+	Replace(fname,'ZZZ',tc);
+	Replace(fname,'@SWD',tempTarg+targetsrcdir);
 }
 
 function checkinput(option) {
@@ -196,146 +211,173 @@ function checkinput(option) {
 	}
 }
 
-desc('default');
+desc('Default'.blue);
 task('default', function () {
   console.log('Type `jake -T` to see the list of all thew tasks.');
 });
 
 // Build with editable options
 namespace('build', function () {
-	desc('Build library supporting multiple curves. For example jake build:choice[BN254,P256,RSA2048]'.red);
+	desc('Build library supporting multiple curves. For example jake build:choice[BN254,P256,RSA2048]'.blue);
 	task('choice', function () {
-		var tempTarg = targetdir+"/build_"+arguments[0];
+		var tempTarg = targetdir+"/build";
 		for (var i=0; i<arguments.length; i++) {
 			if  (checkinput(arguments[i]) != 0)
 				fail('Invalid input');
 			tempTarg += "_"+arguments[i];
 		}
-		console.log('Build with building options'.red);
+		console.log('Building library with building options'.red);
 		console.log('Create target directory'+tempTarg);
 		jake.mkdirP(tempTarg+targetsrcdir);
-		jake.mkdirP(tempTarg+testdir);
+		jake.mkdirP(tempTarg+targettestdir);
 		copyCommonFiles(tempTarg);
 		for (var i=0; i<arguments.length; i++){
 			console.log(('Creating files for '+arguments[i]).blue);
 			if (arguments[i] == 'ED25519') {
 				curveset('256','25519','ED25519','32','24','255','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 				copyROMfiles('ED25519','25519',tempTarg);
+				testset('256','25519','ED25519',tempTarg);
 			}
 			if (arguments[i] == 'C25519') {
 				curveset('256','25519','C25519','32','24','255','5','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
 				copyROMfiles('C25519','25519',tempTarg);
+				testset('256','25519','C25519',tempTarg);
 			}
 			if (arguments[i] == 'NIST256') {
 				curveset('256','NIST256','NIST256','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('NIST256','NIST256',tempTarg);
+				testset('256','NIST256','NIST256',tempTarg);
 			}
 			if (arguments[i] == 'BRAINPOOL') {
 				curveset('256','BRAINPOOL','BRAINPOOL','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('BRAINPOOL','BRAINPOOL',tempTarg);
+				testset('256','BRAINPOOL','BRAINPOOL',tempTarg);
 			}
 			if (arguments[i] == 'ANSSI') {
 				curveset('256','ANSSI','ANSSI','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('ANSSI','ANSSI',tempTarg);
+				testset('256','ANSSI','ANSSI',tempTarg);
 			}
 			if (arguments[i] == 'HIFIVE') {
 				curveset('336','HIFIVE','HIFIVE','42','23','336','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 				copyROMfiles('HIFIVE','HIFIVE',tempTarg);
+				testset('336','HIFIVE','HIFIVE',tempTarg);
 			}
 			if (arguments[i] == 'GOLDILOCKS') {
 				curveset('448','GOLDILOCKS','GOLDILOCKS','56','23','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
 				copyROMfiles('GOLDILOCKS','GOLDILOCKS',tempTarg);
+				testset('448','GOLDILOCKS','GOLDILOCKS',tempTarg);
 			}
 			if (arguments[i] == 'NIST384') {
 				curveset('384','NIST384','NIST384','48','','28','56','384','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('NIST384','NIST384',tempTarg);
+				testset('384','NIST384','NIST384',tempTarg);
 			}
 			if (arguments[i] == 'C41417') {
 				curveset('416','C41417','C41417','52','23','414','7','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 				copyROMfiles('C41417','C41417',tempTarg);
+				testset('416','','',tempTarg);
 			}
 			if (arguments[i] == 'NIST521') {
 				curveset('528','NIST521','NIST521','66','23','521','7','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('NIST521','NIST521',tempTarg);
+				testset('528','NIST521','NIST521',tempTarg);
 			}
 			if (arguments[i] == 'MF254W') {
 				curveset('256','254MF','MF254W','32','24','254','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('254MF','MF254W',tempTarg);
+				testset('256','254MF','MF254W',tempTarg);
 			}
 			if (arguments[i] == 'MF254E') {
 				curveset('256','254MF','MF254E','32','24','254','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
 				copyROMfiles('254MF','MF254E',tempTarg);
+				testset('256','254MF','MF254E',tempTarg);
 			}
 			if (arguments[i] == 'MF254M') {
 				curveset('256','254MF','MF254M','32','24','254','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
 				copyROMfiles('254MF','MF254M',tempTarg);
+				//testset('','','',tempTarg);
 			}
 			if (arguments[i] == 'MF256W') {
 				curveset('256','256MF','MF256W','32','24','256','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('256MF','MF256W',tempTarg);
+				testset('256','256MF','MF256W',tempTarg);
 			}
 			if (arguments[i] == 'MF256E') {
 				curveset('256','256MF','MF256E','32','24','256','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
 				copyROMfiles('256MF','MF256E',tempTarg);
+				testset('256','256MF','MF256E',tempTarg);
 			}
 			if (arguments[i] == 'MF256M') {
 				curveset('256','256MF','MF256M','32','24','256','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
 				copyROMfiles('256MF','MF256M',tempTarg);
+				testset('256','256MF','MF256M',tempTarg);
 			}
 			if (arguments[i] == 'MS255W') {
 				curveset('256','255MS','MS255W','32','24','255','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('255MS','MS255W',tempTarg);
+				testset('256','255MS','MS255W',tempTarg);
 			}
 			if (arguments[i] == 'MS255E') {
 				curveset('256','255MS','MS255E','32','24','255','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 				copyROMfiles('255MS','MS255E',tempTarg);
+				testset('256','255MS','MS255E',tempTarg);
 			}
 			if (arguments[i] == 'MS255M') {
 				curveset('256','255MS','MS255M','32','24','255','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
 				copyROMfiles('255MS','MS255M',tempTarg);
+				testset('256','255MS','MS255M',tempTarg);
 			}
 			if (arguments[i] == 'MS256W') {
 				curveset('256','256MS','MS256W','32','24','256','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
 				copyROMfiles('256MS','MS256W',tempTarg);
+				testset('256','256MS','MS256W',tempTarg);
 			}
 			if (arguments[i] == 'MS256E') {
 				curveset('256','256MS','MS256E','32','24','256','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 				copyROMfiles('256MS','MS256E',tempTarg);
+				testset('256','256MS','MS256E',tempTarg);
 			}
 			if (arguments[i] == 'MS256M') {
 				curveset('256','256MS','MS256M','32','24','256','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
 				copyROMfiles('256MS','MS256M',tempTarg);
+				testset('256','256MS','MS256M',tempTarg);
 			}
 			if (arguments[i] == 'BN254') {
 				curveset('256','BN254','BN254','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
 				copyROMfiles('BN254','BN254',tempTarg);
+				testset('256','BN254','BN254',tempTarg);
 			}
 			if (arguments[i] == 'BN254CX') {
 				curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
 				copyROMfiles('BN254CX','BN254CX',tempTarg);
+				testset('256','BN254CX','BN254CX',tempTarg);
 			}
 			if (arguments[i] == 'BLS383') {
 				curveset('384','BLS383','BLS383','48','23','383','3','NOT_SPECIAL','WEIERSTRASS','BLS',tempTarg);
 				copyROMfiles('BLS383','BLS383',tempTarg);
+				testset('384','BLS383','BLS383',tempTarg);
+				testset('384','BLS383','BLS383',tempTarg);
 			}
 			if (arguments[i] == 'RSA2048') {
 				rsaset('1024','2048','128','22','2',tempTarg);
+				//testset('','','',tempTarg);
 			}
 			if (arguments[i] == 'RSA3072') {
 				rsaset('384','3072','48','23','8',tempTarg);
+				//testset('','','',tempTarg);
 			}
 			if (arguments[i] == 'RSA4096') {
 				rsaset('512','4096','64','23','8',tempTarg);
 			}
 		}
 	});
-	complete();
 });
 
 // Build with default curve BN254CX and RSA2048 
-desc('Build with default curve BN254CX and RSA2048');
+desc('Build library with default curve BN254CX and RSA2048'.blue);
 task('build', function () {
-	console.log('Build with default curve BN254CX and RSA2048'.red);
+	console.log('Build library with default curve BN254CX and RSA2048'.red);
 	var tempTarg = targetdir+'/build_BN254CX_RSA2048';
 	console.log('Create target directory'+tempTarg);
 	jake.mkdirP(tempTarg+targetsrcdir);
@@ -349,7 +391,7 @@ task('build', function () {
 
 // List all the building options
 task('list', function () {
-	desc('See the list of all curves');
+	desc('See the list of all curves'.blue);
 	console.log('\nList of all curves available and RSA configurations\n');
 	console.log('Elliptic Curves'.red);
 	console.log('ED25519');
@@ -384,12 +426,36 @@ task('list', function () {
 	console.log('RSA2048');
 	console.log('RSA3072');
 	console.log('RSA4096\n');
-	complete();
 });
 
 // Clean up target directory
-desc('Clean up target directory');
+desc('Clean up target directory'.blue);
 task('clean', function () {
 	jake.rmRf(targetdir);
 	jake.mkdirP(targetdir);
+});
+
+// Run tests
+desc('Run tests'.blue);
+task('test', {async: true}, function () {
+	var outputfile, cmd, tempTarg = '';
+	fs.readdir(targetdir, function(err, builds) {
+	    for (var i=0; i<builds.length; i++) {
+	        tempTarg = targetdir+'/'+ builds[i];
+	        console.log(('Testing '+tempTarg+' ...').blue);
+	        jake.mkdirP(tempTarg+testingdir);
+	        outputfile = tempTarg+testingdir+'/LastTest.txt';
+	        fs.readdir(tempTarg+targettestdir, function(errors, tests) {
+	        	if (tests == null) {
+	        		console.log('Nothing to test');
+	        	}
+	        	console.log(tempTarg+targettestdir);
+	        	for (var j=0; j<tests.length; j++) {
+	        		cmd = 'node '+tempTarg+targettestdir+'/'+tests[i]+' >> '+outputfile+' 2>&1';
+	        		console.log(cmd);
+	        		jake.exec(cmd,{printStdout: true});
+	        	}
+	        });       	
+	    }
+	});
 });

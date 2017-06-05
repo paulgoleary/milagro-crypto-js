@@ -20,13 +20,10 @@ NOTE: This product includes software developed at *[The Apache Software Foundati
 
 ## Requirement for building and testing
 
-The following programs are required: [Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)
-
-Install the following packages
-
+[Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the following node.js modules (root permissions may be required)
 ```
 npm install -g jake jake-utils
-npm install fs colors
+npm install fs colors assert crypto
 ```
 
 ## Build
