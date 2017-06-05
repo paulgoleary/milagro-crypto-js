@@ -1,8 +1,7 @@
 require('jake-utils');
+require('colors');
 
-var FILE = require("file"),
-	fs = require("fs"),
-	path = require("path"),
+var fs = require("fs"),
 	jake = require('jake');
 
 var cwd = process.cwd(),
@@ -38,22 +37,23 @@ function addToInclude(fname,tempTarg) {
 
 // Copy file in common with all the configurations
 function copyCommonFiles(tempTarg){
+	console.log('Copying common files'.blue);
 	tempTarg += targetsrcdir;
-	jake.cpR(path.join(srcdir,'AES.js'), path.join(tempTarg, 'AES.js'));
-	jake.cpR(path.join(srcdir,'GCM.js'), path.join(tempTarg, 'GCM.js'));
-	jake.cpR(path.join(srcdir,'HASH256.js'), path.join(tempTarg, 'HASH256.js'));
-	jake.cpR(path.join(srcdir,'HASH384.js'), path.join(tempTarg, 'HASH384.js'));
-	jake.cpR(path.join(srcdir,'HASH512.js'), path.join(tempTarg, 'HASH512.js'));
-	jake.cpR(path.join(srcdir,'RAND.js'), path.join(tempTarg, 'RAND.js'));
-	jake.cpR(path.join(srcdir,'UInt64.js'), path.join(tempTarg, 'UInt64.js'));
-	jake.cpR(path.join(srcdir,'include.html'), path.join(tempTarg, 'include.html'));
+	jake.cpR(srcdir+'/AES.js',tempTarg+'/AES.js');
+	jake.cpR(srcdir+'/GCM.js',tempTarg+'/GCM.js');
+	jake.cpR(srcdir+'/HASH256.js',tempTarg+'/HASH256.js');
+	jake.cpR(srcdir+'/HASH384.js',tempTarg+'/HASH384.js');
+	jake.cpR(srcdir+'/HASH512.js',tempTarg+'/HASH512.js');
+	jake.cpR(srcdir+'/RAND.js',tempTarg+'/RAND.js');
+	jake.cpR(srcdir+'/UInt64.js',tempTarg+'/UInt64.js');
+	jake.cpR(srcdir+'/include.html',tempTarg+'/include.html');
 }
 
 // Copy ROM files according with the curve and the field in use
 function copyROMfiles(curve,field,tempTarg) {
 	tempTarg += targetsrcdir;
-	jake.cpR(path.join(srcdir,'ROM_CURVE_'+curve+'.js'), path.join(tempTarg, 'ROM_CURVE_'+curve+'.js'));
-	jake.cpR(path.join(srcdir,'ROM_FIELD_'+field+'.js'), path.join(tempTarg, 'ROM_FIELD_'+field+'.js'));
+	jake.cpR(srcdir+'/ROM_CURVE_'+curve+'.js',tempTarg+'/ROM_CURVE_'+curve+'.js');
+	jake.cpR(srcdir+'/ROM_FIELD_'+field+'.js',tempTarg+'/ROM_FIELD_'+field+'.js');
 }
 
 // Copy and set parameters for files according with the RSA building option.
@@ -61,32 +61,32 @@ function rsaset(tb,tff,nb,base,ml,tempTarg) {
 
 	tempTarg += targetsrcdir;
 	fname='BIG_'+tb+'.js';
-	jake.cpR(path.join(srcdir,'BIG_XXX.js'), path.join(tempTarg, fname));
-	Replace(path.join(tempTarg, fname),'XXX',tb);
-	Replace(path.join(tempTarg, fname),'@NB@',nb);
-	Replace(path.join(tempTarg, fname),'@BASE@',base);
+	jake.cpR(srcdir+'/BIG_XXX.js', tempTarg+fname);
+	Replace(tempTarg+fname,'XXX',tb);
+	Replace(tempTarg+fname,'@NB@',nb);
+	Replace(tempTarg+fname,'@BASE@',base);
 	addToInclude(fname,tempTarg)
 
 	fname='DBIG_'+tb+'.js';
-	jake.cpR(path.join(srcdir,'DBIG_XXX.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/DBIG_XXX.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'XXX',tb);
+	Replace(tempTarg+fname,'XXX',tb);
 	addToInclude(fname,tempTarg)
 
 
 	fname='FF_'+tff+'.js';
-	jake.cpR(path.join(srcdir,'FF_WWW.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/FF_WWW.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'WWW',tff);
-	Replace(path.join(tempTarg, fname),'XXX',tb);
-	Replace(path.join(tempTarg, fname),'@ML@',ml);
+	Replace(tempTarg+fname,'WWW',tff);
+	Replace(tempTarg+fname,'XXX',tb);
+	Replace(tempTarg+fname,'@ML@',ml);
 	addToInclude(fname,tempTarg)
 
 	fname='RSA_'+tff+'.js';
-	jake.cpR(path.join(srcdir,'RSA_WWW.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/RSA_WWW.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'WWW',tff);
-	Replace(path.join(tempTarg, fname),'XXX',tb);
+	Replace(tempTarg+fname,'WWW',tff);
+	Replace(tempTarg+fname,'XXX',tb);
 	addToInclude(fname,tempTarg)
 }
 
@@ -95,45 +95,45 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 
 	tempTarg += targetsrcdir;
 	fname='BIG_'+tb+'.js';
-	jake.cpR(path.join(srcdir,'BIG_XXX.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/BIG_XXX.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'XXX',tb);
-	Replace(path.join(tempTarg, fname),'@NB@',nb);
-	Replace(path.join(tempTarg, fname),'@BASE@',base);
+	Replace(tempTarg+fname,'XXX',tb);
+	Replace(tempTarg+fname,'@NB@',nb);
+	Replace(tempTarg+fname,'@BASE@',base);
 	addToInclude(fname,tempTarg)
 
 	fname='DBIG_'+tb+'.js';
-	jake.cpR(path.join(srcdir,'DBIG_XXX.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/DBIG_XXX.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'XXX',tb);
+	Replace(tempTarg+fname,'XXX',tb);
 	addToInclude(fname,tempTarg)
 
 	fname='FP_'+tf+'.js';
-	jake.cpR(path.join(srcdir,'FP_YYY.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/FP_YYY.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'XXX',tb);
-	Replace(path.join(tempTarg, fname),'YYY',tf);
-	Replace(path.join(tempTarg, fname),'@NBT@',nbt);
-	Replace(path.join(tempTarg, fname),'@M8@',m8);
-	Replace(path.join(tempTarg, fname),'@MT@',mt);
+	Replace(tempTarg+fname,'XXX',tb);
+	Replace(tempTarg+fname,'YYY',tf);
+	Replace(tempTarg+fname,'@NBT@',nbt);
+	Replace(tempTarg+fname,'@M8@',m8);
+	Replace(tempTarg+fname,'@MT@',mt);
 	addToInclude(fname,tempTarg)
 
 	fname='ECP_'+tc+'.js';
-	jake.cpR(path.join(srcdir,'ECP_ZZZ.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/ECP_ZZZ.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'XXX',tb);
-	Replace(path.join(tempTarg, fname),'YYY',tf);
-	Replace(path.join(tempTarg, fname),'ZZZ',tc);
-	Replace(path.join(tempTarg, fname),'@CT@',ct);
-	Replace(path.join(tempTarg, fname),'@PF@',pf);
+	Replace(tempTarg+fname,'XXX',tb);
+	Replace(tempTarg+fname,'YYY',tf);
+	Replace(tempTarg+fname,'ZZZ',tc);
+	Replace(tempTarg+fname,'@CT@',ct);
+	Replace(tempTarg+fname,'@PF@',pf);
 	addToInclude(fname,tempTarg)
 
 	fname='ECDH_'+tc+'.js';
-	jake.cpR(path.join(srcdir,'ECDH_ZZZ.js'), path.join(tempTarg, fname));
+	jake.cpR(srcdir+'/ECDH_ZZZ.js', tempTarg+fname);
 
-	Replace(path.join(tempTarg, fname),'ZZZ',tc);
-	Replace(path.join(tempTarg, fname),'YYY',tf);
-	Replace(path.join(tempTarg, fname),'XXX',tb);
+	Replace(tempTarg+fname,'ZZZ',tc);
+	Replace(tempTarg+fname,'YYY',tf);
+	Replace(tempTarg+fname,'XXX',tb);
 	addToInclude(fname,tempTarg)
 
 	fname='ROM_FIELD_'+tf+'.js';
@@ -143,42 +143,42 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 
 	if (pf != 'NOT' ) {
 		fname='FP2_'+tf+'.js';
-		jake.cpR(path.join(srcdir,'FP2_YYY.js'), path.join(tempTarg, fname));
-		Replace(path.join(tempTarg, fname),'YYY',tf);
-		Replace(path.join(tempTarg, fname),'XXX',tb);
+		jake.cpR(srcdir+'/FP2_YYY.js', tempTarg+fname);
+		Replace(tempTarg+fname,'YYY',tf);
+		Replace(tempTarg+fname,'XXX',tb);
 		addToInclude(fname,tempTarg)
 	}
 		fname='FP4_'+tf+'.js';
-		jake.cpR(path.join(srcdir,'FP4_YYY.js'), path.join(tempTarg, fname));
-		Replace(path.join(tempTarg, fname),'YYY',tf);
-		Replace(path.join(tempTarg, fname),'XXX',tb);
+		jake.cpR(srcdir+'/FP4_YYY.js', tempTarg+fname);
+		Replace(tempTarg+fname,'YYY',tf);
+		Replace(tempTarg+fname,'XXX',tb);
 		addToInclude(fname,tempTarg)
 
 		fname='FP12_'+tf+'.js';
-		jake.cpR(path.join(srcdir,'FP12_YYY.js'), path.join(tempTarg, fname));
-		Replace(path.join(tempTarg, fname),'YYY',tf);
-		Replace(path.join(tempTarg, fname),'XXX',tb);
+		jake.cpR(srcdir+'/FP12_YYY.js', tempTarg+fname);
+		Replace(tempTarg+fname,'YYY',tf);
+		Replace(tempTarg+fname,'XXX',tb);
 		addToInclude(fname,tempTarg)
 
 		fname='ECP2_'+tc+'.js';
-		jake.cpR(path.join(srcdir,'ECP2_ZZZ.js'), path.join(tempTarg, fname));
-		Replace(path.join(tempTarg, fname),'YYY',tf);
-		Replace(path.join(tempTarg, fname),'XXX',tb);
-		Replace(path.join(tempTarg, fname),'ZZZ',tc);
+		jake.cpR(srcdir+'/ECP2_ZZZ.js', tempTarg+fname);
+		Replace(tempTarg+fname,'YYY',tf);
+		Replace(tempTarg+fname,'XXX',tb);
+		Replace(tempTarg+fname,'ZZZ',tc);
 		addToInclude(fname,tempTarg)
 
 		fname='PAIR_'+tc+'.js';
-		jake.cpR(path.join(srcdir,'PAIR_ZZZ.js'), path.join(tempTarg, fname));
-		Replace(path.join(tempTarg, fname),'YYY',tf);
-		Replace(path.join(tempTarg, fname),'XXX',tb);
-		Replace(path.join(tempTarg, fname),'ZZZ',tc);
+		jake.cpR(srcdir+'/PAIR_ZZZ.js', tempTarg+fname);
+		Replace(tempTarg+fname,'YYY',tf);
+		Replace(tempTarg+fname,'XXX',tb);
+		Replace(tempTarg+fname,'ZZZ',tc);
 		addToInclude(fname,tempTarg)
 
 		fname='MPIN_'+tc+'.js';
-		jake.cpR(path.join(srcdir,'MPIN_ZZZ.js'), path.join(tempTarg, fname));
-		Replace(path.join(tempTarg, fname),'YYY',tf);
-		Replace(path.join(tempTarg, fname),'XXX',tb);
-		Replace(path.join(tempTarg, fname),'ZZZ',tc);
+		jake.cpR(srcdir+'/MPIN_ZZZ.js', tempTarg+fname);
+		Replace(tempTarg+fname,'YYY',tf);
+		Replace(tempTarg+fname,'XXX',tb);
+		Replace(tempTarg+fname,'ZZZ',tc);
 		addToInclude(fname,tempTarg)
 }
 
@@ -201,8 +201,9 @@ task('default', function () {
   console.log('Type `jake -T` to see the list of all thew tasks.');
 });
 
+// Build with editable options
 namespace('build', function () {
-	desc('Build library supporting multiple curves. For example jake build:choice[BN254,P256]');
+	desc('Build library supporting multiple curves. For example jake build:choice[BN254,P256,RSA2048]'.red);
 	task('choice', function () {
 		var tempTarg = targetdir+"/build_"+arguments[0];
 		for (var i=0; i<arguments.length; i++) {
@@ -210,12 +211,13 @@ namespace('build', function () {
 				fail('Invalid input');
 			tempTarg += "_"+arguments[i];
 		}
+		console.log('Build with building options'.red);
 		console.log('Create target directory'+tempTarg);
 		jake.mkdirP(tempTarg+targetsrcdir);
 		jake.mkdirP(tempTarg+testdir);
 		copyCommonFiles(tempTarg);
 		for (var i=0; i<arguments.length; i++){
-			console.log(arguments[i]);
+			console.log(('Creating files for '+arguments[i]).blue);
 			if (arguments[i] == 'ED25519') {
 				curveset('256','25519','ED25519','32','24','255','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 				copyROMfiles('ED25519','25519',tempTarg);
@@ -330,34 +332,36 @@ namespace('build', function () {
 	complete();
 });
 
-desc('Build with default curve BN254CX and RSA4096');
+// Build with default curve BN254CX and RSA2048 
+desc('Build with default curve BN254CX and RSA2048');
 task('build', function () {
-	console.log('Build with default curve BN254CX and RSA4096');
-	var tempTarg = targetdir+'/build_BN254CX_RSA4096';
+	console.log('Build with default curve BN254CX and RSA2048'.red);
+	var tempTarg = targetdir+'/build_BN254CX_RSA2048';
 	console.log('Create target directory'+tempTarg);
 	jake.mkdirP(tempTarg+targetsrcdir);
 	jake.mkdirP(tempTarg+testdir);
 	copyCommonFiles(tempTarg);
 	curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
 	copyROMfiles('BN254CX','BN254CX',tempTarg);
-	rsaset('512','4096','64','23','8',tempTarg);
+	rsaset('1024','2048','128','22','2',tempTarg);
 	complete();
 });
 
+// List all the building options
 task('list', function () {
 	desc('See the list of all curves');
 	console.log('\nList of all curves available and RSA configurations\n');
-	console.log('Elliptic Curves');
+	console.log('Elliptic Curves'.red);
 	console.log('ED25519');
 	console.log('C25519');
+	console.log('C41417');
 	console.log('NIST256');
+	console.log('NIST384');
+	console.log('NIST521');
 	console.log('BRAINPOOL');
 	console.log('ANSSI');
 	console.log('HIFIVE');
 	console.log('GOLDILOCKS');
-	console.log('NIST384');
-	console.log('C41417');
-	console.log('NIST521');
 	console.log('MF254W (WEIERSTRASS)');
 	console.log('MF254E (EDWARDS)');
 	console.log('MF254M (MONTGOMERY)');
@@ -371,14 +375,21 @@ task('list', function () {
 	console.log('MS256E (EDWARDS)');
 	console.log('MS256M (MONTGOMERY)\n');
 
-	console.log('Pairing-Friendly Elliptic Curves');
+	console.log('Pairing-Friendly Elliptic Curves'.red);
 	console.log('BN254');
 	console.log('BN254CX');
 	console.log('BLS383\n');
 
-	console.log('RSA configurations');
+	console.log('RSA configurations'.red);
 	console.log('RSA2048');
 	console.log('RSA3072');
 	console.log('RSA4096\n');
 	complete();
+});
+
+// Clean up target directory
+desc('Clean up target directory');
+task('clean', function () {
+	jake.rmRf(targetdir);
+	jake.mkdirP(targetdir);
 });

@@ -18,9 +18,37 @@ AMCJL is provided in *JavaScript* language
 
 NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
 
-## Requirement for testing
+## Requirement for building and testing
 
-Nodejs
+The following programs are required: [Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)
+
+Install the following packages
+
+```
+npm install -g jake jake-utils
+npm install fs colors
+```
+
+## Build
+
+The library can be build using [jake](https://www.npmjs.com/package/jake). Type
+
+```
+jake -T
+```
+to see all the options. In order to build the library with the default pairing friendly elliptic curve `BN254CX` and with the support for `RSA2048` type
+```
+jake build
+```
+To build supporting other curves or other RSA options you an use the command ```jake build:choice[...]```. For example to build the library supporting the curves `BN254CX` and `C25519` with `RSA4096` type
+```
+jake build:choice[BN254CX,C25519,RSA4096]
+```
+To see te list of all the build option type
+``` 
+jake list
+```
+
 
 ## Run tests
 
