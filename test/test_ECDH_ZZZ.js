@@ -35,6 +35,8 @@ eval(fs.readFileSync('@SWD/ECP_ZZZ.js')+'');
 eval(fs.readFileSync('@SWD/ECDH_ZZZ.js')+'');
 eval(fs.readFileSync('@SWD/AES.js')+'');
 
+console.log('Start testing ECDH');
+
 var i,j=0,res;
 var result;
 var pp="M0ng00se";
@@ -83,7 +85,7 @@ console.log("Alice's public key= 0x"+ECDH_ZZZ.bytestostring(W0));
 
 res=ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W0);
 if (res!=0)
-	alert("ECP_ZZZ Public Key is invalid!");
+	exit("ECP_ZZZ Public Key is invalid!");
 // Random private key for other party 
 ECDH_ZZZ.KEY_PAIR_GENERATE(rng,S1,W1);
 
@@ -92,7 +94,7 @@ console.log("Servers public key= 0x"+ECDH_ZZZ.bytestostring(W1));
 
 res=ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W1);
 if (res!=0)
-	alert("ECP_ZZZ Public Key is invalid!");
+	exit("ECP_ZZZ Public Key is invalid!");
 		
 
 // Calculate common key using DH - IEEE 1363 method 
@@ -105,7 +107,7 @@ for (i=0;i<ECDH_ZZZ.EFS;i++)
 	if (Z0[i]!=Z1[i]) same=false;
 
 if (!same)
-	alert("*** ECP_ZZZSVDP-DH Failed");
+	exit("ECP_ZZZSVDP-DH Failed");
 
 var KEY=ECDH_ZZZ.KDF2(sha,Z0,null,ECDH_ZZZ.EAS);
 
@@ -131,7 +133,7 @@ if (ECP_ZZZ.CURVETYPE!=ECP_ZZZ.MONTGOMERY)
 
 	M=ECDH_ZZZ.ECIES_DECRYPT(sha,P1,P2,V,C,T,S1);
 	if (M.length==0)
-		alert("*** ECIES Decryption Failed ");
+		exit("ECIES Decryption Failed");
 	else console.log("Decryption succeeded");
 
 	console.log("Message is 0x"+ECDH_ZZZ.bytestostring(M));
@@ -139,13 +141,15 @@ if (ECP_ZZZ.CURVETYPE!=ECP_ZZZ.MONTGOMERY)
 	console.log("Testing ECDSA");
 
 	if (ECDH_ZZZ.ECPSP_DSA(sha,rng,S0,M,CS,DS)!=0)
-		alert("***ECDSA Signature Failed");
+		exit("ECDSA Signature Failed");
 	
 	console.log("Signature= ");
 	console.log("C= 0x"+ECDH_ZZZ.bytestostring(CS));
 	console.log("D= 0x"+ECDH_ZZZ.bytestostring(DS));
 
 	if (ECDH_ZZZ.ECPVP_DSA(sha,W0,M,CS,DS)!=0)
-		alert("***ECDSA Verification Failed");
-	else console.log("ECDSA Signature/Verification succeeded ");
+		exit("ECDSA Verification Failed");
+	else console.log("ECDSA Signature/Verification succeeded");
 }
+
+return('PASSED');
