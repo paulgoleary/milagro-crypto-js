@@ -2,7 +2,8 @@ require('jake-utils');
 require('colors');
 
 var fs = require('fs'),
-	jake = require('jake');
+	jake = require('jake'),
+	replace = require('replace-in-file');;
 
 var cwd = process.cwd(),
 	srcdir = cwd + '/src',
@@ -20,15 +21,38 @@ jake.addListener('complete', function () {
 });
 
 // Replace pattern into files.
+// function Replace(namefile,oldtext,newtext) {
+
+// 	const options = {
+// 		files: namefile,
+// 		from: oldtext,
+// 		to: newtext,
+// 		allowEmptyPaths: true,
+// 	};
+// 	replace(options, (error, changedFiles) => {
+// 	  if (error) {
+// 	    return console.error('Error occurred:', error);
+// 	  }
+// 	  console.log('Modified files:', changedFiles.join(', '));
+// 	});
+
+// 		// replace({
+// 	 //    replacements: [
+// 	 //        {pattern: oldtext, replacement: newtext}
+// 	 //        ],
+// 	 //    src: [namefile]
+// 	 //    });
+// }
+
 function Replace(namefile,oldtext,newtext) {
+    // load the html file
+    var fileContent = fs.readFileSync(namefile, 'utf8');
 
-		replace({
-	    replacements: [
-	        {pattern: oldtext, replacement: newtext}
-	        ],
-	    src: [namefile]
-	    });
+    // replacePath is your match[1]
+    fileContent = fileContent.replace(oldtext,newtext);
 
+    // this will overwrite the original html file, change the path for test
+    fs.writeFileSync(namefile, fileContent);
 }
 
 // Add file into include file
