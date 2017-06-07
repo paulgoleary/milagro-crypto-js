@@ -12,7 +12,7 @@
 
 AMCJL is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source, specifically designed to support the Internet of Things (IoT).
 
-AMCJL contains the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf)
+AMCJL contains the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf).
 
 NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
 
