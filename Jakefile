@@ -15,7 +15,7 @@ var cwd = process.cwd(),
     failedtestlog = '/FailedTest.txt';
 
 jake.addListener('complete', function () {
-  process.exit();
+  process.exit(0);
 });
 
 // Replace pattern into files.
@@ -258,6 +258,7 @@ function checkinput(option) {
 	}
 }
 
+var testsfailed = false;
 // run a single test
 function testrun(target,test,callback) {
 	var nametest = test.replace(/_/g,' ').replace('.js','');
@@ -267,6 +268,7 @@ function testrun(target,test,callback) {
 	var ex = jake.createExec(cmd);
 	ex.addListener('error', function(msg,code) {
 		process.stdout.write('Failed\n');
+		testsfailed = true;
 		fs.appendFileSync(target+testingdir+failedtestlog, nametest+'\n');
 		callback();
 		return;
@@ -525,16 +527,15 @@ var looptests = function(arr,tempTarg)
             looptests(arr,tempTarg);   
         }
         if(j == arr.length) {
-        	var failed = fs.readFileSync(tempTarg+testingdir+failedtestlog,'utf8');
-			if (failed == null)
-			{
-				jake.logger.log('SUCCESS: all tests passed!');
+        	if(testsfailed) {
+        		var failed = fs.readFileSync(tempTarg+testingdir+failedtestlog,'utf8');
+			    jake.logger.error('The following tests failed: \n'+failed,-1);
+			    process.exit(-1);
+        	}
+        	else {
+        		jake.logger.log('SUCCESS: all tests passed!');
 				complete();
-			}
-			else
-			{
-				jake.fail('The following tests failed: \n'+failed,-1);
-			}
+        	}
         }
     }); 
 }
