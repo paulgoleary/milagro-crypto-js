@@ -524,6 +524,18 @@ var looptests = function(arr,tempTarg)
         {
             looptests(arr,tempTarg);   
         }
+        if(j == arr.length) {
+        	var failed = fs.readFileSync(tempTarg+testingdir+failedtestlog,'utf8');
+			if (failed == null)
+			{
+				jake.logger.log('SUCCESS: all tests passed!');
+				complete();
+			}
+			else
+			{
+				jake.fail('The following tests failed: \n'+failed,-1);
+			}
+        }
     }); 
 }
 
@@ -537,7 +549,7 @@ task('test', {async: true}, function ()
 		if (builds == null)
 		{
 	    	jake.logger.error('Nothing to test');
-	    	fail();
+	    	fail("Abort");
 	    }
 	    if (builds.length != 1)
 	    {
