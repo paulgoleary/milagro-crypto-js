@@ -2,8 +2,6 @@ language: node_js
 
 node_js:
   - "node"
-  - "iojs"
-  - "7"
 
 sudo: required
 dist: trusty
@@ -13,8 +11,8 @@ branches:
     - release
 
 before_script:
-    - npm install -g jake jake-utils
-    - npm install fs colors
+    - sudo npm install -g jake jake-utils
+    - sudo npm install fs colors
 
 script:
   - jake build
