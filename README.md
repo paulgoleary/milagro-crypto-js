@@ -31,13 +31,13 @@ The library can be build using [jake](https://www.npmjs.com/package/jake). Type
 ```
 jake -T
 ```
-to see all the options. In order to build the library with the default pairing friendly elliptic curve `BN254CX` and with the support for `RSA2048` type
+to see all the options. In order to build the library with the default pairing friendly elliptic curve `BN254CX`, the curve `NIST256` and with the support for `RSA2048` type
 ```
 jake build
 ```
-To build supporting other curves or other RSA options you an use the command ```jake build:choice[...]```. For example to build the library supporting the curves `BN254CX` and `C25519` with `RSA4096` type
+To build supporting other curves or other RSA options you an use the command ```jake build:choice[...]```. For example to build the library supporting the curves `BLS383` and `C25519` with `RSA4096` type
 ```
-jake build:choice[BN254CX,C25519,RSA4096]
+jake build:choice[BLS383,C25519,RSA4096]
 ```
 To see te list of all the build options type
 ``` 
@@ -51,8 +51,8 @@ To run the tests type the following command. NOTE: it may take a while!!!
 ```
 jake test
 ```
-If you have made more than one build, then you must to specify which build you want to test, for example
+If you made more than one build, then you must to specify which build you want to test, for example
 ```
-jake test:choice[BN254CX,C25519,RSA4096]
+jake test:choice[BLS383,C25519,RSA4096]
 ```
 

@@ -287,14 +287,14 @@ task('default', function () {
 
 // Build with editable options
 namespace('build', function () {
-	desc('Build library supporting multiple curves. For example jake build:choice[BN254,NIST256,RSA2048]'.blue);
+	desc('Build library supporting multiple curves. For example jake build:choice[BN254CX,NIST256,RSA2048]'.blue);
 	task('choice', function () {
 		var tempTarg = targetdir+'/build';
 		for (var i=0; i<arguments.length; i++) {
 			if  (checkinput(arguments[i]) != 0)
 			{
 				jake.logger.error('ERROR: Invalid input');
-				process.exit();
+				complete();
 			}
 			tempTarg += '_'+arguments[i];
 		}
@@ -447,9 +447,9 @@ namespace('build', function () {
 });
 
 // Build with default curve BN254CX and RSA2048 
-desc('Build library with default curve BN254CX and RSA2048'.blue);
+desc('Build library with default curves BN254CX and NIST256, and RSA2048'.blue);
 task('build', function () {
-	jake.logger.log('Build library with default curve BN254CX and RSA2048'.red);
+	jake.logger.log('Build library with default curves BN254CX and NIST256, and RSA2048'.red);
 	var tempTarg = targetdir+'/build_BN254CX_RSA2048';
 	jake.logger.log('Create target directory'+tempTarg);
 	jake.mkdirP(tempTarg+targetsrcdir);
@@ -459,6 +459,10 @@ task('build', function () {
 	curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
 	copyROMfiles('BN254CX','BN254CX',tempTarg);
 	curvetestset('256','BN254CX','BN254CX','BN',tempTarg);
+	jake.logger.log(('Creating files for NIST256').blue);
+	curveset('256','NIST256','NIST256','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
+	copyROMfiles('NIST256','NIST256',tempTarg);
+	curvetestset('256','NIST256','NIST256','NOT',tempTarg);
 	jake.logger.log(('Creating files for RSA2048').blue);
 	rsaset('1024','2048','128','22','2',tempTarg);
 	rsatestset('1024','2048',tempTarg);
@@ -541,7 +545,7 @@ task('test', {async: true}, function ()
 	    	jake.logger.log('Please specify wich build you want to test (jake build:choice[...])');
 	    	jake.logger.log('Builds available: ');
 	    	jake.logger.log(builds);
-	    	process.exit();
+	    	complete();
 	    }
 	    tempTarg = targetdir+'/'+ builds[0];
 	    jake.logger.log(('Start testing '+tempTarg).blue);
@@ -553,7 +557,7 @@ task('test', {async: true}, function ()
         	if (tests == null)
         	{
         		jake.logger.log('Nothing to test');
-        		process.exit();
+        		complete();
         	}
 			looptests(tests,tempTarg);
         });
@@ -583,7 +587,7 @@ namespace('test', function ()
 		        	if (tests == null)
 		        	{
 		        		jake.logger.error('Nothing to test');
-		        		process.exit();
+		        		complete();
 		        	}
 					looptests(tests,tempTarg);
 		        });
@@ -592,7 +596,7 @@ namespace('test', function ()
 			{
 				jake.logger.error('ERROR: Invalid '+tempTarg.replace(targetdir+'/','')+'. Builds available to test:');
 				jake.logger.log(builds);
-				process.exit();
+				complete();
 			}
 		});
 	});
