@@ -14,6 +14,10 @@ var cwd = process.cwd(),
     lasttestlog = '/LastTest.txt',
     failedtestlog = '/FailedTest.txt';
 
+var AllConfigurations = ['ED25519','GOLDILOCKS','NIST256','BRAINPOOL','ANSSI','HIFIVE','C25519','NIST384','C41417',
+						 'NIST521','MF254W','MF254E','MF254M','MF256W','MF256E','MF256M','MS255W','MS255E','MS255M',
+						 'MS256W','MS256E','MS256M','BN254','BN254CX','BLS383','RSA2048','RSA3072','RSA4096'];
+
 jake.addListener('complete', function () {
   process.exit(0);
 });
@@ -258,6 +262,148 @@ function checkinput(option) {
 	}
 }
 
+function buildconfiguration(option,tempTarg) {
+	jake.logger.log(('Creating files for '+option).blue);
+
+	if (option == 'ED25519') {
+		curveset('256','25519','ED25519','32','24','255','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
+		copyROMfiles('ED25519','25519',tempTarg);
+		curvetestset('256','25519','ED25519','NOT',tempTarg);
+	}
+	if (option == 'C25519') {
+		curveset('256','25519','C25519','32','24','255','5','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
+		copyROMfiles('C25519','25519',tempTarg);
+		curvetestset('256','25519','C25519','NOT',tempTarg);
+	}
+	if (option == 'NIST256') {
+		curveset('256','NIST256','NIST256','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('NIST256','NIST256',tempTarg);
+		curvetestset('256','NIST256','NIST256','NOT',tempTarg);
+	}
+	if (option == 'NIST384') {
+		curveset('384','NIST384','NIST384','48','56','384','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('NIST384','NIST384',tempTarg);
+		curvetestset('384','NIST384','NIST384','NOT',tempTarg);
+	}
+	if (option == 'BRAINPOOL') {
+		curveset('256','BRAINPOOL','BRAINPOOL','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('BRAINPOOL','BRAINPOOL',tempTarg);
+		curvetestset('256','BRAINPOOL','BRAINPOOL','NOT',tempTarg);
+	}
+	if (option == 'ANSSI') {
+		curveset('256','ANSSI','ANSSI','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('ANSSI','ANSSI',tempTarg);
+		curvetestset('256','ANSSI','ANSSI','NOT',tempTarg);
+	}
+	if (option == 'HIFIVE') {
+		curveset('336','HIFIVE','HIFIVE','42','23','336','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
+		copyROMfiles('HIFIVE','HIFIVE',tempTarg);
+		curvetestset('336','HIFIVE','HIFIVE','NOT',tempTarg);
+	}
+	if (option == 'GOLDILOCKS') {
+		curveset('448','GOLDILOCKS','GOLDILOCKS','56','23','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
+		copyROMfiles('GOLDILOCKS','GOLDILOCKS',tempTarg);
+		curvetestset('448','GOLDILOCKS','GOLDILOCKS','NOT',tempTarg);
+	}
+	if (option == 'C41417') {
+		curveset('416','C41417','C41417','52','23','414','7','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
+		copyROMfiles('C41417','C41417',tempTarg);
+		curvetestset('416','','','NOT',tempTarg);
+	}
+	if (option == 'NIST521') {
+		curveset('528','NIST521','NIST521','66','23','521','7','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('NIST521','NIST521',tempTarg);
+		curvetestset('528','NIST521','NIST521','NOT',tempTarg);
+	}
+	if (option == 'MF254W') {
+		curveset('256','254MF','MF254W','32','24','254','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('MF254W','254MF',tempTarg);
+		curvetestset('256','254MF','MF254W','NOT',tempTarg);
+	}
+	if (option == 'MF254E') {
+		curveset('256','254MF','MF254E','32','24','254','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
+		copyROMfiles('MF254E','254MF',tempTarg);
+		curvetestset('256','254MF','MF254E','NOT',tempTarg);
+	}
+	if (option == 'MF254M') {
+		curveset('256','254MF','MF254M','32','24','254','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
+		copyROMfiles('MF254M','254MF',tempTarg);
+		curvetestset('256','254MF','MF254M','NOT',tempTarg);
+	}
+	if (option == 'MF256W') {
+		curveset('256','256MF','MF256W','32','24','256','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('MF256W','256MF',tempTarg);
+		curvetestset('256','256MF','MF256W','NOT',tempTarg);
+	}
+	if (option == 'MF256E') {
+		curveset('256','256MF','MF256E','32','24','256','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
+		copyROMfiles('MF256E','256MF',tempTarg);
+		curvetestset('256','256MF','MF256E','NOT',tempTarg);
+	}
+	if (option == 'MF256M') {
+		curveset('256','256MF','MF256M','32','24','256','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
+		copyROMfiles('MF256M','256MF',tempTarg);
+		curvetestset('256','256MF','MF256M','NOT',tempTarg);
+	}
+	if (option == 'MS255W') {
+		curveset('256','255MS','MS255W','32','24','255','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('MS255W','255MS',tempTarg);
+		curvetestset('256','255MS','MS255W','NOT',tempTarg);
+	}
+	if (option == 'MS255E') {
+		curveset('256','255MS','MS255E','32','24','255','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
+		copyROMfiles('MS255E','255MS',tempTarg);
+		curvetestset('256','255MS','MS255E','NOT',tempTarg);
+	}
+	if (option == 'MS255M') {
+		curveset('256','255MS','MS255M','32','24','255','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
+		copyROMfiles('MS255M','255MS',tempTarg);
+		curvetestset('256','255MS','MS255M','NOT',tempTarg);
+	}
+	if (option == 'MS256W') {
+		curveset('256','256MS','MS256W','32','24','256','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
+		copyROMfiles('MS256W','256MS',tempTarg);
+		curvetestset('256','256MS','MS256W','NOT',tempTarg);
+	}
+	if (option == 'MS256E') {
+		curveset('256','256MS','MS256E','32','24','256','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
+		copyROMfiles('MS256E','256MS',tempTarg);
+		curvetestset('256','256MS','MS256E','NOT',tempTarg);
+	}
+	if (option == 'MS256M') {
+		curveset('256','256MS','MS256M','32','24','256','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
+		copyROMfiles('MS256M','256MS',tempTarg);
+		curvetestset('256','256MS','MS256M','NOT',tempTarg);
+	}
+	if (option == 'BN254') {
+		curveset('256','BN254','BN254','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
+		copyROMfiles('BN254','BN254',tempTarg);
+		curvetestset('256','BN254','BN254','BN',tempTarg);
+	}
+	if (option == 'BN254CX') {
+		curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
+		copyROMfiles('BN254CX','BN254CX',tempTarg);
+		curvetestset('256','BN254CX','BN254CX','BN',tempTarg);
+	}
+	if (option == 'BLS383') {
+		curveset('384','BLS383','BLS383','48','23','383','3','NOT_SPECIAL','WEIERSTRASS','BLS',tempTarg);
+		copyROMfiles('BLS383','BLS383',tempTarg);
+		curvetestset('384','BLS383','BLS383','BLS',tempTarg);
+	}
+	if (option == 'RSA2048') {
+		rsaset('1024','2048','128','22','2',tempTarg);
+		rsatestset('1024','2048',tempTarg);
+	}
+	if (option == 'RSA3072') {
+		rsaset('384','3072','48','23','8',tempTarg);
+		rsatestset('384','3072',tempTarg);
+	}
+	if (option == 'RSA4096') {
+		rsaset('512','4096','64','23','8',tempTarg);
+		rsatestset('512','4096',tempTarg);
+	}
+}
+
 var testsfailed = false;
 // run a single test
 function testrun(target,test,callback) {
@@ -305,144 +451,19 @@ namespace('build', function () {
 		jake.mkdirP(tempTarg+targettestdir);
 		copyCommonFiles(tempTarg);
 		for (var i=0; i<arguments.length; i++){
-			jake.logger.log(('Creating files for '+arguments[i]).blue);
-			if (arguments[i] == 'ED25519') {
-				curveset('256','25519','ED25519','32','24','255','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
-				copyROMfiles('ED25519','25519',tempTarg);
-				curvetestset('256','25519','ED25519','NOT',tempTarg);
-			}
-			if (arguments[i] == 'C25519') {
-				curveset('256','25519','C25519','32','24','255','5','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
-				copyROMfiles('C25519','25519',tempTarg);
-				curvetestset('256','25519','C25519','NOT',tempTarg);
-			}
-			if (arguments[i] == 'NIST256') {
-				curveset('256','NIST256','NIST256','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('NIST256','NIST256',tempTarg);
-				curvetestset('256','NIST256','NIST256','NOT',tempTarg);
-			}
-			if (arguments[i] == 'NIST384') {
-				curveset('384','NIST384','NIST384','48','56','384','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('NIST384','NIST384',tempTarg);
-				curvetestset('384','NIST384','NIST384','NOT',tempTarg);
-			}
-			if (arguments[i] == 'BRAINPOOL') {
-				curveset('256','BRAINPOOL','BRAINPOOL','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('BRAINPOOL','BRAINPOOL',tempTarg);
-				curvetestset('256','BRAINPOOL','BRAINPOOL','NOT',tempTarg);
-			}
-			if (arguments[i] == 'ANSSI') {
-				curveset('256','ANSSI','ANSSI','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('ANSSI','ANSSI',tempTarg);
-				curvetestset('256','ANSSI','ANSSI','NOT',tempTarg);
-			}
-			if (arguments[i] == 'HIFIVE') {
-				curveset('336','HIFIVE','HIFIVE','42','23','336','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
-				copyROMfiles('HIFIVE','HIFIVE',tempTarg);
-				curvetestset('336','HIFIVE','HIFIVE','NOT',tempTarg);
-			}
-			if (arguments[i] == 'GOLDILOCKS') {
-				curveset('448','GOLDILOCKS','GOLDILOCKS','56','23','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
-				copyROMfiles('GOLDILOCKS','GOLDILOCKS',tempTarg);
-				curvetestset('448','GOLDILOCKS','GOLDILOCKS','NOT',tempTarg);
-			}
-			if (arguments[i] == 'C41417') {
-				curveset('416','C41417','C41417','52','23','414','7','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
-				copyROMfiles('C41417','C41417',tempTarg);
-				curvetestset('416','','','NOT',tempTarg);
-			}
-			if (arguments[i] == 'NIST521') {
-				curveset('528','NIST521','NIST521','66','23','521','7','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('NIST521','NIST521',tempTarg);
-				curvetestset('528','NIST521','NIST521','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MF254W') {
-				curveset('256','254MF','MF254W','32','24','254','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('254MF','MF254W',tempTarg);
-				curvetestset('256','254MF','MF254W','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MF254E') {
-				curveset('256','254MF','MF254E','32','24','254','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
-				copyROMfiles('254MF','MF254E',tempTarg);
-				curvetestset('256','254MF','MF254E','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MF254M') {
-				curveset('256','254MF','MF254M','32','24','254','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
-				copyROMfiles('254MF','MF254M',tempTarg);
-				curvetestset('256','254MF','MF254M','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MF256W') {
-				curveset('256','256MF','MF256W','32','24','256','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('256MF','MF256W',tempTarg);
-				curvetestset('256','256MF','MF256W','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MF256E') {
-				curveset('256','256MF','MF256E','32','24','256','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
-				copyROMfiles('256MF','MF256E',tempTarg);
-				curvetestset('256','256MF','MF256E','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MF256M') {
-				curveset('256','256MF','MF256M','32','24','256','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
-				copyROMfiles('256MF','MF256M',tempTarg);
-				curvetestset('256','256MF','MF256M','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MS255W') {
-				curveset('256','255MS','MS255W','32','24','255','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('255MS','MS255W',tempTarg);
-				curvetestset('256','255MS','MS255W','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MS255E') {
-				curveset('256','255MS','MS255E','32','24','255','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
-				copyROMfiles('255MS','MS255E',tempTarg);
-				curvetestset('256','255MS','MS255E','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MS255M') {
-				curveset('256','255MS','MS255M','32','24','255','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
-				copyROMfiles('255MS','MS255M',tempTarg);
-				curvetestset('256','255MS','MS255M','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MS256W') {
-				curveset('256','256MS','MS256W','32','24','256','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
-				copyROMfiles('256MS','MS256W',tempTarg);
-				curvetestset('256','256MS','MS256W','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MS256E') {
-				curveset('256','256MS','MS256E','32','24','256','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
-				copyROMfiles('256MS','MS256E',tempTarg);
-				curvetestset('256','256MS','MS256E','NOT',tempTarg);
-			}
-			if (arguments[i] == 'MS256M') {
-				curveset('256','256MS','MS256M','32','24','256','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
-				copyROMfiles('256MS','MS256M',tempTarg);
-				curvetestset('256','256MS','MS256M','NOT',tempTarg);
-			}
-			if (arguments[i] == 'BN254') {
-				curveset('256','BN254','BN254','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
-				copyROMfiles('BN254','BN254',tempTarg);
-				curvetestset('256','BN254','BN254','BN',tempTarg);
-			}
-			if (arguments[i] == 'BN254CX') {
-				curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
-				copyROMfiles('BN254CX','BN254CX',tempTarg);
-				curvetestset('256','BN254CX','BN254CX','BN',tempTarg);
-			}
-			if (arguments[i] == 'BLS383') {
-				curveset('384','BLS383','BLS383','48','23','383','3','NOT_SPECIAL','WEIERSTRASS','BLS',tempTarg);
-				copyROMfiles('BLS383','BLS383',tempTarg);
-				curvetestset('384','BLS383','BLS383','BLS',tempTarg);
-			}
-			if (arguments[i] == 'RSA2048') {
-				rsaset('1024','2048','128','22','2',tempTarg);
-				rsatestset('1024','2048',tempTarg);
-			}
-			if (arguments[i] == 'RSA3072') {
-				rsaset('384','3072','48','23','8',tempTarg);
-				rsatestset('384','3072',tempTarg);
-			}
-			if (arguments[i] == 'RSA4096') {
-				rsaset('512','4096','64','23','8',tempTarg);
-				rsatestset('512','4096',tempTarg);
-			}
+			buildconfiguration(arguments[i],tempTarg);
+		}
+	});
+	desc('Build the library with all the possible configurations'.blue);
+	task('all', function () {
+		var tempTarg = targetdir+'/buildAll';
+		jake.logger.log('Building library with building options'.red);
+		jake.logger.log('Create target directory'+tempTarg);
+		jake.mkdirP(tempTarg+targetsrcdir);
+		jake.mkdirP(tempTarg+targettestdir);
+		copyCommonFiles(tempTarg);
+		for (var i=0; i<AllConfigurations.length; i++){
+			buildconfiguration(AllConfigurations[i],tempTarg);
 		}
 	});
 });
@@ -456,17 +477,9 @@ task('build', function () {
 	jake.mkdirP(tempTarg+targetsrcdir);
 	jake.mkdirP(tempTarg+targettestdir);
 	copyCommonFiles(tempTarg);
-	jake.logger.log(('Creating files for BN254CX').blue);
-	curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
-	copyROMfiles('BN254CX','BN254CX',tempTarg);
-	curvetestset('256','BN254CX','BN254CX','BN',tempTarg);
-	jake.logger.log(('Creating files for NIST256').blue);
-	curveset('256','NIST256','NIST256','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
-	copyROMfiles('NIST256','NIST256',tempTarg);
-	curvetestset('256','NIST256','NIST256','NOT',tempTarg);
-	jake.logger.log(('Creating files for RSA2048').blue);
-	rsaset('1024','2048','128','22','2',tempTarg);
-	rsatestset('1024','2048',tempTarg);
+	buildconfiguration('BN254CX',tempTarg);
+	buildconfiguration('NIST256',tempTarg);
+	buildconfiguration('RSA2048',tempTarg);
 	complete();
 });
 
@@ -612,4 +625,13 @@ namespace('test', function ()
 			}
 		});
 	});
+});
+
+// Run test on single build
+desc('Build and run all tests in a docker'.blue);
+task('dockerbuild', {async: true}, function ()
+{
+	var cmd = 'docker build --no-cache '+ cwd;
+	jake.exec(cmd, {printStdout: true});
+	complete();
 });

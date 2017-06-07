@@ -50,7 +50,10 @@ To see te list of all the build options type
 ``` 
 jake list
 ```
-
+To build all the possible configurations (used for testing the library) type
+```
+jake build:all
+```
 
 ## Run tests
 To run the tests type the following command. NOTE: it may take a while!!!
@@ -63,3 +66,8 @@ If you made more than one build, then you must to specify which build you want t
 jake test:choice[BLS383,C25519,RSA4096]
 ```
 
+## Testing all in a docker
+To build all the possible configurations and test it in a docker (used for testing the library) type:
+```
+jake dockerbuild
+```
