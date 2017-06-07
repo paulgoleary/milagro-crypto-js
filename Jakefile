@@ -1,8 +1,7 @@
 require('colors');
 
 var fs = require('fs'),
-	jake = require('jake'),
-	replace = require('replace-in-file');;
+	jake = require('jake');
 
 var cwd = process.cwd(),
 	srcdir = cwd + '/src',
