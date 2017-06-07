@@ -1,4 +1,3 @@
-require('jake-utils');
 require('colors');
 
 var fs = require('fs'),
@@ -21,32 +20,9 @@ jake.addListener('complete', function () {
 });
 
 // Replace pattern into files.
-// function Replace(namefile,oldtext,newtext) {
-
-// 	const options = {
-// 		files: namefile,
-// 		from: oldtext,
-// 		to: newtext,
-// 		allowEmptyPaths: true,
-// 	};
-// 	replace(options, (error, changedFiles) => {
-// 	  if (error) {
-// 	    return console.error('Error occurred:', error);
-// 	  }
-// 	  console.log('Modified files:', changedFiles.join(', '));
-// 	});
-
-// 		// replace({
-// 	 //    replacements: [
-// 	 //        {pattern: oldtext, replacement: newtext}
-// 	 //        ],
-// 	 //    src: [namefile]
-// 	 //    });
-// }
-
 function Replace(namefile,oldtext,newtext) {
     // load the html file
-    var fileContent = fs.readFileSync(namefile, 'utf8');
+    var fileContent = fs.readFileSync(namefile,'utf8');
 
     // replacePath is your match[1]
     fileContent = fileContent.replace(oldtext,newtext);
@@ -57,8 +33,8 @@ function Replace(namefile,oldtext,newtext) {
 
 // Add file into include file
 function addToInclude(fname,tempTarg) {
-	var incfile = read(tempTarg+'/include.html')
-	if (!(fname in incfile)) {
+	var incfile = fs.readFileSync(tempTarg+'/include.html','utf8')
+	if (!(incfile.includes(fname))) {
 		fs.appendFileSync(tempTarg+includefile, '<script type=\'text/javascript\' src=\''+fname+'\'></script>\n');
 	}
 }
