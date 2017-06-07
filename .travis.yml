@@ -1,0 +1,27 @@
+language: node_js
+
+node_js:
+  - "node"
+  - "iojs"
+  - "7"
+
+sudo: required
+dist: trusty
+
+branches:
+  except:
+    - release
+
+branches:
+  only:
+    - master
+    - develop
+    - travis
+
+before_script:
+    - npm install -g jake jake-utils
+    - npm install fs colors
+
+script:
+  - jake build
+  - jake test
