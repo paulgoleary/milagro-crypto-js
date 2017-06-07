@@ -1,5 +1,12 @@
 # AMCL - *Apache Milagro Crypto JavaScript Library*
 
+[![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/miracl/milagro-crypto-js/tree/master)
+[![Master Build Status](https://secure.travis-ci.org/miracl/milagro-crypto-js.png?branch=master)](https://travis-ci.org/miracl/milagro-crypto-js?branch=master)
+
+[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/miracl/milagro-crypto-js/tree/develop)
+[![Develop Build Status](https://secure.travis-ci.org/miracl/milagro-crypto-js.png?branch=develop)](https://travis-ci.org/miracl/milagro-crypto-js?branch=develop)
+
+
 * **category**:    Library
 * **copyright**:   2016 MIRACL UK LTD
 * **license**:     ASL 2.0 - http://www.apache.org/licenses/LICENSE-2.0

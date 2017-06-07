@@ -11,8 +11,8 @@ branches:
     - release
 
 before_script:
-    - sudo npm install -g jake jake-utils
-    - sudo npm install fs colors
+    - npm install -g jake jake-utils
+    - npm install fs colors
 
 script:
   - jake build
