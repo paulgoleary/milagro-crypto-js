@@ -18,5 +18,5 @@ before_script:
     - npm install handlebars
 
 script:
-  - jake build
-  - jake test
+  - jake build --t
+  - jake test --t
