@@ -17,6 +17,7 @@ branches:
     - master
     - develop
     - travis
+    - Enable_multicurve_build
 
 before_script:
     - npm install -g jake jake-utils
