@@ -27,8 +27,8 @@ NOTE: This product includes software developed at *[The Apache Software Foundati
 
 [Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the following node.js modules (root permissions may be required)
 ```
-npm install -g jake jake-utils
-npm install fs colors assert crypto
+npm install -g jake
+npm install fs colors assert crypto handlebars jake-utils
 ```
 
 ## Build

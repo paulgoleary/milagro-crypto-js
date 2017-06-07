@@ -15,6 +15,7 @@ before_script:
     - npm install jake-utils
     - npm install fs
     - npm install colors
+    - npm install handlebars
 
 script:
   - jake build
