@@ -301,14 +301,14 @@ function buildconfiguration(option,tempTarg) {
 		curvetestset('336','HIFIVE','HIFIVE','NOT',tempTarg);
 	}
 	if (option == 'GOLDILOCKS') {
-		curveset('448','GOLDILOCKS','GOLDILOCKS','56','23','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
+		curveset('448','GOLDILOCKS','GOLDILOCKS','56','29','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('GOLDILOCKS','GOLDILOCKS',tempTarg);
 		curvetestset('448','GOLDILOCKS','GOLDILOCKS','NOT',tempTarg);
 	}
 	if (option == 'C41417') {
 		curveset('416','C41417','C41417','52','23','414','7','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('C41417','C41417',tempTarg);
-		curvetestset('416','','','NOT',tempTarg);
+		curvetestset('416','C41417','C41417','NOT',tempTarg);
 	}
 	if (option == 'NIST521') {
 		curveset('528','NIST521','NIST521','66','23','521','7','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
@@ -409,18 +409,31 @@ var testsfailed = false;
 function testrun(target,test,callback) {
 	var nametest = test.replace(/_/g,' ').replace('.js','');
 	var outputfile = target+testingdir+lasttestlog;
-	var cmd ='node '+target+targettestdir+'/'+test+' >> '+outputfile+' 2>&1';
+	var tempoutfile = target+testingdir+"/temp.txt";
+	var cmd ='node '+target+targettestdir+'/'+test+' >> '+tempoutfile+' 2>&1';
 	process.stdout.write(nametest+' ... ');
 	var ex = jake.createExec(cmd);
 	ex.addListener('error', function(msg,code) {
 		process.stdout.write('Failed\n');
 		testsfailed = true;
+		var temp = fs.readFileSync(tempoutfile,'utf8');
+		fs.appendFileSync(outputfile,'Start '+nametest+'\n\n'+temp+'\nFinished '+nametest+'\n\n')
 		fs.appendFileSync(target+testingdir+failedtestlog, nametest+'\n');
+		fs.unlinkSync(tempoutfile);
 		callback();
 		return;
 	});
 	ex.addListener('cmdEnd',function(arg) {
-		process.stdout.write('OK\n');
+		var temp = fs.readFileSync(tempoutfile,'utf8');
+		if(temp.includes('SUCCESS'))
+			process.stdout.write('OK\n');
+		else {
+			process.stdout.write('Failed\n');
+			testsfailed = true;
+			fs.appendFileSync(target+testingdir+failedtestlog, nametest+'\n');
+		}
+		fs.appendFileSync(outputfile,'Start '+nametest+'\n\n'+temp+'\nFinished '+nametest+'\n\n')
+		fs.unlinkSync(tempoutfile);
 		callback();
 		return;
 	});
@@ -456,7 +469,7 @@ namespace('build', function () {
 	});
 	desc('Build the library with all the possible configurations'.blue);
 	task('all', function () {
-		var tempTarg = targetdir+'/buildAll';
+		var tempTarg = targetdir+'/build_All';
 		jake.logger.log('Building library with building options'.red);
 		jake.logger.log('Create target directory'+tempTarg);
 		jake.mkdirP(tempTarg+targetsrcdir);
@@ -560,10 +573,10 @@ task('test', {async: true}, function ()
 	var tempTarg = '';
 	fs.readdir(targetdir, function(err, builds)
 	{
-		if (builds == null)
+		if ((builds == null) || (builds.length == 0))
 		{
 	    	jake.logger.error('Nothing to test');
-	    	fail("Abort");
+	    	process.exit("Abort");
 	    }
 	    if (builds.length != 1)
 	    {
@@ -575,8 +588,10 @@ task('test', {async: true}, function ()
 	    tempTarg = targetdir+'/'+ builds[0];
 	    jake.logger.log(('Start testing '+tempTarg).blue);
         jake.mkdirP(tempTarg+testingdir);
-        jake.rmRf(tempTarg+testingdir+lasttestlog);
-        jake.rmRf(tempTarg+testingdir+failedtestlog);
+        if (fs.existsSync(tempTarg+testingdir+lasttestlog))
+        	fs.unlinkSync(tempTarg+testingdir+lasttestlog);
+        if (fs.existsSync(tempTarg+testingdir+failedtestlog))
+        	fs.unlinkSync(tempTarg+testingdir+failedtestlog);
         fs.readdir(tempTarg+targettestdir, function(errors, tests)
         {
         	if (tests == null)

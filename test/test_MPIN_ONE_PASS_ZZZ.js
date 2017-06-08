@@ -175,9 +175,10 @@ console.log("Epoch " + timeValue);
 
 rtn=MPIN_ZZZ.CLIENT(sha,date,CLIENT_ID,rng,X,pin,TOKEN,SEC,pxID,pxCID,pPERMIT,timeValue,Y);
 
-if (rtn != 0)
-exit("FAILURE: CLIENT rtn: " + rtn);   
-
+if (rtn != 0){
+	console.error("FAILURE: CLIENT rtn: " + rtn);   
+	process.exit(-1);
+}
 if (FULL)
 {
 	HCID=MPIN_ZZZ.HASH_ID(sha,CLIENT_ID);
@@ -185,8 +186,10 @@ if (FULL)
 }
 
 rtn=MPIN_ZZZ.SERVER(sha,date,pHID,pHTID,Y,SST,pxID,pxCID,SEC,pE,pF,CLIENT_ID,timeValue);
-if (rtn != 0)
-	exit("FAILURE: SERVER rtn: " + rtn);  
+if (rtn != 0){
+	console.error("FAILURE: SERVER rtn: " + rtn);  
+	process.exit(-1);
+}
 
 if (FULL)
 {
@@ -200,7 +203,10 @@ if (rtn == MPIN_ZZZ.BAD_PIN)
 	if (PINERROR)
 	{
 		var err=MPIN_ZZZ.KANGAROO(E,F);
-		if (err!=0) console.log("(Client PIN is out by "+err + ")");
+		if (err!=0){
+			console.log("(Client PIN is out by "+err + ")");
+			process.exit(-1);
+		}
 	}
 }
 else 
@@ -217,4 +223,4 @@ else
 		console.log("Server Key =  0x"+MPIN_ZZZ.bytestostring(SK));    
 	}
 }
-return('SUCCESS')
+console.log('SUCCESS')

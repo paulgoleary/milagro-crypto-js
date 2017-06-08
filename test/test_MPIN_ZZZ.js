@@ -173,19 +173,24 @@ if (ONE_PASS)
 
 	rtn=MPIN_ZZZ.CLIENT(sha,date,CLIENT_ID,rng,X,pin,TOKEN,SEC,pxID,pxCID,pPERMIT,timeValue,Y);
 
-	if (rtn != 0)
-	exit("FAILURE: CLIENT rtn: " + rtn);   
-
+	if (rtn != 0){
+		console.error("FAILURE: CLIENT rtn: " + rtn);
+		process.exit(-1);
+	}
 	rtn=MPIN_ZZZ.SERVER(sha,date,pHID,pHTID,Y,SST,pxID,pxCID,SEC,pE,pF,CLIENT_ID,timeValue);
-	if (rtn != 0)
-		exit("FAILURE: SERVER rtn: " + rtn);  
+	if (rtn != 0){
+		console.error("FAILURE: SERVER rtn: " + rtn);  
+		process.exit(-1);
+	}
 }
 else 
 {
 	console.log("MPIN Multi Pass ");   
 	rtn=MPIN_ZZZ.CLIENT_1(sha,date,CLIENT_ID,rng,X,pin,TOKEN,SEC,pxID,pxCID,pPERMIT);
-	if (rtn != 0)
-		exit("FAILURE: CLIENT_1 rtn: " + rtn);   
+	if (rtn != 0){
+		console.error("FAILURE: CLIENT_1 rtn: " + rtn);  
+		process.exit(-1);
+	} 
 
 /* Server calculates H(ID) and H(T|H(ID)) (if time permits enabled), and maps them to points on the curve HID and HTID resp. */
 	MPIN_ZZZ.SERVER_1(sha,date,CLIENT_ID,pHID,pHTID);
@@ -195,15 +200,18 @@ else
 
 /* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
 	rtn=MPIN_ZZZ.CLIENT_2(X,Y,SEC);
-	if (rtn != 0)
-		exit("FAILURE: CLIENT_2 rtn: " + rtn);  
+	if (rtn != 0){
+		console.error("FAILURE: CLIENT_2 rtn: " + rtn);
+		process.exit(-1);
+	}
 /* Server Second pass. Inputs hashed client id, random Y, -(x+y)*SEC, xID and xCID and Server secret SST. E and F help kangaroos to find error. */
 /* If PIN error not required, set E and F = NULL */
 	rtn=MPIN_ZZZ.SERVER_2(date,pHID,pHTID,Y,SST,pxID,pxCID,SEC,pE,pF);
 
-	if (rtn != 0)
-		exit("FAILURE: SERVER_1 rtn: " + rtn);  
-
+	if (rtn != 0){
+		console.log("FAILURE: SERVER_1 rtn: " + rtn);  
+		process.exit(-1);
+	}
 }
 		  
 
@@ -213,10 +221,13 @@ if (rtn == MPIN_ZZZ.BAD_PIN)
 	if (PINERROR)
 	{
 		var err=MPIN_ZZZ.KANGAROO(E,F);
-		if (err!=0) console.log("(Client PIN is out by "+err + ")");
+		if (err!=0) {
+			console.log("(Client PIN is out by "+err + ")");
+			process.exit(-1);
+		}
 	}
 }
 else
 	console.log("Server says - PIN is good! You really are "+IDstr); 
 
-return('SUCCESS')
+console.log('SUCCESS')

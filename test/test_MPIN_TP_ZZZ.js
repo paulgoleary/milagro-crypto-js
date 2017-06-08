@@ -165,9 +165,10 @@ if (!PINERROR)
 
 console.log("MPIN Multi Pass ");   
 rtn=MPIN_ZZZ.CLIENT_1(sha,date,CLIENT_ID,rng,X,pin,TOKEN,SEC,pxID,pxCID,pPERMIT);
-if (rtn != 0)
-	exit("FAILURE: CLIENT_1 rtn: " + rtn);   
-
+if (rtn != 0){
+	console.error("FAILURE: CLIENT_1 rtn: " + rtn);   
+	process.exit(-1);
+}
 /* Server calculates H(ID) and H(T|H(ID)) (if time permits enabled), and maps them to points on the curve HID and HTID resp. */
 MPIN_ZZZ.SERVER_1(sha,date,CLIENT_ID,pHID,pHTID);
 
@@ -176,15 +177,18 @@ MPIN_ZZZ.RANDOM_GENERATE(rng,Y);
 
 /* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
 rtn=MPIN_ZZZ.CLIENT_2(X,Y,SEC);
-if (rtn != 0)
-	exit("FAILURE: CLIENT_2 rtn: " + rtn);  
+if (rtn != 0){
+	console.error("FAILURE: CLIENT_2 rtn: " + rtn);  
+	process.exit(-1);
+}
 /* Server Second pass. Inputs hashed client id, random Y, -(x+y)*SEC, xID and xCID and Server secret SST. E and F help kangaroos to find error. */
 /* If PIN error not required, set E and F = NULL */
 rtn=MPIN_ZZZ.SERVER_2(date,pHID,pHTID,Y,SST,pxID,pxCID,SEC,pE,pF);
 
-if (rtn != 0)
-	exit("FAILURE: SERVER_1 rtn: " + rtn);  		  
-
+if (rtn != 0){
+	console.error("FAILURE: SERVER_1 rtn: " + rtn);  		  
+	process.exit(-1);
+}
 if (rtn == MPIN_ZZZ.BAD_PIN)
 {
 	console.log("Server says - Bad Pin. I don't know you. Feck off."); 
@@ -197,4 +201,4 @@ if (rtn == MPIN_ZZZ.BAD_PIN)
 else 
 	console.log("Server says - PIN is good! You really are "+IDstr); 
 
-return('SUCCESS')
+console.log('SUCCESS')

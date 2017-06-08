@@ -91,7 +91,10 @@ else
 		if (E[j]!=ML[j]) cmp=false;
 }
 if (cmp) console.log('Decryption is OK');
-else exit('Decryption Failed');
+else{ 
+	console.error('Decryption Failed');
+	process.exit(-1);
+}
 
 var MS=RSA_WWW.OAEP_DECODE(sha,null,ML); /* OAEP decode message  */
 console.log('Decoding= 0x' + RSA_WWW.bytestohex(MS));  
@@ -116,8 +119,10 @@ else
 		if (C[j]!=ML[j]) cmp=false;
 }
 if (cmp) console.log('Signature is valid');
-else exit('Signature is INVALID');
-
+else {
+	console.error('Signature is INVALID');
+	process.exit(-1);
+}
 RSA_WWW.PRIVATE_KEY_KILL(priv);
 
-return('SUCCESS')
+console.log('SUCCESS')

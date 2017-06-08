@@ -84,8 +84,10 @@ ECDH_ZZZ.KEY_PAIR_GENERATE(null,S0,W0);
 console.log("Alice's public key= 0x"+ECDH_ZZZ.bytestostring(W0));
 
 res=ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W0);
-if (res!=0)
-	exit("ECP_ZZZ Public Key is invalid!");
+if (res!=0) {
+	console.error("ECP_ZZZ Public Key is invalid!");
+	return(-1);
+}
 // Random private key for other party 
 ECDH_ZZZ.KEY_PAIR_GENERATE(rng,S1,W1);
 
@@ -93,10 +95,11 @@ console.log("Servers private key= 0x"+ECDH_ZZZ.bytestostring(S1));
 console.log("Servers public key= 0x"+ECDH_ZZZ.bytestostring(W1));
 
 res=ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W1);
-if (res!=0)
-	exit("ECP_ZZZ Public Key is invalid!");
+if (res!=0) {
+	console.error("ECP_ZZZ Public Key is invalid!");
+	return(-1);
+}
 		
-
 // Calculate common key using DH - IEEE 1363 method 
 
 ECDH_ZZZ.ECPSVDP_DH(S0,W1,Z0);
@@ -106,8 +109,10 @@ var same=true;
 for (i=0;i<ECDH_ZZZ.EFS;i++)
 	if (Z0[i]!=Z1[i]) same=false;
 
-if (!same)
-	exit("ECP_ZZZSVDP-DH Failed");
+if (!same) {
+	console.error("ECP_ZZZSVDP-DH Failed");
+	return(-1);
+}
 
 var KEY=ECDH_ZZZ.KDF2(sha,Z0,null,ECDH_ZZZ.EAS);
 
@@ -132,24 +137,29 @@ if (ECP_ZZZ.CURVETYPE!=ECP_ZZZ.MONTGOMERY)
 
 
 	M=ECDH_ZZZ.ECIES_DECRYPT(sha,P1,P2,V,C,T,S1);
-	if (M.length==0)
-		exit("ECIES Decryption Failed");
+	if (M.length==0) {
+		console.error("ECIES Decryption Failed");
+		return(-1);
+	}
 	else console.log("Decryption succeeded");
 
 	console.log("Message is 0x"+ECDH_ZZZ.bytestostring(M));
 
 	console.log("Testing ECDSA");
 
-	if (ECDH_ZZZ.ECPSP_DSA(sha,rng,S0,M,CS,DS)!=0)
-		exit("ECDSA Signature Failed");
+	if (ECDH_ZZZ.ECPSP_DSA(sha,rng,S0,M,CS,DS)!=0) {
+		console.error("ECDSA Signature Failed");
+		return(-1);
+	}
 	
 	console.log("Signature= ");
 	console.log("C= 0x"+ECDH_ZZZ.bytestostring(CS));
 	console.log("D= 0x"+ECDH_ZZZ.bytestostring(DS));
 
-	if (ECDH_ZZZ.ECPVP_DSA(sha,W0,M,CS,DS)!=0)
-		exit("ECDSA Verification Failed");
+	if (ECDH_ZZZ.ECPVP_DSA(sha,W0,M,CS,DS)!=0) {
+		console.error("ECDSA Verification Failed");
+		return(-1);
+	}
 	else console.log("ECDSA Signature/Verification succeeded");
 }
-
-return('PASSED');
+console.log('SUCCESS');
