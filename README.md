@@ -42,7 +42,7 @@ to see all the options. In order to build the library with the default pairing f
 ```
 jake build
 ```
-To build supporting other curves or other RSA options you an use the command ```jake build:choice[...]```. For example to build the library supporting the curves `BLS383` and `C25519` with `RSA4096` type
+To build the library supporting other curves or other RSA options you can use the command ```jake build:choice[...]```. For example to build the library supporting the curves `BLS383` and `C25519` with `RSA4096` type
 ```
 jake build:choice[BLS383,C25519,RSA4096]
 ```
@@ -56,7 +56,7 @@ jake build:all
 ```
 
 ## Run tests
-To run the tests type the following command. NOTE: it may take a while!!!
+To run the tests type the following command.
 
 ```
 jake test
@@ -67,7 +67,7 @@ jake test:choice[BLS383,C25519,RSA4096]
 ```
 
 ## Testing all in a docker
-To build all the possible configurations and test it in a docker (used for testing the library) type:
+To build the library with all the possible configurations and test it in a docker (used for testing the library) type:
 ```
 jake dockerbuild
 ```
