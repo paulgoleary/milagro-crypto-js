@@ -1,0 +1,22 @@
+language: node_js
+
+node_js:
+  - "node"
+
+sudo: required
+dist: trusty
+
+branches:
+  except:
+    - release
+
+before_script:
+    - npm install -g jake
+    - npm install jake
+    - npm install fs
+    - npm install colors
+    - npm install handlebars
+
+script:
+  - jake build:all --t
+  - jake test:choice[All] --t

@@ -17,38 +17,16 @@
 	under the License.
 */
 
-/* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
+/* Fixed Data in ROM - Field and Curve parameters */
 
-var UInt64 = function(top,bot) {
-	this.top=top;
-	this.bot=bot;
-};
+var ROM_CURVE_ANSSI={
 
-UInt64.prototype={
-	add: function(y)
-	{
-		var t=(this.bot>>>0)+(y.bot>>>0);
-		var low=t >>> 0;
-		var high=(this.top>>>0)+(y.top>>>0);
+// ANSSI curve
 
-		this.bot=low;
-		if (low!=t)
-			this.top=(high+1)>>>0;
-		else
-			this.top=high;
+  CURVE_A : -3,
+  CURVE_B : [0x7BB73F,0xED967B,0x803075,0xE4B1A1,0xEC0C9A,0xC00FDF,0x754A44,0xD4ABA,0x28A930,0x3FCA54,0xEE35],
+  CURVE_Order:[0xD655E1,0xD459C6,0x941FFD,0x40D2BF,0xDC67E1,0x435B53,0xE8CE42,0x10126D,0x3AD58F,0x178C0B,0xF1FD],
+  CURVE_Gx :[0x8F5CFF,0x7A2DD9,0x164C9,0xAF98B7,0x27D2DC,0x23958C,0x4749D4,0x31183D,0xC139EB,0xD4C356,0xB6B3],
+  CURVE_Gy :[0x62CFB,0x5A1554,0xE18311,0xE8E4C9,0x1C307,0xEF8C27,0xF0F3EC,0x1F9271,0xB20491,0xE0F7C8,0x6142],
 
-		return this;
-	},
-	copy: function()
-	{
-		var r=new UInt64(this.top,this.bot);
-		return r;
-	},
-	shlb: function()
-	{
-		var t=this.bot>>>24;
-		this.top=t+(this.top<<8);
-		this.bot<<=8;
-		return this;
-	}
 };

@@ -17,38 +17,15 @@
 	under the License.
 */
 
-/* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
+/* Fixed Data in ROM - Field and Curve parameters */
 
-var UInt64 = function(top,bot) {
-	this.top=top;
-	this.bot=bot;
-};
+var ROM_CURVE_MS256M={
 
-UInt64.prototype={
-	add: function(y)
-	{
-		var t=(this.bot>>>0)+(y.bot>>>0);
-		var low=t >>> 0;
-		var high=(this.top>>>0)+(y.top>>>0);
+// MS256 Montgomery curve
 
-		this.bot=low;
-		if (low!=t)
-			this.top=(high+1)>>>0;
-		else
-			this.top=high;
-
-		return this;
-	},
-	copy: function()
-	{
-		var r=new UInt64(this.top,this.bot);
-		return r;
-	},
-	shlb: function()
-	{
-		var t=this.bot>>>24;
-		this.top=t+(this.top<<8);
-		this.bot<<=8;
-		return this;
-	}
+	CURVE_A : -61370,
+	CURVE_B : [0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+	CURVE_Order:[0x22B4AD,0x4E6F11,0x64E5B8,0xD0A6BC,0x6AA55A,0xFFFFBE,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x3FFF],
+	CURVE_Gx: [0xb,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+	CURVE_Gy: [0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
 };

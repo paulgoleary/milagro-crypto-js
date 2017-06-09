@@ -26,6 +26,24 @@ var AES = function() {
 	this.f=[];
 };
 
+// AES constants
+
+AES.ECB=0;
+AES.CBC=1;
+AES.CFB1=2;
+AES.CFB2=3;
+AES.CFB4=5;
+AES.OFB1=14;
+AES.OFB2=15;
+AES.OFB4=17;
+AES.OFB8=21;
+AES.OFB16=29;
+AES.CTR1=30;
+AES.CTR2=31;
+AES.CTR4=33; 
+AES.CTR8=37; 
+AES.CTR16=45; 
+
 AES.prototype={
 /* reset cipher */
 	reset:function(m,iv)
@@ -34,7 +52,7 @@ AES.prototype={
 		this.mode=m;
 		for (i=0;i<16;i++)
 			this.f[i]=0;
-		if (this.mode!=ROM.ECB && iv!==null)
+		if (this.mode!=AES.ECB && iv!==null)
 			for (i=0;i<16;i++)
 				this.f[i]=iv[i];
 	},
@@ -257,19 +275,19 @@ AES.prototype={
 
 		switch (this.mode)
 		{
-		case ROM.ECB: 
+		case AES.ECB: 
 			this.ecb_encrypt(buff);
 			return 0;
-		case ROM.CBC:
+		case AES.CBC:
 			for (j=0;j<16;j++) buff[j]^=this.f[j];
 			this.ecb_encrypt(buff);
 			for (j=0;j<16;j++) this.f[j]=buff[j];
 			return 0;
 
-		case ROM.CFB1:
-		case ROM.CFB2:
-		case ROM.CFB4:
-			bytes=this.mode-ROM.CFB1+1;
+		case AES.CFB1:
+		case AES.CFB2:
+		case AES.CFB4:
+			bytes=this.mode-AES.CFB1+1;
 			for (j=0;j<bytes;j++) fell_off=(fell_off<<8)|this.f[j];
 			for (j=0;j<16;j++) st[j]=this.f[j];
 			for (j=bytes;j<16;j++) this.f[j-bytes]=this.f[j];
@@ -281,24 +299,24 @@ AES.prototype={
 			}
 			return fell_off;
 
-		case ROM.OFB1:
-		case ROM.OFB2:
-		case ROM.OFB4:
-		case ROM.OFB8:
-		case ROM.OFB16:
+		case AES.OFB1:
+		case AES.OFB2:
+		case AES.OFB4:
+		case AES.OFB8:
+		case AES.OFB16:
 
-			bytes=this.mode-ROM.OFB1+1;
+			bytes=this.mode-AES.OFB1+1;
 			this.ecb_encrypt(this.f);
 			for (j=0;j<bytes;j++) buff[j]^=this.f[j];
 			return 0;
 
-		case ROM.CTR1:
-		case ROM.CTR2:
-		case ROM.CTR4:
-		case ROM.CTR8:
-		case ROM.CTR16:
+		case AES.CTR1:
+		case AES.CTR2:
+		case AES.CTR4:
+		case AES.CTR8:
+		case AES.CTR16:
 
-			bytes=this.mode-ROM.CTR1+1;
+			bytes=this.mode-AES.CTR1+1;
 			for (j=0;j<16;j++) st[j]=this.f[j];
 			this.ecb_encrypt(st);
 			for (j=0;j<bytes;j++) buff[j]^=st[j];
@@ -320,10 +338,10 @@ AES.prototype={
 		fell_off=0;
 		switch (this.mode)
 		{
-		case ROM.ECB:
+		case AES.ECB:
 			this.ecb_decrypt(buff);
 			return 0;
-		case ROM.CBC:
+		case AES.CBC:
 			for (j=0;j<16;j++) 
 			{
 				st[j]=this.f[j];
@@ -336,10 +354,10 @@ AES.prototype={
 				st[j]=0;
 			}
 			return 0;
-		case ROM.CFB1:
-		case ROM.CFB2:
-		case ROM.CFB4:
-			bytes=this.mode-ROM.CFB1+1;
+		case AES.CFB1:
+		case AES.CFB2:
+		case AES.CFB4:
+			bytes=this.mode-AES.CFB1+1;
 			for (j=0;j<bytes;j++) fell_off=(fell_off<<8)|this.f[j];
 			for (j=0;j<16;j++) st[j]=this.f[j];
 			for (j=bytes;j<16;j++) this.f[j-bytes]=this.f[j];
@@ -350,22 +368,22 @@ AES.prototype={
 				buff[j]^=st[j];
 			}
 			return fell_off;
-		case ROM.OFB1:
-		case ROM.OFB2:
-		case ROM.OFB4:
-		case ROM.OFB8:
-		case ROM.OFB16:
-			bytes=this.mode-ROM.OFB1+1;
+		case AES.OFB1:
+		case AES.OFB2:
+		case AES.OFB4:
+		case AES.OFB8:
+		case AES.OFB16:
+			bytes=this.mode-AES.OFB1+1;
 			this.ecb_encrypt(this.f);
 			for (j=0;j<bytes;j++) buff[j]^=this.f[j];
 			return 0;
 
- 		case ROM.CTR1:
-		case ROM.CTR2:
-		case ROM.CTR4:
-		case ROM.CTR8:
-		case ROM.CTR16:
-			bytes=this.mode-ROM.CTR1+1;
+ 		case AES.CTR1:
+		case AES.CTR2:
+		case AES.CTR4:
+		case AES.CTR8:
+		case AES.CTR16:
+			bytes=this.mode-AES.CTR1+1;
 			for (j=0;j<16;j++) st[j]=this.f[j];
 			this.ecb_encrypt(st);
 			for (j=0;j<bytes;j++) buff[j]^=st[j];

@@ -17,38 +17,15 @@
 	under the License.
 */
 
-/* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
+/* Fixed Data in ROM - Field and Curve parameters */
 
-var UInt64 = function(top,bot) {
-	this.top=top;
-	this.bot=bot;
-};
+var ROM_CURVE_MS255E={
 
-UInt64.prototype={
-	add: function(y)
-	{
-		var t=(this.bot>>>0)+(y.bot>>>0);
-		var low=t >>> 0;
-		var high=(this.top>>>0)+(y.top>>>0);
+// MS255 Edwards curve
 
-		this.bot=low;
-		if (low!=t)
-			this.top=(high+1)>>>0;
-		else
-			this.top=high;
-
-		return this;
-	},
-	copy: function()
-	{
-		var r=new UInt64(this.top,this.bot);
-		return r;
-	},
-	shlb: function()
-	{
-		var t=this.bot>>>24;
-		this.top=t+(this.top<<8);
-		this.bot<<=8;
-		return this;
-	}
+CURVE_A : -1,
+CURVE_B : [0xEA97,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+CURVE_Order:[0x36EB75,0xD1ED04,0x2EAC49,0xEDA683,0xF1A785,0xFFFFDC,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x1FFF],
+CURVE_Gx :[0x4,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+CURVE_Gy :[0x8736A0,0x255BD0,0x45BA2A,0xED445A,0x914B8A,0x47E552,0xDD8E0C,0xEC254C,0x7BB545,0x78534A,0x26CB],
 };

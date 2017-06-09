@@ -17,38 +17,15 @@
 	under the License.
 */
 
-/* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
+/* Fixed Data in ROM - Field and Curve parameters */
 
-var UInt64 = function(top,bot) {
-	this.top=top;
-	this.bot=bot;
-};
+var ROM_CURVE_MS255W={
 
-UInt64.prototype={
-	add: function(y)
-	{
-		var t=(this.bot>>>0)+(y.bot>>>0);
-		var low=t >>> 0;
-		var high=(this.top>>>0)+(y.top>>>0);
+// MS255 WEIERSTRASS curve
 
-		this.bot=low;
-		if (low!=t)
-			this.top=(high+1)>>>0;
-		else
-			this.top=high;
-
-		return this;
-	},
-	copy: function()
-	{
-		var r=new UInt64(this.top,this.bot);
-		return r;
-	},
-	shlb: function()
-	{
-		var t=this.bot>>>24;
-		this.top=t+(this.top<<8);
-		this.bot<<=8;
-		return this;
-	}
+CURVE_A : -3,
+CURVE_B : [0xFFAB46,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x7FFF],
+CURVE_Order:[0x594AEB,0xAC983C,0xDFAB8F,0x3AD2B3,0x4A3828,0xFFFF86,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x7FFF],
+CURVE_Gx :[0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+CURVE_Gy :[0xCB44BA,0xFF6769,0xD1733,0xDDFDA6,0xB6C78C,0x7D177D,0xF9B2FF,0x921EBF,0xBA7833,0x6AC0ED,0x6F7A],
 };

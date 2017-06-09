@@ -1,0 +1,19 @@
+TEST 1: node test_add_shares.js
+./run_test.sh: 25: ./run_test.sh: node: not found
+TEST 2: node test_token.js
+./run_test.sh: 29: ./run_test.sh: node: not found
+TEST 3: node test_pass1.js
+./run_test.sh: 33: ./run_test.sh: node: not found
+TEST 4: node test_pass2.js
+./run_test.sh: 37: ./run_test.sh: node: not found
+TEST 5: node test_randomX.js
+./run_test.sh: 41: ./run_test.sh: node: not found
+Traceback (most recent call last):
+  File "./find_duplicates.py", line 31, in <module>
+    values = json.load(open("./randomX.json", "r"))
+IOError: [Errno 2] No such file or directory: './randomX.json'
+TEST 6: node test_sha265.js
+./run_test.sh: 46: ./run_test.sh: node: not found
+TEST 7: node test_onepass.js
+./run_test.sh: 50: ./run_test.sh: node: not found
+ALL TESTS PASSED
