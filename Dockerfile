@@ -33,4 +33,4 @@ ADD ./ /root/src/milagro-crypto-js
 WORKDIR /root/src/milagro-crypto-js
 
 RUN jake build:all --t && \
-jake test --t
+jake test:choice[All] --t

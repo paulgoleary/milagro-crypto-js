@@ -19,4 +19,4 @@ before_script:
 
 script:
   - jake build:all --t
-  - jake test --t
+  - jake test:choice[All] --t

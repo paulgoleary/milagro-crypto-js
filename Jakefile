@@ -7,6 +7,7 @@ var cwd = process.cwd(),
 	srcdir = cwd + '/src',
 	testdir = cwd + '/test',
     targetdir = cwd + '/target',
+    testvectordir = cwd + '/testVectors',
     testingdir = '/Testing',
     includefile = '/include.html',
     targetsrcdir = '/src',
@@ -240,12 +241,15 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 // Copy and set parameters for files according with the RSA configuration chosen.
 function rsatestset(tb,tff,tempTarg) {
 
+	if (tff == '2048') { // Test only RSA2048 for the moment
 	fname = tempTarg+targettestdir+'/'+'test_RSA_'+tff+'.js';
 	jake.cpR(testdir+'/test_RSA_WWW.js', fname);
 
 	Replace(fname,/XXX/g,tb);
 	Replace(fname,/WWW/g,tff);
 	Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+	Replace(fname,/@TVD/g,testvectordir);
+	}
 }
 
 function checkinput(option) {
@@ -301,7 +305,7 @@ function buildconfiguration(option,tempTarg) {
 		curvetestset('336','HIFIVE','HIFIVE','NOT',tempTarg);
 	}
 	if (option == 'GOLDILOCKS') {
-		curveset('448','GOLDILOCKS','GOLDILOCKS','56','29','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
+		curveset('448','GOLDILOCKS','GOLDILOCKS','56','23','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('GOLDILOCKS','GOLDILOCKS',tempTarg);
 		curvetestset('448','GOLDILOCKS','GOLDILOCKS','NOT',tempTarg);
 	}

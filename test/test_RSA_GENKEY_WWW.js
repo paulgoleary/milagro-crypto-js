@@ -31,18 +31,7 @@ eval(fs.readFileSync('@SWD/HASH256.js')+'');
 eval(fs.readFileSync('@SWD/HASH384.js')+'');
 eval(fs.readFileSync('@SWD/HASH512.js')+'');
 
-function hex2string(hexx) {
-    var hex = hexx.toString();//force conversion
-    var str = '';
-    for (var i = 0; i < hex.length; i += 2)
-        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-    return str;
-}
-
 console.log('Start test RSA');
-
-// Load test vectors
-var vectors = require('@TVD/RSA_WWW.json');
 
 var i,j=0,res;
 var result;
@@ -65,15 +54,16 @@ var S=[];
 
 var start,end,time;
 start=new Date().getTime();
-console.log('Load RSA public/private key pair from test vectors');
+console.log('Generating RSA public/private key pair (slow!)');
+RSA_WWW.KEY_PAIR(rng,65537,priv,pub);
+console.log('PR.p: '+priv.p.toString());
+console.log('PR.q: '+priv.q.toString());
+console.log('PR.dp: '+priv.dp.toString());
+console.log('PR.dq: '+priv.dq.toString());
+console.log('PR.c: '+priv.c.toString());
+console.log('PUB.n: '+pub.n.toString());
 
-FF_WWW.fromBytes(priv.p, new Buffer(vectors['priv.p'], "hex"));
-FF_WWW.fromBytes(priv.q, new Buffer(vectors['priv.q'], "hex"));
-FF_WWW.fromBytes(priv.dp, new Buffer(vectors['priv.dp'], "hex"));
-FF_WWW.fromBytes(priv.dq, new Buffer(vectors['priv.dq'], "hex"));
-FF_WWW.fromBytes(priv.c, new Buffer(vectors['priv.c'], "hex"));
-FF_WWW.fromBytes(pub.n, new Buffer(vectors['pub.n'], "hex"));
-pub.e=vectors['pub.e'];
+
 
 end=new Date().getTime();
 time=end-start;
