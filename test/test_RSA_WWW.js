@@ -22,19 +22,19 @@ under the License.
 var fs = require('fs');
 var chai = require('chai');
 
+eval(fs.readFileSync('@SWD/UInt64.js')+'');
 eval(fs.readFileSync('@SWD/HASH256.js')+'');
 eval(fs.readFileSync('@SWD/HASH384.js')+'');
 eval(fs.readFileSync('@SWD/HASH512.js')+'');
 eval(fs.readFileSync('@SWD/BIG_XXX.js')+'');
 eval(fs.readFileSync('@SWD/DBIG_XXX.js')+'');
-eval(fs.readFileSync('@SWD/UInt64.js')+'');
 eval(fs.readFileSync('@SWD/RAND.js')+'');
 eval(fs.readFileSync('@SWD/FF_WWW.js')+'');
 eval(fs.readFileSync('@SWD/RSA_WWW.js')+'');
 
 var expect = chai.expect;
 
-describe('Test RSA', function() {
+describe('TEST RSA WWW', function() {
 
 	var vectors;
 	var i,j=0,res;
@@ -61,7 +61,8 @@ describe('Test RSA', function() {
 		done();
 	});
 
-	it('Test RSA enctyption/decryption', function(done) {
+	it('test RSA Enctyption/Decryption', function(done) {
+	this.timeout(20000);
 
 		message='Hello World\n';
 
@@ -93,14 +94,15 @@ describe('Test RSA', function() {
 		done();
 	});
 
-	it('Test RSA signature', function(done) {
-
+	it('test RSA Signature', function(done) {
+	this.timeout(20000);
+	
 		RSA_WWW.PKCS15(sha,M,C);
 
 		RSA_WWW.DECRYPT(priv,C,S); /* create signature in S */ 
 
 		RSA_WWW.ENCRYPT(pub,S,ML); 
-
+		var cmp=true;
 		if (C.length!=ML.length) cmp=false;
 		else
 		{

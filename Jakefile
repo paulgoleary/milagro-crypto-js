@@ -210,30 +210,6 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 		fname = tempTarg+targettestdir+'/'+'test_MPIN_'+tc+'.js';
 		jake.cpR(testdir+'/test_MPIN_ZZZ.js', fname);
 
-	examplesete(fname,/XXX/g,tb);
-		Replace(fname,/YYY/g,tf);
-		Replace(fname,/ZZZ/g,tc);
-		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
-
-		fname = tempTarg+targettestdir+'/'+'test_MPIN_TP_'+tc+'.js';
-		jake.cpR(testdir+'/test_MPIN_TP_ZZZ.js', fname);
-
-		Replace(fname,/XXX/g,tb);
-		Replace(fname,/YYY/g,tf);
-		Replace(fname,/ZZZ/g,tc);
-		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
-
-		fname = tempTarg+targettestdir+'/'+'test_MPIN_FULL_'+tc+'.js';
-		jake.cpR(testdir+'/test_MPIN_FULL_ZZZ.js', fname);
-
-		Replace(fname,/XXX/g,tb);
-		Replace(fname,/YYY/g,tf);
-		Replace(fname,/ZZZ/g,tc);
-		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
-
-		fname = tempTarg+targettestdir+'/'+'test_MPIN_ONE_PASS_'+tc+'.js';
-		jake.cpR(testdir+'/test_MPIN_ONE_PASS_ZZZ.js', fname);
-
 		Replace(fname,/XXX/g,tb);
 		Replace(fname,/YYY/g,tf);
 		Replace(fname,/ZZZ/g,tc);
@@ -500,38 +476,15 @@ function buildconfiguration(option,tempTarg) {
 	}
 }
 
-var testsfailed = false;
-// run a single test
-function testrun(target,test,callback) {
-	var nametest = test.replace(/_/g,' ').replace('.js','');
-	var outputfile = target+testingdir+lasttestlog;
-	var tempoutfile = target+testingdir+"/temp.txt";
-	var cmd ='node '+target+targettestdir+'/'+test+' >> '+tempoutfile+' 2>&1';
-	process.stdout.write(nametest+' ... ');
-	var ex = jake.createExec(cmd);
+// run tests with mocha
+function testrun(target) {
+	var cmd = ['cd '+target+' && mocha'];
+	var ex = jake.createExec(cmd,{printStdout: true});
 	ex.addListener('error', function(msg,code) {
-		process.stdout.write('Failed\n');
-		testsfailed = true;
-		var temp = fs.readFileSync(tempoutfile,'utf8');
-		fs.appendFileSync(outputfile,'Start '+nametest+'\n\n'+temp+'\nFinished '+nametest+'\n\n')
-		fs.appendFileSync(target+testingdir+failedtestlog, nametest+'\n');
-		fs.unlinkSync(tempoutfile);
-		callback();
-		return;
+		process.exit("Abort");
 	});
 	ex.addListener('cmdEnd',function(arg) {
-		var temp = fs.readFileSync(tempoutfile,'utf8');
-		if(temp.includes('SUCCESS'))
-			process.stdout.write('OK\n');
-		else {
-			process.stdout.write('Failed\n');
-			testsfailed = true;
-			fs.appendFileSync(target+testingdir+failedtestlog, nametest+'\n');
-		}
-		fs.appendFileSync(outputfile,'Start '+nametest+'\n\n'+temp+'\nFinished '+nametest+'\n\n')
-		fs.unlinkSync(tempoutfile);
-		callback();
-		return;
+		complete();
 	});
 	ex.run();
 }
@@ -641,30 +594,6 @@ task('clean', function () {
 	jake.mkdirP(targetdir);
 });
 
-var j = 0;
-var looptests = function(arr,tempTarg) 
-{
-    testrun(tempTarg,arr[j],function()
-    {
-        j++;
-        if(j < arr.length) // any more items in array? continue looptests
-        {
-            looptests(arr,tempTarg);   
-        }
-        if(j == arr.length) {
-        	if(testsfailed) {
-        		var failed = fs.readFileSync(tempTarg+testingdir+failedtestlog,'utf8');
-			    jake.logger.error('The following tests failed: \n'+failed,-1);
-			    process.exit(-1);
-        	}
-        	else {
-        		jake.logger.log('SUCCESS: all tests passed!');
-				complete();
-        	}
-        }
-    }); 
-}
-
 // Run test on single build
 desc('Run tests'.blue);
 task('test', {async: true}, function ()
@@ -691,15 +620,7 @@ task('test', {async: true}, function ()
         	fs.unlinkSync(tempTarg+testingdir+lasttestlog);
         if (fs.existsSync(tempTarg+testingdir+failedtestlog))
         	fs.unlinkSync(tempTarg+testingdir+failedtestlog);
-        fs.readdir(tempTarg+targettestdir, function(errors, tests)
-        {
-        	if (tests == null)
-        	{
-        		jake.logger.log('Nothing to test');
-        		complete();
-        	}
-			looptests(tests,tempTarg);
-        });
+        testrun(tempTarg);
 	});
 });
 
@@ -730,7 +651,7 @@ namespace('test', function ()
 		        		jake.logger.error('Nothing to test');
 		        		complete();
 		        	}
-					looptests(tests,tempTarg);
+					testrun(tempTarg);
 		        });
 			}
 			else
@@ -757,21 +678,8 @@ desc('Format code using js-beautify'.blue);
 task('format', {async: true}, function ()
 {
 	var cmd = ['js-beautify -r '+srcdir+'/*js',
-			   'js-beautify -r '+testdir+'/*js']
+			   'js-beautify -r '+testdir+'/*js',
+			   'js-beautify -r '+examplesdir+'/*js']
 	jake.exec(cmd, {printStdout: true});
-	complete();
-});
-
-// Try to use mocha
-desc('Try to use mocha'.blue);
-task('mocha', {async: true}, function ()
-{
-	mochaTests({
-	    directory: pwd+'/target/build_RSA2048/test',
-	    files    : pwd+'/target/build_RSA2048/test\-.*\.js/',
-	    coverage : true,
-	    reporter : 'tap',
-	    output   : 'test/results.tap'
-	});
 	complete();
 });

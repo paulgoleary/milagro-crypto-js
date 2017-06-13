@@ -38,7 +38,7 @@ eval(fs.readFileSync('@SWD/AES.js') + '');
 
 var expect = chai.expect;
 
-describe('test ECC', function() {
+describe('TEST ECC ZZZ', function() {
 
 		var i = 0, j = 0, res;
 		var result;
@@ -79,8 +79,8 @@ describe('test ECC', function() {
 	});
 
 
-	it('test key generation', function(done) {
-		this.timeout(0);
+	it('test Key Generation', function(done) {
+		this.timeout(20000);
 
 		// Generate Key pair S/W 
 		ECDH_ZZZ.KEY_PAIR_GENERATE(null, S0, W0);
@@ -106,14 +106,15 @@ describe('test ECC', function() {
 
 		KEY = ECDH_ZZZ.KDF2(sha,Z0,null,ECDH_ZZZ.EAS);
 
-		expect(same).to.be.equal(true);
+		expect(same).to.be.equal(false);
 		done();
 	});
 
 
 	if (ECP_ZZZ.CURVETYPE!=ECP_ZZZ.MONTGOMERY)
 	{
-		it('Test ECIES', function(done) {
+		it('test ECIES', function(done) {
+		this.timeout(20000);
 			P1[0]=0x0; P1[1]=0x1; P1[2]=0x2; 
 			P2[0]=0x0; P2[1]=0x1; P2[2]=0x2; P2[3]=0x3; 
 
@@ -123,12 +124,13 @@ describe('test ECC', function() {
 
 			M=ECDH_ZZZ.ECIES_DECRYPT(sha,P1,P2,V,C,T,S1);
 
-			expect(M.length).to.be.equal(0);
+			expect(M.length).to.not.equal(0);
 
 			done();
 		});
 
-		it('Test ECDSA', function(done) {
+		it('test ECDSA', function(done) {
+		this.timeout(20000);
 			expect(ECDH_ZZZ.ECPSP_DSA(sha,rng,S0,M,CS,DS)).to.be.equal(0);
 			expect(ECDH_ZZZ.ECPVP_DSA(sha,W0,M,CS,DS)).to.be.equal(0);
 			done();
