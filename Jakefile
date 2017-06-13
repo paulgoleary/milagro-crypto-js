@@ -1,4 +1,5 @@
 require('colors');
+require('jake-utils');
 
 var fs = require('fs'),
 	jake = require('jake');
@@ -8,10 +9,12 @@ var cwd = process.cwd(),
 	testdir = cwd + '/test',
     targetdir = cwd + '/target',
     testvectordir = cwd + '/testVectors',
+    examplesdir = cwd + '/examples',
     testingdir = '/Testing',
     includefile = '/include.html',
     targetsrcdir = '/src',
     targettestdir = '/test',
+    targetexamplesdir = '/examples',
     lasttestlog = '/LastTest.txt',
     failedtestlog = '/FailedTest.txt';
 
@@ -71,8 +74,8 @@ function rsaset(tb,tff,nb,base,ml,tempTarg) {
 	fname='BIG_'+tb+'.js';
 	jake.cpR(srcdir+'/BIG_XXX.js', tempTarg+fname);
 	Replace(tempTarg+fname,/XXX/g,tb);
-	Replace(tempTarg+fname,/@NB@/g,nb);
-	Replace(tempTarg+fname,/@BASE@/g,base);
+	Replace(tempTarg+fname,/@NB/g,nb);
+	Replace(tempTarg+fname,/@BASE/g,base);
 	addToInclude(fname,tempTarg)
 
 	fname='DBIG_'+tb+'.js';
@@ -87,7 +90,7 @@ function rsaset(tb,tff,nb,base,ml,tempTarg) {
 
 	Replace(tempTarg+fname,/WWW/g,tff);
 	Replace(tempTarg+fname,/XXX/g,tb);
-	Replace(tempTarg+fname,/@ML@/g,ml);
+	Replace(tempTarg+fname,/@ML/g,ml);
 	addToInclude(fname,tempTarg)
 
 	fname='RSA_'+tff+'.js';
@@ -106,8 +109,8 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 	jake.cpR(srcdir+'/BIG_XXX.js', tempTarg+fname);
 
 	Replace(tempTarg+fname,/XXX/g,tb);
-	Replace(tempTarg+fname,/@NB@/g,nb);
-	Replace(tempTarg+fname,/@BASE@/g,base);
+	Replace(tempTarg+fname,/@NB/g,nb);
+	Replace(tempTarg+fname,/@BASE/g,base);
 	addToInclude(fname,tempTarg)
 
 	fname='DBIG_'+tb+'.js';
@@ -121,9 +124,9 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 
 	Replace(tempTarg+fname,/XXX/g,tb);
 	Replace(tempTarg+fname,/YYY/g,tf);
-	Replace(tempTarg+fname,/@NBT@/g,nbt);
-	Replace(tempTarg+fname,/@M8@/g,m8);
-	Replace(tempTarg+fname,/@MT@/g,mt);
+	Replace(tempTarg+fname,/@NBT/g,nbt);
+	Replace(tempTarg+fname,/@M8/g,m8);
+	Replace(tempTarg+fname,/@MT/g,mt);
 	addToInclude(fname,tempTarg)
 
 	fname='ECP_'+tc+'.js';
@@ -132,8 +135,8 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 	Replace(tempTarg+fname,/XXX/g,tb);
 	Replace(tempTarg+fname,/YYY/g,tf);
 	Replace(tempTarg+fname,/ZZZ/g,tc);
-	Replace(tempTarg+fname,/@CT@/g,ct);
-	Replace(tempTarg+fname,/@PF@/g,pf);
+	Replace(tempTarg+fname,/@CT/g,ct);
+	Replace(tempTarg+fname,/@PF/g,pf);
 	addToInclude(fname,tempTarg)
 
 	fname='ECDH_'+tc+'.js';
@@ -207,7 +210,7 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 		fname = tempTarg+targettestdir+'/'+'test_MPIN_'+tc+'.js';
 		jake.cpR(testdir+'/test_MPIN_ZZZ.js', fname);
 
-		Replace(fname,/XXX/g,tb);
+	examplesete(fname,/XXX/g,tb);
 		Replace(fname,/YYY/g,tf);
 		Replace(fname,/ZZZ/g,tc);
 		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
@@ -235,6 +238,67 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 		Replace(fname,/YYY/g,tf);
 		Replace(fname,/ZZZ/g,tc);
 		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+	}
+}
+
+// Copy and set parameters for test files according with the curve chosen.
+function curveexampleset(tb,tf,tc,pf,tempTarg) {
+
+	if (pf == 'NOT'){
+		fname = tempTarg+targetexamplesdir+'/'+'ECDH_'+tc+'.js';
+		jake.cpR(examplesdir+'/ECDH_ZZZ.js', fname);
+
+		Replace(fname,/XXX/g,tb);
+		Replace(fname,/YYY/g,tf);
+		Replace(fname,/ZZZ/g,tc);
+		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+	}
+	if (pf != 'NOT'){
+		fname = tempTarg+targetexamplesdir+'/'+'MPIN_'+tc+'.js';
+		jake.cpR(examplesdir+'/MPIN_ZZZ.js', fname);
+
+		Replace(fname,/XXX/g,tb);
+		Replace(fname,/YYY/g,tf);
+		Replace(fname,/ZZZ/g,tc);
+		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+
+		fname = tempTarg+targetexamplesdir+'/'+'MPIN_TP_'+tc+'.js';
+		jake.cpR(examplesdir+'/MPIN_TP_ZZZ.js', fname);
+
+		Replace(fname,/XXX/g,tb);
+		Replace(fname,/YYY/g,tf);
+		Replace(fname,/ZZZ/g,tc);
+		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+
+		fname = tempTarg+targetexamplesdir+'/'+'MPIN_FULL_'+tc+'.js';
+		jake.cpR(examplesdir+'/MPIN_FULL_ZZZ.js', fname);
+
+		Replace(fname,/XXX/g,tb);
+		Replace(fname,/YYY/g,tf);
+		Replace(fname,/ZZZ/g,tc);
+		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+
+		fname = tempTarg+targetexamplesdir+'/'+'MPIN_ONE_PASS_'+tc+'.js';
+		jake.cpR(examplesdir+'/MPIN_ONE_PASS_ZZZ.js', fname);
+
+		Replace(fname,/XXX/g,tb);
+		Replace(fname,/YYY/g,tf);
+		Replace(fname,/ZZZ/g,tc);
+		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+	}
+}
+
+// Copy and set parameters for files according with the RSA configuration chosen.
+function rsaexampleset(tb,tff,tempTarg) {
+
+	if (tff == '2048') { // Test only RSA2048 for the moment
+	fname = tempTarg+targetexamplesdir+'/'+'RSA_'+tff+'.js';
+	jake.cpR(examplesdir+'/RSA_WWW.js', fname);
+
+	Replace(fname,/XXX/g,tb);
+	Replace(fname,/WWW/g,tff);
+	Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+	Replace(fname,/@TVD/g,testvectordir);
 	}
 }
 
@@ -273,138 +337,166 @@ function buildconfiguration(option,tempTarg) {
 		curveset('256','25519','ED25519','32','24','255','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('ED25519','25519',tempTarg);
 		curvetestset('256','25519','ED25519','NOT',tempTarg);
+		curveexampleset('256','25519','ED25519','NOT',tempTarg);
 	}
 	if (option == 'C25519') {
 		curveset('256','25519','C25519','32','24','255','5','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
 		copyROMfiles('C25519','25519',tempTarg);
 		curvetestset('256','25519','C25519','NOT',tempTarg);
+		curveexampleset('256','25519','C25519','NOT',tempTarg);
 	}
 	if (option == 'NIST256') {
 		curveset('256','NIST256','NIST256','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('NIST256','NIST256',tempTarg);
 		curvetestset('256','NIST256','NIST256','NOT',tempTarg);
+		curveexampleset('256','NIST256','NIST256','NOT',tempTarg);
 	}
 	if (option == 'NIST384') {
 		curveset('384','NIST384','NIST384','48','56','384','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('NIST384','NIST384',tempTarg);
 		curvetestset('384','NIST384','NIST384','NOT',tempTarg);
+		curveexampleset('384','NIST384','NIST384','NOT',tempTarg);
 	}
 	if (option == 'BRAINPOOL') {
 		curveset('256','BRAINPOOL','BRAINPOOL','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('BRAINPOOL','BRAINPOOL',tempTarg);
 		curvetestset('256','BRAINPOOL','BRAINPOOL','NOT',tempTarg);
+		curveexampleset('256','BRAINPOOL','BRAINPOOL','NOT',tempTarg);
 	}
 	if (option == 'ANSSI') {
 		curveset('256','ANSSI','ANSSI','32','24','256','7','NOT_SPECIAL','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('ANSSI','ANSSI',tempTarg);
 		curvetestset('256','ANSSI','ANSSI','NOT',tempTarg);
+		curveexampleset('256','ANSSI','ANSSI','NOT',tempTarg);
 	}
 	if (option == 'HIFIVE') {
 		curveset('336','HIFIVE','HIFIVE','42','23','336','5','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('HIFIVE','HIFIVE',tempTarg);
 		curvetestset('336','HIFIVE','HIFIVE','NOT',tempTarg);
+		curveexampleset('336','HIFIVE','HIFIVE','NOT',tempTarg);
 	}
 	if (option == 'GOLDILOCKS') {
 		curveset('448','GOLDILOCKS','GOLDILOCKS','56','23','448','7','GENERALISED_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('GOLDILOCKS','GOLDILOCKS',tempTarg);
 		curvetestset('448','GOLDILOCKS','GOLDILOCKS','NOT',tempTarg);
+		curveexampleset('448','GOLDILOCKS','GOLDILOCKS','NOT',tempTarg);
 	}
 	if (option == 'C41417') {
 		curveset('416','C41417','C41417','52','23','414','7','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('C41417','C41417',tempTarg);
 		curvetestset('416','C41417','C41417','NOT',tempTarg);
+		curveexampleset('416','C41417','C41417','NOT',tempTarg);
 	}
 	if (option == 'NIST521') {
 		curveset('528','NIST521','NIST521','66','23','521','7','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('NIST521','NIST521',tempTarg);
 		curvetestset('528','NIST521','NIST521','NOT',tempTarg);
+		curveexampleset('528','NIST521','NIST521','NOT',tempTarg);
 	}
 	if (option == 'MF254W') {
 		curveset('256','254MF','MF254W','32','24','254','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('MF254W','254MF',tempTarg);
 		curvetestset('256','254MF','MF254W','NOT',tempTarg);
+		curveexampleset('256','254MF','MF254W','NOT',tempTarg);
 	}
 	if (option == 'MF254E') {
 		curveset('256','254MF','MF254E','32','24','254','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
 		copyROMfiles('MF254E','254MF',tempTarg);
 		curvetestset('256','254MF','MF254E','NOT',tempTarg);
+		curveexampleset('256','254MF','MF254E','NOT',tempTarg);
 	}
 	if (option == 'MF254M') {
 		curveset('256','254MF','MF254M','32','24','254','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
 		copyROMfiles('MF254M','254MF',tempTarg);
 		curvetestset('256','254MF','MF254M','NOT',tempTarg);
+		curveexampleset('256','254MF','MF254M','NOT',tempTarg);
 	}
 	if (option == 'MF256W') {
 		curveset('256','256MF','MF256W','32','24','256','7','MONTGOMERY_FRIENDLY','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('MF256W','256MF',tempTarg);
 		curvetestset('256','256MF','MF256W','NOT',tempTarg);
+		curveexampleset('256','256MF','MF256W','NOT',tempTarg);
 	}
 	if (option == 'MF256E') {
 		curveset('256','256MF','MF256E','32','24','256','7','MONTGOMERY_FRIENDLY','EDWARDS','NOT',tempTarg);
 		copyROMfiles('MF256E','256MF',tempTarg);
 		curvetestset('256','256MF','MF256E','NOT',tempTarg);
+		curveexampleset('256','256MF','MF256E','NOT',tempTarg);
 	}
 	if (option == 'MF256M') {
 		curveset('256','256MF','MF256M','32','24','256','7','MONTGOMERY_FRIENDLY','MONTGOMERY','NOT',tempTarg);
 		copyROMfiles('MF256M','256MF',tempTarg);
 		curvetestset('256','256MF','MF256M','NOT',tempTarg);
+		curveexampleset('256','256MF','MF256M','NOT',tempTarg);
 	}
 	if (option == 'MS255W') {
 		curveset('256','255MS','MS255W','32','24','255','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('MS255W','255MS',tempTarg);
 		curvetestset('256','255MS','MS255W','NOT',tempTarg);
+		curveexampleset('256','255MS','MS255W','NOT',tempTarg);
 	}
 	if (option == 'MS255E') {
 		curveset('256','255MS','MS255E','32','24','255','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('MS255E','255MS',tempTarg);
 		curvetestset('256','255MS','MS255E','NOT',tempTarg);
+		curveexampleset('256','255MS','MS255E','NOT',tempTarg);
 	}
 	if (option == 'MS255M') {
 		curveset('256','255MS','MS255M','32','24','255','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
 		copyROMfiles('MS255M','255MS',tempTarg);
 		curvetestset('256','255MS','MS255M','NOT',tempTarg);
+		curveexampleset('256','255MS','MS255M','NOT',tempTarg);
 	}
 	if (option == 'MS256W') {
 		curveset('256','256MS','MS256W','32','24','256','3','PSEUDO_MERSENNE','WEIERSTRASS','NOT',tempTarg);
 		copyROMfiles('MS256W','256MS',tempTarg);
 		curvetestset('256','256MS','MS256W','NOT',tempTarg);
+		curveexampleset('256','256MS','MS256W','NOT',tempTarg);
 	}
 	if (option == 'MS256E') {
 		curveset('256','256MS','MS256E','32','24','256','3','PSEUDO_MERSENNE','EDWARDS','NOT',tempTarg);
 		copyROMfiles('MS256E','256MS',tempTarg);
 		curvetestset('256','256MS','MS256E','NOT',tempTarg);
+		curveexampleset('256','256MS','MS256E','NOT',tempTarg);
 	}
 	if (option == 'MS256M') {
 		curveset('256','256MS','MS256M','32','24','256','3','PSEUDO_MERSENNE','MONTGOMERY','NOT',tempTarg);
 		copyROMfiles('MS256M','256MS',tempTarg);
 		curvetestset('256','256MS','MS256M','NOT',tempTarg);
+		curveexampleset('256','256MS','MS256M','NOT',tempTarg);
 	}
 	if (option == 'BN254') {
 		curveset('256','BN254','BN254','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
 		copyROMfiles('BN254','BN254',tempTarg);
 		curvetestset('256','BN254','BN254','BN',tempTarg);
+		curveexampleset('256','BN254','BN254','BN',tempTarg);
 	}
 	if (option == 'BN254CX') {
 		curveset('256','BN254CX','BN254CX','32','24','254','3','NOT_SPECIAL','WEIERSTRASS','BN',tempTarg);
 		copyROMfiles('BN254CX','BN254CX',tempTarg);
 		curvetestset('256','BN254CX','BN254CX','BN',tempTarg);
+		curveexampleset('256','BN254CX','BN254CX','BN',tempTarg);
 	}
 	if (option == 'BLS383') {
 		curveset('384','BLS383','BLS383','48','23','383','3','NOT_SPECIAL','WEIERSTRASS','BLS',tempTarg);
 		copyROMfiles('BLS383','BLS383',tempTarg);
 		curvetestset('384','BLS383','BLS383','BLS',tempTarg);
+		curveexampleset('384','BLS383','BLS383','BLS',tempTarg);
 	}
 	if (option == 'RSA2048') {
 		rsaset('1024','2048','128','22','2',tempTarg);
 		rsatestset('1024','2048',tempTarg);
+		rsaexampleset('1024','2048',tempTarg);
 	}
 	if (option == 'RSA3072') {
 		rsaset('384','3072','48','23','8',tempTarg);
 		rsatestset('384','3072',tempTarg);
+		rsaexampleset('384','3072',tempTarg);
 	}
 	if (option == 'RSA4096') {
 		rsaset('512','4096','64','23','8',tempTarg);
 		rsatestset('512','4096',tempTarg);
+		rsaexampleset('512','4096',tempTarg);
 	}
 }
 
@@ -466,6 +558,7 @@ namespace('build', function () {
 		jake.logger.log('Create target directory'+tempTarg);
 		jake.mkdirP(tempTarg+targetsrcdir);
 		jake.mkdirP(tempTarg+targettestdir);
+		jake.mkdirP(tempTarg+targetexamplesdir);
 		copyCommonFiles(tempTarg);
 		for (var i=0; i<arguments.length; i++){
 			buildconfiguration(arguments[i],tempTarg);
@@ -478,6 +571,7 @@ namespace('build', function () {
 		jake.logger.log('Create target directory'+tempTarg);
 		jake.mkdirP(tempTarg+targetsrcdir);
 		jake.mkdirP(tempTarg+targettestdir);
+		jake.mkdirP(tempTarg+targetexamplesdir);
 		copyCommonFiles(tempTarg);
 		for (var i=0; i<AllConfigurations.length; i++){
 			buildconfiguration(AllConfigurations[i],tempTarg);
@@ -493,6 +587,7 @@ task('build', function () {
 	jake.logger.log('Create target directory'+tempTarg);
 	jake.mkdirP(tempTarg+targetsrcdir);
 	jake.mkdirP(tempTarg+targettestdir);
+	jake.mkdirP(tempTarg+targetexamplesdir);
 	copyCommonFiles(tempTarg);
 	buildconfiguration('BN254CX',tempTarg);
 	buildconfiguration('NIST256',tempTarg);
@@ -624,8 +719,10 @@ namespace('test', function ()
 			{
 				jake.logger.log(('Start testing '+tempTarg).blue);
 		        jake.mkdirP(tempTarg+testingdir);
-		        jake.rmRf(tempTarg+testingdir+lasttestlog);
-		        jake.rmRf(tempTarg+testingdir+failedtestlog);
+				if (fs.existsSync(tempTarg+testingdir+lasttestlog))
+        			fs.unlinkSync(tempTarg+testingdir+lasttestlog);
+        		if (fs.existsSync(tempTarg+testingdir+failedtestlog))
+        			fs.unlinkSync(tempTarg+testingdir+failedtestlog);
 		        fs.readdir(tempTarg+targettestdir, function(errors, tests)
 		        {
 		        	if (tests == null)
@@ -652,5 +749,29 @@ task('dockerbuild', {async: true}, function ()
 {
 	var cmd = 'docker build --no-cache '+ cwd;
 	jake.exec(cmd, {printStdout: true});
+	complete();
+});
+
+// Format code using js-beautify
+desc('Format code using js-beautify'.blue);
+task('format', {async: true}, function ()
+{
+	var cmd = ['js-beautify -r '+srcdir+'/*js',
+			   'js-beautify -r '+testdir+'/*js']
+	jake.exec(cmd, {printStdout: true});
+	complete();
+});
+
+// Try to use mocha
+desc('Try to use mocha'.blue);
+task('mocha', {async: true}, function ()
+{
+	mochaTests({
+	    directory: pwd+'/target/build_RSA2048/test',
+	    files    : pwd+'/target/build_RSA2048/test\-.*\.js/',
+	    coverage : true,
+	    reporter : 'tap',
+	    output   : 'test/results.tap'
+	});
 	complete();
 });

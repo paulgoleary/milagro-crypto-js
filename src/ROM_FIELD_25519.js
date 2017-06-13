@@ -19,11 +19,11 @@
 
 /* Fixed Data in ROM - Field and Curve parameters */
 
-var ROM_FIELD_25519={
+var ROM_FIELD_25519 = {
 
-// 25519 Curve Modulus
+    // 25519 Curve Modulus
 
-Modulus: [0xFFFFED,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x7FFF],
-MConst: 19,
+    Modulus: [0xFFFFED, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x7FFF],
+    MConst: 19,
 
 };

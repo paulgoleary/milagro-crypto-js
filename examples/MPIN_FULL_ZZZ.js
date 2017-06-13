@@ -190,16 +190,18 @@ if (ONE_PASS)
 
 	rtn=MPIN_ZZZ.CLIENT(sha,date,CLIENT_ID,rng,X,pin,TOKEN,SEC,pxID,pxCID,pPERMIT,timeValue,Y);
 
-	if (rtn != 0)
-	exit("FAILURE: CLIENT rtn: " + rtn);   
-
+	if (rtn != 0){
+		console.error("FAILURE: CLIENT rtn: " + rtn);
+		process.exit(-1);
+	}
 	HCID=MPIN_ZZZ.HASH_ID(sha,CLIENT_ID);
 	MPIN_ZZZ.GET_G1_MULTIPLE(rng,1,R,HCID,Z);  /* Also Send Z=r.ID to Server, remember random r */
 
 	rtn=MPIN_ZZZ.SERVER(sha,date,pHID,pHTID,Y,SST,pxID,pxCID,SEC,pE,pF,CLIENT_ID,timeValue);
-	if (rtn != 0)
-		exit("FAILURE: SERVER rtn: " + rtn);  
-
+	if (rtn != 0){
+		console.error("FAILURE: SERVER rtn: " + rtn);  
+		process.exit(-1);
+	}
 	HSID=MPIN_ZZZ.HASH_ID(sha,CLIENT_ID);
 	MPIN_ZZZ.GET_G1_MULTIPLE(rng,0,W,prHID,T);  /* Also send T=w.ID to client, remember random w  */
 }
@@ -207,9 +209,10 @@ else
 {
 	console.log("MPIN Multi Pass ");   
 	rtn=MPIN_ZZZ.CLIENT_1(sha,date,CLIENT_ID,rng,X,pin,TOKEN,SEC,pxID,pxCID,pPERMIT);
-	if (rtn != 0)
-		exit("FAILURE: CLIENT_1 rtn: " + rtn);   
-
+	if (rtn != 0){
+		console.error("FAILURE: CLIENT_1 rtn: " + rtn);
+		process.exit(-1);
+	}
 	HCID=MPIN_ZZZ.HASH_ID(sha,CLIENT_ID);
 	MPIN_ZZZ.GET_G1_MULTIPLE(rng,1,R,HCID,Z);  /* Also Send Z=r.ID to Server, remember random r */
 
@@ -224,15 +227,18 @@ else
 
 /* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
 	rtn=MPIN_ZZZ.CLIENT_2(X,Y,SEC);
-	if (rtn != 0)
-		exit("FAILURE: CLIENT_2 rtn: " + rtn);  
+	if (rtn != 0){
+		console.error("FAILURE: CLIENT_2 rtn: " + rtn);
+		process.exit(-1);
+	}
 /* Server Second pass. Inputs hashed client id, random Y, -(x+y)*SEC, xID and xCID and Server secret SST. E and F help kangaroos to find error. */
 /* If PIN error not required, set E and F = NULL */
 	rtn=MPIN_ZZZ.SERVER_2(date,pHID,pHTID,Y,SST,pxID,pxCID,SEC,pE,pF);
 
-	if (rtn != 0)
-		exit("FAILURE: SERVER_1 rtn: " + rtn);  
-
+	if (rtn != 0){
+		console.error("FAILURE: SERVER_1 rtn: " + rtn);  
+		process.exit(-1);
+	}
 }
 		  
 
@@ -242,7 +248,10 @@ if (rtn == MPIN_ZZZ.BAD_PIN)
 	if (PINERROR)
 	{
 		var err=MPIN_ZZZ.KANGAROO(E,F);
-		if (err!=0) console.log("(Client PIN is out by "+err + ")");
+		if (err!=0) {
+			console.error("(Client PIN is out by "+err + ")");
+			process.exit(-1);
+		}
 	}
 }
 else 
@@ -258,4 +267,4 @@ else
 	console.log("Server Key =  0x"+MPIN_ZZZ.bytestostring(SK));    
 }
 
-return('SUCCESS')
+console.log('SUCCESS')
