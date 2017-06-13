@@ -106,7 +106,7 @@ describe('TEST ECC ZZZ', function() {
 
 		KEY = ECDH_ZZZ.KDF2(sha,Z0,null,ECDH_ZZZ.EAS);
 
-		expect(same).to.be.equal(false);
+		expect(same).to.be.equal(true);
 		done();
 	});
 
