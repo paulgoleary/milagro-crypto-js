@@ -80,7 +80,7 @@ describe('TEST ECC ZZZ', function() {
 
 
 	it('test Key Generation', function(done) {
-		this.timeout(20000);
+		this.timeout(0);
 
 		// Generate Key pair S/W 
 		ECDH_ZZZ.KEY_PAIR_GENERATE(null, S0, W0);
@@ -114,7 +114,7 @@ describe('TEST ECC ZZZ', function() {
 	if (ECP_ZZZ.CURVETYPE!=ECP_ZZZ.MONTGOMERY)
 	{
 		it('test ECIES', function(done) {
-		this.timeout(20000);
+		this.timeout(0);
 			P1[0]=0x0; P1[1]=0x1; P1[2]=0x2; 
 			P2[0]=0x0; P2[1]=0x1; P2[2]=0x2; P2[3]=0x3; 
 
@@ -130,7 +130,7 @@ describe('TEST ECC ZZZ', function() {
 		});
 
 		it('test ECDSA', function(done) {
-		this.timeout(20000);
+		this.timeout(0);
 			expect(ECDH_ZZZ.ECPSP_DSA(sha,rng,S0,M,CS,DS)).to.be.equal(0);
 			expect(ECDH_ZZZ.ECPVP_DSA(sha,W0,M,CS,DS)).to.be.equal(0);
 			done();

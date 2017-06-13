@@ -62,7 +62,7 @@ describe('TEST RSA WWW', function() {
 	});
 
 	it('test RSA Enctyption/Decryption', function(done) {
-	this.timeout(20000);
+	this.timeout(0);
 
 		message='Hello World\n';
 
@@ -95,7 +95,7 @@ describe('TEST RSA WWW', function() {
 	});
 
 	it('test RSA Signature', function(done) {
-	this.timeout(20000);
+	this.timeout(0);
 	
 		RSA_WWW.PKCS15(sha,M,C);
 

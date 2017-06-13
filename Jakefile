@@ -14,8 +14,7 @@ var cwd = process.cwd(),
     targetsrcdir = '/src',
     targettestdir = '/test',
     targetexamplesdir = '/examples',
-    lasttestlog = '/LastTest.txt',
-    failedtestlog = '/FailedTest.txt';
+    lasttestlog = '/LastTest.txt';
 
 var AllConfigurations = ['ED25519','GOLDILOCKS','NIST256','BRAINPOOL','ANSSI','HIFIVE','C25519','NIST384','C41417',
 						 'NIST521','MF254W','MF254E','MF254M','MF256W','MF256E','MF256M','MS255W','MS255E','MS255M',
@@ -477,10 +476,10 @@ function buildconfiguration(option,tempTarg) {
 
 // run tests with mocha
 function testrun(target) {
-	var cmd = ['cd '+target+' && mocha'];
+	var cmd = ['cd '+target+' && mocha | tee '+target+testingdir+lasttestlog+' ; test ${PIPESTATUS[0]} -eq 0'];
 	var ex = jake.createExec(cmd,{printStdout: true});
 	ex.addListener('error', function(msg,code) {
-		process.exit("Abort");
+		process.exit(code);
 	});
 	ex.addListener('cmdEnd',function(arg) {
 		complete();
@@ -617,8 +616,6 @@ task('test', {async: true}, function ()
         jake.mkdirP(tempTarg+testingdir);
         if (fs.existsSync(tempTarg+testingdir+lasttestlog))
         	fs.unlinkSync(tempTarg+testingdir+lasttestlog);
-        if (fs.existsSync(tempTarg+testingdir+failedtestlog))
-        	fs.unlinkSync(tempTarg+testingdir+failedtestlog);
         testrun(tempTarg);
 	});
 });
@@ -641,8 +638,6 @@ namespace('test', function ()
 		        jake.mkdirP(tempTarg+testingdir);
 				if (fs.existsSync(tempTarg+testingdir+lasttestlog))
         			fs.unlinkSync(tempTarg+testingdir+lasttestlog);
-        		if (fs.existsSync(tempTarg+testingdir+failedtestlog))
-        			fs.unlinkSync(tempTarg+testingdir+failedtestlog);
 		        fs.readdir(tempTarg+targettestdir, function(errors, tests)
 		        {
 		        	if (tests == null)

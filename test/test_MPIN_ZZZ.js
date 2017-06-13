@@ -54,7 +54,7 @@ describe('TEST MPIN ZZZ', function() {
 	});
 
 	it('test MPin', function(done) {
-		this.timeout(20000);
+		this.timeout(0);
 		
 		var i,res;
 		var result;
@@ -142,7 +142,7 @@ describe('TEST MPIN ZZZ', function() {
 	});
 
 	it('test MPin Time Permits', function(done) {
-		this.timeout(20000);
+		this.timeout(0);
 		var i,res;
 		var result;
 
