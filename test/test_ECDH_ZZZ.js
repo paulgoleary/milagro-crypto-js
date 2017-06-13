@@ -68,6 +68,7 @@ describe('TEST ECC ZZZ', function() {
 		var C;
 
 	before(function(done){
+		this.timeout(0);
 		rng.clean();
 		for (i = 0; i < 100; i++) RAW[i] = i;
 		rng.seed(100, RAW);
@@ -79,7 +80,7 @@ describe('TEST ECC ZZZ', function() {
 	});
 
 
-	it('test Key Generation', function(done) {
+	it('test ECDH', function(done) {
 		this.timeout(0);
 
 		// Generate Key pair S/W 
