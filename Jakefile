@@ -1,5 +1,4 @@
 require('colors');
-require('jake-utils');
 
 var fs = require('fs'),
 	jake = require('jake');
