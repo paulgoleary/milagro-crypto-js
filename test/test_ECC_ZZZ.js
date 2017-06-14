@@ -40,102 +40,107 @@ var expect = chai.expect;
 
 describe('TEST ECC ZZZ', function() {
 
-		var i = 0, j = 0, res;
-		var result;
-		var pp = "M0ng00se";
-		var EGS = ECDH_ZZZ.EGS;
-		var EFS = ECDH_ZZZ.EFS;
-		var EAS = 16;
-		var sha = ECDH_ZZZ.HASH_TYPE;
-		var S1 = [];
-		var W0 = [];
-		var W1 = [];
-		var Z0 = [];
-		var Z1 = [];
-		var RAW = [];
-		var SALT = [];
-		var P1 = [];
-		var P2 = [];
-		var V = [];
-		var M = [];
-		var CS = [];
-		var DS = [];
-		var S0;
-		var rng = new RAND();
-		var T = new Array(12); // must specify required length
-		var PW;
-		var KEY;
-		var C;
+    var i = 0,
+        j = 0,
+        res;
+    var result;
+    var pp = "M0ng00se";
+    var EGS = ECDH_ZZZ.EGS;
+    var EFS = ECDH_ZZZ.EFS;
+    var EAS = 16;
+    var sha = ECDH_ZZZ.HASH_TYPE;
+    var S1 = [];
+    var W0 = [];
+    var W1 = [];
+    var Z0 = [];
+    var Z1 = [];
+    var RAW = [];
+    var SALT = [];
+    var P1 = [];
+    var P2 = [];
+    var V = [];
+    var M = [];
+    var CS = [];
+    var DS = [];
+    var S0;
+    var rng = new RAND();
+    var T = new Array(12); // must specify required length
+    var PW;
+    var KEY;
+    var C;
 
-	before(function(done){
-		this.timeout(0);
-		rng.clean();
-		for (i = 0; i < 100; i++) RAW[i] = i;
-		rng.seed(100, RAW);
-		for (i = 0; i < 8; i++) SALT[i] = (i + 1); // set Salt
-		PW = ECDH_ZZZ.stringtobytes(pp);
-		// private key S0 of size EGS bytes derived from Password and Salt 
-		S0 = ECDH_ZZZ.PBKDF2(sha, PW, SALT, 1000, EGS);
-		done();
-	});
-
-
-	it('test ECDH', function(done) {
-		this.timeout(0);
-
-		// Generate Key pair S/W 
-		ECDH_ZZZ.KEY_PAIR_GENERATE(null, S0, W0);
+    before(function(done) {
+        this.timeout(0);
+        rng.clean();
+        for (i = 0; i < 100; i++) RAW[i] = i;
+        rng.seed(100, RAW);
+        for (i = 0; i < 8; i++) SALT[i] = (i + 1); // set Salt
+        PW = ECDH_ZZZ.stringtobytes(pp);
+        // private key S0 of size EGS bytes derived from Password and Salt 
+        S0 = ECDH_ZZZ.PBKDF2(sha, PW, SALT, 1000, EGS);
+        done();
+    });
 
 
-		res = ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W0);
-		expect(res).to.be.equal(0);
-		// Random private key for other party 
-		ECDH_ZZZ.KEY_PAIR_GENERATE(rng, S1, W1);
+    it('test ECDH', function(done) {
+        this.timeout(0);
 
-		res = ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W1);
-		expect(res).to.be.equal(0);
-
-		// Calculate common key using DH - IEEE 1363 method 
-
-		ECDH_ZZZ.ECPSVDP_DH(S0, W1, Z0);
-		ECDH_ZZZ.ECPSVDP_DH(S1, W0, Z1);
-
-		var same = true;
-		for (i = 0; i < ECDH_ZZZ.EFS; i++)
-		    if (Z0[i] != Z1[i]) same = false;
+        // Generate Key pair S/W 
+        ECDH_ZZZ.KEY_PAIR_GENERATE(null, S0, W0);
 
 
-		KEY = ECDH_ZZZ.KDF2(sha,Z0,null,ECDH_ZZZ.EAS);
+        res = ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W0);
+        expect(res).to.be.equal(0);
+        // Random private key for other party 
+        ECDH_ZZZ.KEY_PAIR_GENERATE(rng, S1, W1);
 
-		expect(same).to.be.equal(true);
-		done();
-	});
+        res = ECDH_ZZZ.PUBLIC_KEY_VALIDATE(W1);
+        expect(res).to.be.equal(0);
+
+        // Calculate common key using DH - IEEE 1363 method 
+
+        ECDH_ZZZ.ECPSVDP_DH(S0, W1, Z0);
+        ECDH_ZZZ.ECPSVDP_DH(S1, W0, Z1);
+
+        var same = true;
+        for (i = 0; i < ECDH_ZZZ.EFS; i++)
+            if (Z0[i] != Z1[i]) same = false;
 
 
-	if (ECP_ZZZ.CURVETYPE!=ECP_ZZZ.MONTGOMERY)
-	{
-		it('test ECIES', function(done) {
-		this.timeout(0);
-			P1[0]=0x0; P1[1]=0x1; P1[2]=0x2; 
-			P2[0]=0x0; P2[1]=0x1; P2[2]=0x2; P2[3]=0x3; 
+        KEY = ECDH_ZZZ.KDF2(sha, Z0, null, ECDH_ZZZ.EAS);
 
-			for (i=0;i<=16;i++) M[i]=i;
+        expect(same).to.be.equal(true);
+        done();
+    });
 
-			C=ECDH_ZZZ.ECIES_ENCRYPT(sha,P1,P2,rng,W1,M,V,T);
 
-			M=ECDH_ZZZ.ECIES_DECRYPT(sha,P1,P2,V,C,T,S1);
+    if (ECP_ZZZ.CURVETYPE != ECP_ZZZ.MONTGOMERY) {
+        it('test ECIES', function(done) {
+            this.timeout(0);
+            P1[0] = 0x0;
+            P1[1] = 0x1;
+            P1[2] = 0x2;
+            P2[0] = 0x0;
+            P2[1] = 0x1;
+            P2[2] = 0x2;
+            P2[3] = 0x3;
 
-			expect(M.length).to.not.equal(0);
+            for (i = 0; i <= 16; i++) M[i] = i;
 
-			done();
-		});
+            C = ECDH_ZZZ.ECIES_ENCRYPT(sha, P1, P2, rng, W1, M, V, T);
 
-		it('test ECDSA', function(done) {
-		this.timeout(0);
-			expect(ECDH_ZZZ.ECPSP_DSA(sha,rng,S0,M,CS,DS)).to.be.equal(0);
-			expect(ECDH_ZZZ.ECPVP_DSA(sha,W0,M,CS,DS)).to.be.equal(0);
-			done();
-		});
-	}
+            M = ECDH_ZZZ.ECIES_DECRYPT(sha, P1, P2, V, C, T, S1);
+
+            expect(M.length).to.not.equal(0);
+
+            done();
+        });
+
+        it('test ECDSA', function(done) {
+            this.timeout(0);
+            expect(ECDH_ZZZ.ECPSP_DSA(sha, rng, S0, M, CS, DS)).to.be.equal(0);
+            expect(ECDH_ZZZ.ECPVP_DSA(sha, W0, M, CS, DS)).to.be.equal(0);
+            done();
+        });
+    }
 });
-

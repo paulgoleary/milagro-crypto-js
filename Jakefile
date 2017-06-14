@@ -674,9 +674,16 @@ task('dockerbuild', {async: true}, function ()
 desc('Format code using js-beautify'.blue);
 task('format', {async: true}, function ()
 {
-	var cmd = ['js-beautify -r '+srcdir+'/*js',
-			   'js-beautify -r '+testdir+'/*js',
-			   'js-beautify -r '+examplesdir+'/*js']
+	var cmd = ['js-beautify -r '+srcdir+'/*js && js-beautify -r '+testdir+'/*js && js-beautify -r '+examplesdir+'/*js']
+	jake.exec(cmd, {printStdout: true});
+	complete();
+});
+
+// Format code using js-beautify
+desc('Print the version of the repo'.blue);
+task('version', {async: true}, function ()
+{
+	var cmd = ['cat VERSION']
 	jake.exec(cmd, {printStdout: true});
 	complete();
 });
