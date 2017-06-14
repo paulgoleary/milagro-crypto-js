@@ -196,8 +196,8 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 function curvetestset(tb,tf,tc,pf,tempTarg) {
 
 	if (pf == 'NOT'){
-		fname = tempTarg+targettestdir+'/'+'test_ECDH_'+tc+'.js';
-		jake.cpR(testdir+'/test_ECDH_ZZZ.js', fname);
+		fname = tempTarg+targettestdir+'/'+'test_ECC_'+tc+'.js';
+		jake.cpR(testdir+'/test_ECC_ZZZ.js', fname);
 
 		Replace(fname,/XXX/g,tb);
 		Replace(fname,/YYY/g,tf);
@@ -219,8 +219,8 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 function curveexampleset(tb,tf,tc,pf,tempTarg) {
 
 	if (pf == 'NOT'){
-		fname = tempTarg+targetexamplesdir+'/'+'ECDH_'+tc+'.js';
-		jake.cpR(examplesdir+'/ECDH_ZZZ.js', fname);
+		fname = tempTarg+targetexamplesdir+'/'+'ECC_'+tc+'.js';
+		jake.cpR(examplesdir+'/ECC_ZZZ.js', fname);
 
 		Replace(fname,/XXX/g,tb);
 		Replace(fname,/YYY/g,tf);
