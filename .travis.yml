@@ -16,6 +16,7 @@ before_script:
     - npm install fs
     - npm install colors
     - npm install handlebars
+    - npm install chai
     - npm install -g mocha
     - npm install -g mocha-circleci-reporter
 
