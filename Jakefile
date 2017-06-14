@@ -476,12 +476,15 @@ function buildconfiguration(option,tempTarg) {
 
 // run tests with mocha
 function testrun(target) {
-	var cmd = ['cd '+target+' && mocha | tee '+target+testingdir+lasttestlog+' ; test ${PIPESTATUS[0]} -eq 0'];
+	var cmd = 'mocha --reporter mocha-circleci-reporter '+target+targettestdir;
 	var ex = jake.createExec(cmd,{printStdout: true});
+	console.log(cmd);
 	ex.addListener('error', function(msg,code) {
+		jake.exec('mv ./test-results.xml '+target+testingdir);
 		process.exit(code);
 	});
 	ex.addListener('cmdEnd',function(arg) {
+		jake.exec('mv ./test-results.xml '+target+testingdir);
 		complete();
 	});
 	ex.run();
@@ -534,7 +537,7 @@ namespace('build', function () {
 desc('Build library with default curves BN254CX and NIST256, and RSA2048'.blue);
 task('build', function () {
 	jake.logger.log('Build library with default curves BN254CX and NIST256, and RSA2048'.red);
-	var tempTarg = targetdir+'/build_BN254CX_RSA2048';
+	var tempTarg = targetdir+'/build_BN254CX_NIST256_RSA2048';
 	jake.logger.log('Create target directory'+tempTarg);
 	jake.mkdirP(tempTarg+targetsrcdir);
 	jake.mkdirP(tempTarg+targettestdir);
