@@ -16,7 +16,10 @@ before_script:
     - npm install fs
     - npm install colors
     - npm install handlebars
+    - npm install chai
+    - npm install -g mocha
+    - npm install -g mocha-circleci-reporter
 
 script:
   - jake build:all --t
-  - jake test:choice[All] --t
+  - jake test --t

@@ -25,7 +25,10 @@ RUN npm install -g jake && \
 npm install jake && \
 npm install fs && \
 npm install colors && \
-npm install handlebars
+npm install handlebars && \
+npm install chai && \
+npm install -g mocha && \
+npm install -g mocha-circleci-reporter
 
 # Build and demo Iot-PoC
 RUN mkdir -p /root/src/milagro-crypto-js
@@ -33,4 +36,4 @@ ADD ./ /root/src/milagro-crypto-js
 WORKDIR /root/src/milagro-crypto-js
 
 RUN jake build:all --t && \
-jake test:choice[All] --t
+jake test:choice[All]

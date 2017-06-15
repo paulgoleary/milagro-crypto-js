@@ -27,8 +27,8 @@ NOTE: This product includes software developed at *[The Apache Software Foundati
 
 [Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the following node.js modules (root permissions may be required)
 ```
-npm install -g jake
-npm install fs colors assert crypto handlebars jake
+npm install -g jake mocha mocha-circleci-reporter
+npm install fs colors handlebars jake chai
 ```
 
 ## Build
@@ -64,6 +64,13 @@ jake test
 If you made more than one build, then you must to specify which build you want to test, for example
 ```
 jake test:choice[BLS383,C25519,RSA4096]
+```
+
+## Run examples
+We provide also some script examples for [Nodejs](https://nodejs.org/en/). In order to try, for example, the script on ECC functions type the following commands
+```
+cd target/build_BN254CX_NIST256_RSA2048/examples/
+node ECC_NIST256.js
 ```
 
 ## Testing all in a docker
