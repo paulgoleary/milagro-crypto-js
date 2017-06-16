@@ -41,6 +41,19 @@ eval(fs.readFileSync('@SWD/PAIR_ZZZ.js') + '');
 
 var expect = chai.expect;
 
+hextobytes = function (value_hex) {
+    // "use strict";
+    var len, byte_value, i;
+
+    len = value_hex.length;
+    byte_value = [];
+
+    for (i = 0; i < len; i += 2) {
+        byte_value[(i / 2)] = parseInt(value_hex.substr(i, 2), 16);
+    }
+    return byte_value;
+};
+
 describe('TEST MPIN ZZZ', function() {
 
     var rng = new RAND();
@@ -495,15 +508,12 @@ describe('TEST MPIN ZZZ', function() {
         var SEC = [];
         var Y = [];
 
-        var pxID = xID;
-        var pxCID = xCID;
-
         for(var vector in vectors)
         {
-            var rtn = MPIN_ZZZ.CLIENT_1(sha, vectors[vector].DATE, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, pxID, pxCID, hextobytes(vectors[vector].TIME_PERMIT));
+            var rtn = MPIN_ZZZ.CLIENT_1(sha, vectors[vector].DATE, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, xID, xCID, hextobytes(vectors[vector].TIME_PERMIT));
             expect(rtn).to.be.equal(0);
-            expect(MPIN_ZZZ.bytestostring(pxID)).to.be.equal(vectors[vector].U);
-            expect(MPIN_ZZZ.bytestostring(pxCID)).to.be.equal(vectors[vector].UT);
+            expect(MPIN_ZZZ.bytestostring(xID)).to.be.equal(vectors[vector].U);
+            expect(MPIN_ZZZ.bytestostring(xCID)).to.be.equal(vectors[vector].UT);
 
             var rtn = MPIN_ZZZ.CLIENT_2(hextobytes(vectors[vector].X), hextobytes(vectors[vector].Y), SEC);
             expect(rtn).to.be.equal(0);
@@ -519,15 +529,14 @@ describe('TEST MPIN ZZZ', function() {
 
         var sha = MPIN_ZZZ.HASH_TYPE;
         var xID = [];
-        var xCID = [];
         var SEC = [];
         var Y = [];
 
         for(var vector in vectors)
         {
-            var rtn = MPIN_ZZZ.CLIENT(sha, vectors[vector].DATE, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, xID, xCID, hextobytes(vectors[vector].TIME_PERMIT), vectors[vector].TimeValue, Y);
+            var rtn = MPIN_ZZZ.CLIENT(sha, 0, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, xID, null, null, vectors[vector].TimeValue, Y);
             expect(rtn).to.be.equal(0);
-            expect(MPIN_ZZZ.bytestostring(xCID)).to.be.equal(vectors[vector].UT);
+            expect(MPIN_ZZZ.bytestostring(xID)).to.be.equal(vectors[vector].U);
             expect(MPIN_ZZZ.bytestostring(SEC)).to.be.equal(vectors[vector].SEC);
         }
         done();

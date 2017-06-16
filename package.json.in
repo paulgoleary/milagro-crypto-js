@@ -9,8 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --ui exports --require blanket --reporter mocha-text-cov",
-    "coverage": "nyc --reporter=text --cache mocha"
+    "test": "mocha --reporter mocha-circleci-reporter && mv ./test-results.xml ./Testing/test-results.xml"
   },
   "repository": {
     "type": "git",
@@ -27,36 +26,5 @@
   "bugs": {
     "url": "https://github.com/miracl/milagro-crypto-js/issues"
   },
-  "homepage": "https://github.com/miracl/milagro-crypto-js#readme",
-  "devDependencies": {
-    "coveralls": "^2.13.1",
-    "mocha-with-coverage": "0.0.2"
-  },
-  "dependencies": {
-    "blanket": "^1.2.3",
-    "gulp": "^3.9.1",
-    "gulp-istanbul": "^1.1.2",
-    "gulp-mocha": "^4.3.1",
-    "mocha-text-cov": "^0.1.1"
-  },
-  "nyc": {
-    "check-coverage": true,
-    "lines": 0,
-    "statements": 0,
-    "functions": 0,
-    "branches": 0,
-    "include": [
-      "src/**/*.js",
-      "test/**/*js"
-    ],
-    "exclude": [
-      "src/**/*.spec.js"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "all": true,
-    "report-dir": "./alternative"
-  }
+  "homepage": "https://github.com/miracl/milagro-crypto-js#readme"
 }
