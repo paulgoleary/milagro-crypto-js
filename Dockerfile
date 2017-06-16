@@ -37,3 +37,5 @@ WORKDIR /root/src/milagro-crypto-js
 
 RUN jake build:all --t && \
 jake test:choice[All]
+
+COPY /root/src/milagro-crypto-js/target/build_All ./target/

@@ -480,7 +480,7 @@ describe('TEST MPIN ZZZ', function() {
     it('test Combine Shares in G1 ZZZ with Test Vectors', function(done) {
         this.timeout(0);
         // Load test vectors
-        var vectors = require('/home/alessandro/Dev/milagro-crypto-js/testVectors/MPIN_ZZZ.json');
+        var vectors = require('@TVD/MPIN_ZZZ.json');
 
         var sha = MPIN_ZZZ.HASH_TYPE;
         var CS = [];
@@ -500,7 +500,7 @@ describe('TEST MPIN ZZZ', function() {
     it('test MPin Two Passes ZZZ with Test Vectors', function(done) {
         this.timeout(0);
         // Load test vectors
-        var vectors = require('/home/alessandro/Dev/milagro-crypto-js/testVectors/MPIN_ZZZ.json');
+        var vectors = require('@TVD/MPIN_ZZZ.json');
 
         var sha = MPIN_ZZZ.HASH_TYPE;
         var xID = [];
@@ -525,7 +525,7 @@ describe('TEST MPIN ZZZ', function() {
     it('test MPin One Pass ZZZ with Test Vectors', function(done) {
         this.timeout(0);
         // Load test vectors
-        var vectors = require('/home/alessandro/Dev/milagro-crypto-js/testVectors/MPIN_ONE_PASS_ZZZ.json');
+        var vectors = require('@TVD/MPIN_ONE_PASS_ZZZ.json');
 
         var sha = MPIN_ZZZ.HASH_TYPE;
         var xID = [];

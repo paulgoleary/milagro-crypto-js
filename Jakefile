@@ -198,7 +198,6 @@ function curveset(tb,tf,tc,nb,base,nbt,m8,mt,ct,pf,tempTarg) {
 // Copy and set parameters for test files according with the curve chosen.
 function curvetestset(tb,tf,tc,pf,tempTarg) {
 
-	if (pf == 'NOT'){
 		fname = tempTarg+targettestdir+'/'+'test_ECC_'+tc+'.js';
 		jake.cpR(testdir+'/test_ECC_ZZZ.js', fname);
 
@@ -206,7 +205,7 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 		Replace(fname,/YYY/g,tf);
 		Replace(fname,/ZZZ/g,tc);
 		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
-	}
+
 	if (pf != 'NOT'){
 		fname = tempTarg+targettestdir+'/'+'test_MPIN_'+tc+'.js';
 		jake.cpR(testdir+'/test_MPIN_ZZZ.js', fname);
@@ -289,6 +288,7 @@ function rsaexampleset(tb,tff,tempTarg) {
 // Copy and set parameters for files according with the RSA configuration chosen.
 function rsatestset(tb,tff,tempTarg) {
 
+if (tff != "4096") {
 	fname = tempTarg+targettestdir+'/'+'test_RSA_'+tff+'.js';
 	jake.cpR(testdir+'/test_RSA_WWW.js', fname);
 
@@ -296,6 +296,7 @@ function rsatestset(tb,tff,tempTarg) {
 	Replace(fname,/WWW/g,tff);
 	Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
 	Replace(fname,/@TVD/g,testvectordir);
+}
 }
 
 function checkinput(option) {
