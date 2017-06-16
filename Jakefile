@@ -214,6 +214,7 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 		Replace(fname,/YYY/g,tf);
 		Replace(fname,/ZZZ/g,tc);
 		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+		Replace(fname,/@TVD/g,testvectordir);
 	}
 }
 
