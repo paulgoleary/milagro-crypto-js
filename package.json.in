@@ -1,0 +1,62 @@
+{
+  "name": "milagro-crypto-js",
+  "version": "3.0.1",
+  "description": "Crypto Library in Javascript - part of Apache Milagro Crypto Library",
+  "main": "milagro-crypto.js",
+  "directories": {
+    "doc": "doc",
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --ui exports --require blanket --reporter mocha-text-cov",
+    "coverage": "nyc --reporter=text --cache mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miracl/milagro-crypto-js.git"
+  },
+  "keywords": [
+    "pairing",
+    "elliptic",
+    "curve",
+    "cryptography"
+  ],
+  "author": "Michael Scott, Alessandro Budroni, Kealan McCusker",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/miracl/milagro-crypto-js/issues"
+  },
+  "homepage": "https://github.com/miracl/milagro-crypto-js#readme",
+  "devDependencies": {
+    "coveralls": "^2.13.1",
+    "mocha-with-coverage": "0.0.2"
+  },
+  "dependencies": {
+    "blanket": "^1.2.3",
+    "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.1.2",
+    "gulp-mocha": "^4.3.1",
+    "mocha-text-cov": "^0.1.1"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 0,
+    "statements": 0,
+    "functions": 0,
+    "branches": 0,
+    "include": [
+      "src/**/*.js",
+      "test/**/*js"
+    ],
+    "exclude": [
+      "src/**/*.spec.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "all": true,
+    "report-dir": "./alternative"
+  }
+}

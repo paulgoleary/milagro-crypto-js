@@ -46,16 +46,19 @@ function addToInclude(fname,tempTarg) {
 
 // Copy file in common with all the configurations
 function copyCommonFiles(tempTarg){
+	// Copy package.json
+	jake.cpR(cwd+'/package.json.in',tempTarg+'/package.json');
 	jake.logger.log('Copying common files'.blue);
-	tempTarg += targetsrcdir+'/';
-	jake.cpR(srcdir+'/AES.js',tempTarg+'/AES.js');
-	jake.cpR(srcdir+'/GCM.js',tempTarg+'/GCM.js');
-	jake.cpR(srcdir+'/HASH256.js',tempTarg+'/HASH256.js');
-	jake.cpR(srcdir+'/HASH384.js',tempTarg+'/HASH384.js');
-	jake.cpR(srcdir+'/HASH512.js',tempTarg+'/HASH512.js');
-	jake.cpR(srcdir+'/RAND.js',tempTarg+'/RAND.js');
-	jake.cpR(srcdir+'/UInt64.js',tempTarg+'/UInt64.js');
-	jake.cpR(srcdir+'/include.html',tempTarg+'/include.html');
+	tempTestDir = tempTarg + targettestdir;
+	tempSrcDir = tempTarg + targetsrcdir;
+	jake.cpR(srcdir+'/AES.js',tempSrcDir+'/AES.js');
+	jake.cpR(srcdir+'/GCM.js',tempSrcDir+'/GCM.js');
+	jake.cpR(srcdir+'/HASH256.js',tempSrcDir+'/HASH256.js');
+	jake.cpR(srcdir+'/HASH384.js',tempSrcDir+'/HASH384.js');
+	jake.cpR(srcdir+'/HASH512.js',tempSrcDir+'/HASH512.js');
+	jake.cpR(srcdir+'/RAND.js',tempSrcDir+'/RAND.js');
+	jake.cpR(srcdir+'/UInt64.js',tempSrcDir+'/UInt64.js');
+	jake.cpR(srcdir+'/include.html',tempSrcDir+'/include.html');
 }
 
 // Copy ROM files according with the curve and the field in use
@@ -265,7 +268,6 @@ function curveexampleset(tb,tf,tc,pf,tempTarg) {
 // Copy and set parameters for files according with the RSA configuration chosen.
 function rsaexampleset(tb,tff,tempTarg) {
 
-	if (tff == '2048') { // Test only RSA2048 for the moment
 	fname = tempTarg+targetexamplesdir+'/'+'RSA_'+tff+'.js';
 	jake.cpR(examplesdir+'/RSA_WWW.js', fname);
 
@@ -273,13 +275,20 @@ function rsaexampleset(tb,tff,tempTarg) {
 	Replace(fname,/WWW/g,tff);
 	Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
 	Replace(fname,/@TVD/g,testvectordir);
-	}
+
+	fname = tempTarg+targetexamplesdir+'/'+'RSA_GENKEY_'+tff+'.js';
+	jake.cpR(examplesdir+'/RSA_GENKEY_WWW.js', fname);
+
+	Replace(fname,/XXX/g,tb);
+	Replace(fname,/WWW/g,tff);
+	Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+	Replace(fname,/@TVD/g,testvectordir);
+
 }
 
 // Copy and set parameters for files according with the RSA configuration chosen.
 function rsatestset(tb,tff,tempTarg) {
 
-	if (tff == '2048') { // Test only RSA2048 for the moment
 	fname = tempTarg+targettestdir+'/'+'test_RSA_'+tff+'.js';
 	jake.cpR(testdir+'/test_RSA_WWW.js', fname);
 
@@ -287,7 +296,6 @@ function rsatestset(tb,tff,tempTarg) {
 	Replace(fname,/WWW/g,tff);
 	Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
 	Replace(fname,/@TVD/g,testvectordir);
-	}
 }
 
 function checkinput(option) {
@@ -476,15 +484,14 @@ function buildconfiguration(option,tempTarg) {
 
 // run tests with mocha
 function testrun(target) {
-	var cmd = 'mocha --reporter mocha-circleci-reporter '+target+targettestdir;
+	//var cmd = 'mocha --reporter mocha-circleci-reporter '+target+targettestdir;
+	var cmd = 'cd '+target+' && npm test';
 	var ex = jake.createExec(cmd,{printStdout: true});
 	console.log(cmd);
 	ex.addListener('error', function(msg,code) {
-		jake.exec('mv ./test-results.xml '+target+testingdir);
 		process.exit(code);
 	});
 	ex.addListener('cmdEnd',function(arg) {
-		jake.exec('mv ./test-results.xml '+target+testingdir);
 		complete();
 	});
 	ex.run();

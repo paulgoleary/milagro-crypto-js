@@ -463,4 +463,74 @@ describe('TEST MPIN ZZZ', function() {
 
         done();
     });
+
+    it('test Combine Shares in G1 ZZZ with Test Vectors', function(done) {
+        this.timeout(0);
+        // Load test vectors
+        var vectors = require('/home/alessandro/Dev/milagro-crypto-js/testVectors/MPIN_ZZZ.json');
+
+        var sha = MPIN_ZZZ.HASH_TYPE;
+        var CS = [];
+        var TP = [];
+
+        for(var vector in vectors)
+        {
+            MPIN_ZZZ.RECOMBINE_G1(hextobytes(vectors[vector].CS1),hextobytes(vectors[vector].CS2),CS);
+            expect(MPIN_ZZZ.bytestostring(CS)).to.be.equal(vectors[vector].CLIENT_SECRET);
+
+            MPIN_ZZZ.RECOMBINE_G1(hextobytes(vectors[vector].TP1),hextobytes(vectors[vector].TP2),TP);
+            expect(MPIN_ZZZ.bytestostring(TP)).to.be.equal(vectors[vector].TIME_PERMIT);
+        }
+        done();
+    });
+
+    it('test MPin Two Passes ZZZ with Test Vectors', function(done) {
+        this.timeout(0);
+        // Load test vectors
+        var vectors = require('/home/alessandro/Dev/milagro-crypto-js/testVectors/MPIN_ZZZ.json');
+
+        var sha = MPIN_ZZZ.HASH_TYPE;
+        var xID = [];
+        var xCID = [];
+        var SEC = [];
+        var Y = [];
+
+        var pxID = xID;
+        var pxCID = xCID;
+
+        for(var vector in vectors)
+        {
+            var rtn = MPIN_ZZZ.CLIENT_1(sha, vectors[vector].DATE, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, pxID, pxCID, hextobytes(vectors[vector].TIME_PERMIT));
+            expect(rtn).to.be.equal(0);
+            expect(MPIN_ZZZ.bytestostring(pxID)).to.be.equal(vectors[vector].U);
+            expect(MPIN_ZZZ.bytestostring(pxCID)).to.be.equal(vectors[vector].UT);
+
+            var rtn = MPIN_ZZZ.CLIENT_2(hextobytes(vectors[vector].X), hextobytes(vectors[vector].Y), SEC);
+            expect(rtn).to.be.equal(0);
+            expect(MPIN_ZZZ.bytestostring(SEC)).to.be.equal(vectors[vector].V);
+        }
+        done();
+    });
+
+    it('test MPin One Pass ZZZ with Test Vectors', function(done) {
+        this.timeout(0);
+        // Load test vectors
+        var vectors = require('/home/alessandro/Dev/milagro-crypto-js/testVectors/MPIN_ONE_PASS_ZZZ.json');
+
+        var sha = MPIN_ZZZ.HASH_TYPE;
+        var xID = [];
+        var xCID = [];
+        var SEC = [];
+        var Y = [];
+
+        for(var vector in vectors)
+        {
+            var rtn = MPIN_ZZZ.CLIENT(sha, vectors[vector].DATE, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, xID, xCID, hextobytes(vectors[vector].TIME_PERMIT), vectors[vector].TimeValue, Y);
+            expect(rtn).to.be.equal(0);
+            expect(MPIN_ZZZ.bytestostring(xCID)).to.be.equal(vectors[vector].UT);
+            expect(MPIN_ZZZ.bytestostring(SEC)).to.be.equal(vectors[vector].SEC);
+        }
+        done();
+    });
+
 });
