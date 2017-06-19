@@ -702,6 +702,7 @@ var MPIN_ZZZ = {
 
     /* y = H(time,xCID) */
     GET_Y: function(sha, TimeValue, xCID, Y) {
+
         var q = new BIG_XXX(0);
         q.rcopy(ROM_CURVE_ZZZ.CURVE_Order);
         var h = this.hashit(sha, TimeValue, xCID);
@@ -730,6 +731,8 @@ var MPIN_ZZZ = {
         rtn = this.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT);
         if (rtn != 0)
             return rtn;
+
+
 
         this.GET_Y(sha, TimeValue, pID, Y);
 
@@ -922,6 +925,160 @@ var MPIN_ZZZ = {
 
         for (var i = 0; i < this.PAS; i++) SK[i] = t[i];
 
+        return 0;
+    },
+
+    /* Generate a public key and the corresponding z for the key-escrow less scheme */
+    /*
+        if R==NULL then Z is passed in
+        if R!=NULL then Z is passed out
+        Pa=(z^-1).Q
+    */
+    GET_DVS_KEYPAIR: function(rng, Z, Pa) {
+
+        Q = new ECP2_ZZZ();
+        var r = new BIG_XXX(0);
+        r.rcopy(ROM_CURVE_ZZZ.CURVE_Order);
+
+        if (rng != null)
+            this.RANDOM_GENERATE(rng,Z);
+
+        var z = BIG_XXX.fromBytes(Z);
+        z.invmodp(r);
+
+        var pa = new BIG_XXX(0);
+        pa.rcopy(ROM_CURVE_ZZZ.CURVE_Pxa);
+        var pb = new BIG_XXX(0);
+        pb.rcopy(ROM_CURVE_ZZZ.CURVE_Pxb);
+        var QX = new FP2_YYY(0);
+        QX.bset(pa, pb);
+        var pa = new BIG_XXX(0);
+        pa.rcopy(ROM_CURVE_ZZZ.CURVE_Pya);
+        var pb = new BIG_XXX(0);
+        pb.rcopy(ROM_CURVE_ZZZ.CURVE_Pyb);
+        var QY = new FP2_YYY(0);
+        QY.bset(pa, pb);
+
+        Q.setxy(QX,QY);
+        if (Q.INF)
+            return MPIN_ZZZ.INVALID_POINT;
+
+        Q = PAIR_ZZZ.G2mul(Q, z);
+        Q.toBytes(Pa);
+        return 0;
+
+    },
+
+    /* DVS signature message */
+    CLIENT_DVS_SIGN: function(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT, Message, TimeValue, Y) {
+
+        var rtn = 0;
+        var pID;
+        var M = [];
+        if (date == 0) {
+            pID = xID;
+        } else {
+            pID = xCID;
+            xID = null;
+        }
+
+        rtn = this.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT);
+        if (rtn != 0)
+            return rtn;
+
+        M = pID.slice();
+
+        if (Message != null) {
+            for (var i = 0; i < Message.length; i++)
+                M.push(Message[i]);
+        }
+
+            this.GET_Y(sha, TimeValue, M, Y);
+
+        rtn = this.CLIENT_2(X, Y, SEC);
+        if (rtn != 0)
+            return rtn;
+
+        return 0;
+    },
+
+    /* Verify DVS signature */
+    SERVER_DVS_VERIFY: function(sha, date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, Pa, CID, Message, TimeValue) {
+        var rtn = 0;
+        var pID;
+        var M = [];
+        if (date == 0) {
+            pID = xID;
+        } else {
+            pID = xCID;
+        }
+
+        this.SERVER_1(sha, date, CID, HID, HTID);
+
+        M = pID.slice();
+
+        if (Message != null) {
+            for (var i = 0; i < Message.length; i++)
+                M.push(Message[i]);
+        }
+
+        this.GET_Y(sha, TimeValue, M, Y);
+
+        var Q = ECP2_ZZZ.fromBytes(Pa);
+        if (Q.is_infinity()) return this.INVALID_POINT;
+
+
+        var sQ = ECP2_ZZZ.fromBytes(SST);
+        if (sQ.is_infinity()) return this.INVALID_POINT;
+
+        var R;
+        if (date !== 0)
+            R = ECP_ZZZ.fromBytes(xCID);
+        else {
+            if (xID == null) return this.BAD_PARAMS;
+            R = ECP_ZZZ.fromBytes(xID);
+        }
+        if (R.is_infinity()) return this.INVALID_POINT;
+
+        var y = BIG_XXX.fromBytes(Y);
+        var P;
+
+        if (date != 0) P = ECP_ZZZ.fromBytes(HTID);
+        else {
+            if (HID == null) return this.BAD_PARAMS;
+            P = ECP_ZZZ.fromBytes(HID);
+        }
+        if (P.is_infinity()) return this.INVALID_POINT;
+
+        P = PAIR_ZZZ.G1mul(P, y);
+        P.add(R);
+        P.affine();
+        R = ECP_ZZZ.fromBytes(mSEC);
+        if (R.is_infinity()) return this.INVALID_POINT;
+
+        var g = PAIR_ZZZ.ate2(Q, R, sQ, P);
+        g = PAIR_ZZZ.fexp(g);
+
+        if (!g.isunity()) {
+            if (HID != null && xID != null && E != null && F != null) {
+                g.toBytes(E);
+                if (date !== 0) {
+                    P = ECP_ZZZ.fromBytes(HID);
+                    if (P.is_infinity()) return this.INVALID_POINT;
+                    R = ECP_ZZZ.fromBytes(xID);
+                    if (R.is_infinity()) return this.INVALID_POINT;
+
+                    P = PAIR_ZZZ.G1mul(P, y);
+                    P.add(R);
+                    P.affine();
+                }
+                g = PAIR_ZZZ.ate(Q, P);
+                g = PAIR_ZZZ.fexp(g);
+
+                g.toBytes(F);
+            }
+            return this.BAD_PIN;
+        }
         return 0;
     }
 };
