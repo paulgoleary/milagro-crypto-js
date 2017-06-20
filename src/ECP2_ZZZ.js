@@ -608,3 +608,5 @@ ECP2_ZZZ.teq = function(b, c) {
     x -= 1; // if x=0, x now -1
     return ((x >> 31) & 1);
 };
+
+module.exports = ECP2_ZZZ;

@@ -27,3 +27,5 @@ var ROM_FIELD_25519 = {
     MConst: 19,
 
 };
+
+module.exports = ROM_FIELD_25519;

@@ -27,3 +27,5 @@ var ROM_FIELD_256MF = {
     MConst: 0xFFA8,
 
 };
+
+module.exports = ROM_FIELD_256MF;

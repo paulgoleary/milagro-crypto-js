@@ -96,3 +96,5 @@ var ROM_CURVE_BLS383 = {
     //debug: false,
 
 };
+
+module.exports = ROM_CURVE_BLS383;

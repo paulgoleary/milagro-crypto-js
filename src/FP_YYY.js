@@ -405,3 +405,5 @@ FP_YYY.mod = function(d) {
     b.norm();
     return b;
 };
+
+module.exports = FP_YYY;

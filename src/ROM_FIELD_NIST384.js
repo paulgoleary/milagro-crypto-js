@@ -27,3 +27,5 @@ var ROM_FIELD_NIST384 = {
     MConst: 0x1,
 
 };
+
+module.exports = ROM_FIELD_NIST384;

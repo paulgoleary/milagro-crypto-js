@@ -362,3 +362,5 @@ FP2_YYY.prototype = {
     }
 
 };
+
+module.exports = FP2_YYY;

@@ -241,3 +241,5 @@ HASH512.HK = [new UInt64(0x428a2f98, 0xd728ae22), new UInt64(0x71374491, 0x23ef6
     new UInt64(0x4cc5d4be, 0xcb3e42b6), new UInt64(0x597f299c, 0xfc657e2a),
     new UInt64(0x5fcb6fab, 0x3ad6faec), new UInt64(0x6c44198c, 0x4a475817)
 ];
+
+module.exports = HASH512;

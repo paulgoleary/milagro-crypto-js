@@ -990,3 +990,5 @@ var MPIN_ZZZ = {
 
     }
 };
+
+module.exports = MPIN_ZZZ;

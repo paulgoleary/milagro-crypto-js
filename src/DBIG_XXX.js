@@ -276,3 +276,5 @@ DBIG_XXX.comp = function(a, b) {
     }
     return 0;
 };
+
+module.exports = DBIG_XXX;

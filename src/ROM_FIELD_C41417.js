@@ -27,3 +27,5 @@ var ROM_FIELD_C41417 = {
     MConst: 0x11,
 
 };
+
+module.exports = ROM_FIELD_C41417;

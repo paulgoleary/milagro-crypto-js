@@ -28,3 +28,5 @@ var ROM_FIELD_254MF = {
 
 
 };
+
+module.exports = ROM_FIELD_254MF;

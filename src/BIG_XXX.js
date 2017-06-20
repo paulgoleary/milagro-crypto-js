@@ -923,3 +923,5 @@ BIG_XXX.invmod256 = function(a) {
 
     return U;
 };
+
+module.exports = BIG_XXX;

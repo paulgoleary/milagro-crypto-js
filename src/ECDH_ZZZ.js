@@ -587,3 +587,5 @@ var ECDH_ZZZ = {
         return M;
     }
 };
+
+module.exports = ECDH_ZZZ;

@@ -27,3 +27,5 @@ var ROM_FIELD_255MS = {
     MConst: 0x2FD,
 
 };
+
+module.exports = ROM_FIELD_255MS;

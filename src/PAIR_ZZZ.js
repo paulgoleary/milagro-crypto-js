@@ -607,32 +607,4 @@ PAIR_ZZZ.GTpow = function(d, e) {
     return r;
 };
 
-/* test group membership - no longer needed */
-/* with GT-Strong curve, now only check that m!=1, conj(m)*m==1, and m.m^{p^4}=m^{p^2} */
-/*
-PAIR_ZZZ.GTmember= function(m)
-{
-	if (m.isunity()) return false;
-	var r=new FP12_YYY(m);
-	r.conj();
-	r.mul(m);
-	if (!r.isunity()) return false;
-
-	var fa=new BIG_XXX(0); fa.rcopy(ROM_FIELD_YYY.Fra);
-	var fb=new BIG_XXX(0); fb.rcopy(ROM_FIELD_YYY.Frb);
-	var f=new FP2_YYY(fa,fb); //f.bset(fa,fb);
-
-	r.copy(m); r.frob(f); r.frob(f);
-	var w=new FP12_YYY(r); w.frob(f); w.frob(f);
-	w.mul(m);
-	if (!ROM_CURVE_ZZZ.GT_STRONG)
-	{
-		if (!w.equals(r)) return false;
-		var x=new BIG_XXX(0); x.rcopy(ROM_CURVE_ZZZ.CURVE_Bnx);
-		r.copy(m); w=r.pow(x); w=w.pow(x);
-		r.copy(w); r.sqr(); r.mul(w); r.sqr();
-		w.copy(m); w.frob(f);
-	}
-	return w.equals(r);
-};
-*/
+module.exports = PAIR_ZZZ;

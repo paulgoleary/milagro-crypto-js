@@ -872,3 +872,5 @@ FF_WWW.prime = function(p, rng) {
     }
     return true;
 };
+
+module.exports = FF_WWW;

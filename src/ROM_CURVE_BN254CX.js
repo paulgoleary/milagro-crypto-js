@@ -94,3 +94,5 @@ var ROM_CURVE_BN254CX = {
     //debug: false,
 
 };
+
+module.exports = ROM_CURVE_BN254CX;

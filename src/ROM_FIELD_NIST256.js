@@ -28,3 +28,5 @@ var ROM_FIELD_NIST256 = {
 
 
 };
+
+module.exports = ROM_FIELD_NIST256;

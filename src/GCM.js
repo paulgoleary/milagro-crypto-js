@@ -327,3 +327,5 @@ GCM.hex2bytes = function(s) {
 
     return data;
 };
+
+module.exports = GCM;

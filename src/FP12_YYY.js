@@ -622,3 +622,5 @@ FP12_YYY.pow4 = function(q, u) {
     p.reduce();
     return p;
 };
+
+module.exports = FP12_YYY;

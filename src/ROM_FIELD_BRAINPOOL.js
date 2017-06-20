@@ -27,3 +27,5 @@ var ROM_FIELD_BRAINPOOL = {
     MConst: 0xFD89B9,
 
 };
+
+module.exports = ROM_FIELD_BRAINPOOL;

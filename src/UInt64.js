@@ -49,3 +49,5 @@ UInt64.prototype = {
         return this;
     }
 };
+
+module.exports = UInt64;

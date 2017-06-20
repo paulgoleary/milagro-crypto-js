@@ -490,3 +490,5 @@ FP4_YYY.prototype = {
     }
 
 };
+
+module.exports = FP4_YYY;

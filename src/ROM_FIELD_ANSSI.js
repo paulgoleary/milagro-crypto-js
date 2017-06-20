@@ -28,3 +28,5 @@ var ROM_FIELD_ANSSI = {
 
 
 };
+
+module.exports = ROM_FIELD_ANSSI;

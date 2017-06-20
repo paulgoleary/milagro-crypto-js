@@ -370,3 +370,5 @@ RSA_WWW = {
     }
 
 };
+
+module.exports = RSA_WWW;

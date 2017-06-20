@@ -996,3 +996,5 @@ ECP_ZZZ.RHS = function(x) {
     r.reduce();
     return r;
 };
+
+module.exports = ECP_ZZZ;
