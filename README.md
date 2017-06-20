@@ -33,7 +33,7 @@ npm install fs colors handlebars jake chai
 
 ## Build
 
-The library can be build using [jake](https://www.npmjs.com/package/jake). Type
+The library can be built using [jake](https://www.npmjs.com/package/jake). Type
 
 ```
 jake -T
@@ -46,7 +46,7 @@ To build the library supporting other curves or other RSA options you can use th
 ```
 jake build:choice[BLS383,C25519,RSA4096]
 ```
-To see te list of all the build options type
+To see the list of all the build options type
 ``` 
 jake list
 ```

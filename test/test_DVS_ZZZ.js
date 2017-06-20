@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
-/* Test MPIN - test driver and function exerciser for MPIN API Functions */
+/* Test DVS - test driver and function exerciser for Designated Veifier Signature API Functions */
 
 var fs = require('fs');
 var chai = require('chai');

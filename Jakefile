@@ -51,6 +51,7 @@ function copyCommonFiles(tempTarg){
 	jake.logger.log('Copying common files'.blue);
 	tempTestDir = tempTarg + targettestdir;
 	tempSrcDir = tempTarg + targetsrcdir;
+	tempExmDir = tempTarg + targetexamplesdir;
 	jake.cpR(srcdir+'/AES.js',tempSrcDir+'/AES.js');
 	jake.cpR(srcdir+'/GCM.js',tempSrcDir+'/GCM.js');
 	jake.cpR(srcdir+'/HASH256.js',tempSrcDir+'/HASH256.js');
@@ -59,6 +60,13 @@ function copyCommonFiles(tempTarg){
 	jake.cpR(srcdir+'/RAND.js',tempSrcDir+'/RAND.js');
 	jake.cpR(srcdir+'/UInt64.js',tempSrcDir+'/UInt64.js');
 	jake.cpR(srcdir+'/include.html',tempSrcDir+'/include.html');
+
+	jake.cpR(examplesdir+'/HASH.js',tempExmDir+'/HASH.js');
+	Replace(tempExmDir+'/HASH.js',/@SWD/g,tempSrcDir);
+
+	jake.cpR(testdir+'/test_HASH.js',tempTestDir+'/test_HASH.js');
+	Replace(tempTestDir+'/test_HASH.js',/@SWD/g,tempSrcDir);
+	Replace(tempTestDir+'/test_HASH.js',/@TVD/g,testvectordir);
 }
 
 // Copy ROM files according with the curve and the field in use
