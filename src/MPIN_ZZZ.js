@@ -574,21 +574,28 @@ var MPIN_ZZZ = {
         //else P.toBytes(HID);
     },
 
-    /* Implement step 1 of MPin protocol on server side */
-    SERVER_2: function(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F) {
-        var A = new BIG_XXX(0);
-        var B = new BIG_XXX(0);
-        A.rcopy(ROM_CURVE_ZZZ.CURVE_Pxa);
-        B.rcopy(ROM_CURVE_ZZZ.CURVE_Pxb);
-        var QX = new FP2_YYY(0);
-        QX.bset(A, B);
-        A.rcopy(ROM_CURVE_ZZZ.CURVE_Pya);
-        B.rcopy(ROM_CURVE_ZZZ.CURVE_Pyb);
-        var QY = new FP2_YYY(0);
-        QY.bset(A, B);
+    /* Implement step 1 of MPin protocol on server side. Pa is the client public key in case of DVS, otherwise must be set to null */
+    SERVER_2: function(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, Pa) {
+    
+        if ((Pa === undefined) || (Pa == null)) {
+            var A = new BIG_XXX(0);
+            var B = new BIG_XXX(0);
+            A.rcopy(ROM_CURVE_ZZZ.CURVE_Pxa);
+            B.rcopy(ROM_CURVE_ZZZ.CURVE_Pxb);
+            var QX = new FP2_YYY(0);
+            QX.bset(A, B);
+            A.rcopy(ROM_CURVE_ZZZ.CURVE_Pya);
+            B.rcopy(ROM_CURVE_ZZZ.CURVE_Pyb);
+            var QY = new FP2_YYY(0);
+            QY.bset(A, B);
 
-        var Q = new ECP2_ZZZ();
-        Q.setxy(QX, QY);
+            var Q = new ECP2_ZZZ();
+            Q.setxy(QX, QY);
+        }
+        else {
+            var Q = ECP2_ZZZ.fromBytes(Pa);
+            if (Q.is_infinity()) return this.INVALID_POINT;
+        }
 
         var sQ = ECP2_ZZZ.fromBytes(SST);
         if (sQ.is_infinity()) return this.INVALID_POINT;
@@ -702,6 +709,7 @@ var MPIN_ZZZ = {
 
     /* y = H(time,xCID) */
     GET_Y: function(sha, TimeValue, xCID, Y) {
+
         var q = new BIG_XXX(0);
         q.rcopy(ROM_CURVE_ZZZ.CURVE_Order);
         var h = this.hashit(sha, TimeValue, xCID);
@@ -715,11 +723,12 @@ var MPIN_ZZZ = {
         return 0;
     },
 
-    /* One pass MPIN_ZZZ Client */
-    CLIENT: function(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT, TimeValue, Y) {
+    /* One pass MPIN_ZZZ Client - DVS signature. Message must be null in case of One pass MPIN. */
+    CLIENT: function(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT, TimeValue, Y, Message) {
 
         var rtn = 0;
         var pID;
+        var M = [];
         if (date == 0) {
             pID = xID;
         } else {
@@ -731,7 +740,14 @@ var MPIN_ZZZ = {
         if (rtn != 0)
             return rtn;
 
-        this.GET_Y(sha, TimeValue, pID, Y);
+        M = pID.slice();
+
+        if ((Message != undefined) || (Message != null)) {
+            for (var i = 0; i < Message.length; i++)
+                M.push(Message[i]);
+        }
+
+        this.GET_Y(sha, TimeValue, M, Y);
 
         rtn = this.CLIENT_2(X, Y, SEC);
         if (rtn != 0)
@@ -741,9 +757,10 @@ var MPIN_ZZZ = {
     },
 
     /* One pass MPIN_ZZZ Server */
-    SERVER: function(sha, date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, CID, TimeValue) {
+    SERVER: function(sha, date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, CID, TimeValue, Message, Pa) {
         var rtn = 0;
         var pID;
+        var M = [];
         if (date == 0) {
             pID = xID;
         } else {
@@ -752,9 +769,16 @@ var MPIN_ZZZ = {
 
         this.SERVER_1(sha, date, CID, HID, HTID);
 
-        this.GET_Y(sha, TimeValue, pID, Y);
+        M = pID.slice();
 
-        rtn = this.SERVER_2(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F);
+        if ((Message != undefined) || (Message != null)) {
+            for (var i = 0; i < Message.length; i++)
+                M.push(Message[i]);
+        }
+
+        this.GET_Y(sha, TimeValue, M, Y);
+
+        rtn = this.SERVER_2(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, Pa);
         if (rtn != 0)
             return rtn;
 
@@ -923,5 +947,46 @@ var MPIN_ZZZ = {
         for (var i = 0; i < this.PAS; i++) SK[i] = t[i];
 
         return 0;
+    },
+
+    /* Generate a public key and the corresponding z for the key-escrow less scheme */
+    /*
+        if R==NULL then Z is passed in
+        if R!=NULL then Z is passed out
+        Pa=(z^-1).Q
+    */
+    GET_DVS_KEYPAIR: function(rng, Z, Pa) {
+
+        Q = new ECP2_ZZZ();
+        var r = new BIG_XXX(0);
+        r.rcopy(ROM_CURVE_ZZZ.CURVE_Order);
+
+        if (rng != null)
+            this.RANDOM_GENERATE(rng,Z);
+
+        var z = BIG_XXX.fromBytes(Z);
+        z.invmodp(r);
+
+        var pa = new BIG_XXX(0);
+        pa.rcopy(ROM_CURVE_ZZZ.CURVE_Pxa);
+        var pb = new BIG_XXX(0);
+        pb.rcopy(ROM_CURVE_ZZZ.CURVE_Pxb);
+        var QX = new FP2_YYY(0);
+        QX.bset(pa, pb);
+        var pa = new BIG_XXX(0);
+        pa.rcopy(ROM_CURVE_ZZZ.CURVE_Pya);
+        var pb = new BIG_XXX(0);
+        pb.rcopy(ROM_CURVE_ZZZ.CURVE_Pyb);
+        var QY = new FP2_YYY(0);
+        QY.bset(pa, pb);
+
+        Q.setxy(QX,QY);
+        if (Q.INF)
+            return MPIN_ZZZ.INVALID_POINT;
+
+        Q = PAIR_ZZZ.G2mul(Q, z);
+        Q.toBytes(Pa);
+        return 0;
+
     }
 };

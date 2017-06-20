@@ -215,6 +215,15 @@ function curvetestset(tb,tf,tc,pf,tempTarg) {
 		Replace(fname,/ZZZ/g,tc);
 		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
 		Replace(fname,/@TVD/g,testvectordir);
+
+		fname = tempTarg+targettestdir+'/'+'test_DVS_'+tc+'.js';
+		jake.cpR(testdir+'/test_DVS_ZZZ.js', fname);
+
+		Replace(fname,/XXX/g,tb);
+		Replace(fname,/YYY/g,tf);
+		Replace(fname,/ZZZ/g,tc);
+		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+		Replace(fname,/@TVD/g,testvectordir);
 	}
 }
 
@@ -257,6 +266,14 @@ function curveexampleset(tb,tf,tc,pf,tempTarg) {
 
 		fname = tempTarg+targetexamplesdir+'/'+'MPIN_ONE_PASS_'+tc+'.js';
 		jake.cpR(examplesdir+'/MPIN_ONE_PASS_ZZZ.js', fname);
+
+		Replace(fname,/XXX/g,tb);
+		Replace(fname,/YYY/g,tf);
+		Replace(fname,/ZZZ/g,tc);
+		Replace(fname,/@SWD/g,tempTarg+targetsrcdir);
+
+		fname = tempTarg+targetexamplesdir+'/'+'DVS_'+tc+'.js';
+		jake.cpR(examplesdir+'/DVS_ZZZ.js', fname);
 
 		Replace(fname,/XXX/g,tb);
 		Replace(fname,/YYY/g,tf);
