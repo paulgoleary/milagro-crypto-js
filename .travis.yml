@@ -6,6 +6,8 @@ node_js:
 sudo: required
 dist: trusty
 
+group: edge
+
 branches:
   except:
     - release
