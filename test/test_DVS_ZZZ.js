@@ -107,11 +107,11 @@ describe('TEST DVS ZZZ', function() {
 
         var message = "Message to sign";
 
-        res = MPIN_ZZZ.CLIENT_DVS_SIGN(sha, 0, CLIENT_ID, rng, X, pin, TOKEN, SEC, U, null, null, message, timeValue, Y1);
+        res = MPIN_ZZZ.CLIENT(sha, 0, CLIENT_ID, rng, X, pin, TOKEN, SEC, U, null, null, timeValue, Y1, message);
         expect(res).to.be.equal(0);
 
         /* Server  */
-        res = MPIN_ZZZ.SERVER_DVS_VERIFY(sha, 0, xID, null, Y2, SST, U, null, SEC, null, null, Pa, CLIENT_ID, message, timeValue);
+        res = MPIN_ZZZ.SERVER(sha, 0, xID, null, Y2, SST, U, null, SEC, null, null, CLIENT_ID, timeValue, message, Pa);
         expect(res).to.be.equal(0);
         done();
     });
@@ -175,11 +175,11 @@ describe('TEST DVS ZZZ', function() {
 
         var message = "Message to sign";
 
-        res = MPIN_ZZZ.CLIENT_DVS_SIGN(sha, 0, CLIENT_ID, rng, X, pin, TOKEN, SEC, U, null, null, message, timeValue, Y1);
+        res = MPIN_ZZZ.CLIENT(sha, 0, CLIENT_ID, rng, X, pin, TOKEN, SEC, U, null, null, timeValue, Y1, message);
         expect(res).to.be.equal(0);
 
         /* Server  */
-        res = MPIN_ZZZ.SERVER_DVS_VERIFY(sha, 0, xID, null, Y2, SST, U, null, SEC, null, null, Pa2, CLIENT_ID, message, timeValue);
+        res = MPIN_ZZZ.SERVER(sha, 0, xID, null, Y2, SST, U, null, SEC, null, null, CLIENT_ID, timeValue, message, Pa2);
         expect(res).to.be.equal(MPIN_ZZZ.BAD_PIN);
         done();
     });

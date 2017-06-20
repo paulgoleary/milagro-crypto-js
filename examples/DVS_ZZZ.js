@@ -60,6 +60,7 @@ var Z = [];
 var Pa = [];
 var U = [];
 
+var sha = MPIN_ZZZ.HASH_TYPE;
 
 /* Trusted Authority set-up */
 MPIN_ZZZ.RANDOM_GENERATE(rng, S);
@@ -120,7 +121,7 @@ var timeValue = MPIN_ZZZ.GET_TIME();
 
 var message = "Message to sign";
 
-res = MPIN_ZZZ.CLIENT_DVS_SIGN(sha, 0, CLIENT_ID, rng, X, pin, TOKEN, SEC, U, null, null, message, timeValue, Y1);
+res = MPIN_ZZZ.CLIENT(sha, 0, CLIENT_ID, rng, X, pin, TOKEN, SEC, U, null, null, timeValue, Y1, message);
 if (res != 0){
     console.log("Failed to extract PIN, error ", res);
     return 1;
@@ -132,7 +133,7 @@ console.log("Y1: 0x" + MPIN_ZZZ.bytestostring(Y1));
 console.log("V: 0x" + MPIN_ZZZ.bytestostring(SEC));
 
 /* Server  */
-res = MPIN_ZZZ.SERVER_DVS_VERIFY(sha,0,xID,null,Y2,SST,U,null,SEC,null,null,Pa,CLIENT_ID,message,timeValue);
+res = MPIN_ZZZ.SERVER(sha,0,xID,null,Y2,SST,U,null,SEC,null,null,CLIENT_ID,timeValue, message, Pa);
 console.log("Y2: 0x"+MPIN_ZZZ.bytestostring(Y2));
 
 if (res != 0)

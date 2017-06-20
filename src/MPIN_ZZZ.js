@@ -574,21 +574,28 @@ var MPIN_ZZZ = {
         //else P.toBytes(HID);
     },
 
-    /* Implement step 1 of MPin protocol on server side */
-    SERVER_2: function(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F) {
-        var A = new BIG_XXX(0);
-        var B = new BIG_XXX(0);
-        A.rcopy(ROM_CURVE_ZZZ.CURVE_Pxa);
-        B.rcopy(ROM_CURVE_ZZZ.CURVE_Pxb);
-        var QX = new FP2_YYY(0);
-        QX.bset(A, B);
-        A.rcopy(ROM_CURVE_ZZZ.CURVE_Pya);
-        B.rcopy(ROM_CURVE_ZZZ.CURVE_Pyb);
-        var QY = new FP2_YYY(0);
-        QY.bset(A, B);
+    /* Implement step 1 of MPin protocol on server side. Pa is the client public key in case of DVS, otherwise must be set to null */
+    SERVER_2: function(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, Pa) {
+    
+        if ((Pa === undefined) || (Pa == null)) {
+            var A = new BIG_XXX(0);
+            var B = new BIG_XXX(0);
+            A.rcopy(ROM_CURVE_ZZZ.CURVE_Pxa);
+            B.rcopy(ROM_CURVE_ZZZ.CURVE_Pxb);
+            var QX = new FP2_YYY(0);
+            QX.bset(A, B);
+            A.rcopy(ROM_CURVE_ZZZ.CURVE_Pya);
+            B.rcopy(ROM_CURVE_ZZZ.CURVE_Pyb);
+            var QY = new FP2_YYY(0);
+            QY.bset(A, B);
 
-        var Q = new ECP2_ZZZ();
-        Q.setxy(QX, QY);
+            var Q = new ECP2_ZZZ();
+            Q.setxy(QX, QY);
+        }
+        else {
+            var Q = ECP2_ZZZ.fromBytes(Pa);
+            if (Q.is_infinity()) return this.INVALID_POINT;
+        }
 
         var sQ = ECP2_ZZZ.fromBytes(SST);
         if (sQ.is_infinity()) return this.INVALID_POINT;
@@ -716,11 +723,12 @@ var MPIN_ZZZ = {
         return 0;
     },
 
-    /* One pass MPIN_ZZZ Client */
-    CLIENT: function(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT, TimeValue, Y) {
+    /* One pass MPIN_ZZZ Client - DVS signature. Message must be null in case of One pass MPIN. */
+    CLIENT: function(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT, TimeValue, Y, Message) {
 
         var rtn = 0;
         var pID;
+        var M = [];
         if (date == 0) {
             pID = xID;
         } else {
@@ -732,9 +740,14 @@ var MPIN_ZZZ = {
         if (rtn != 0)
             return rtn;
 
+        M = pID.slice();
 
+        if ((Message != undefined) || (Message != null)) {
+            for (var i = 0; i < Message.length; i++)
+                M.push(Message[i]);
+        }
 
-        this.GET_Y(sha, TimeValue, pID, Y);
+        this.GET_Y(sha, TimeValue, M, Y);
 
         rtn = this.CLIENT_2(X, Y, SEC);
         if (rtn != 0)
@@ -744,9 +757,10 @@ var MPIN_ZZZ = {
     },
 
     /* One pass MPIN_ZZZ Server */
-    SERVER: function(sha, date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, CID, TimeValue) {
+    SERVER: function(sha, date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, CID, TimeValue, Message, Pa) {
         var rtn = 0;
         var pID;
+        var M = [];
         if (date == 0) {
             pID = xID;
         } else {
@@ -755,9 +769,16 @@ var MPIN_ZZZ = {
 
         this.SERVER_1(sha, date, CID, HID, HTID);
 
-        this.GET_Y(sha, TimeValue, pID, Y);
+        M = pID.slice();
 
-        rtn = this.SERVER_2(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F);
+        if ((Message != undefined) || (Message != null)) {
+            for (var i = 0; i < Message.length; i++)
+                M.push(Message[i]);
+        }
+
+        this.GET_Y(sha, TimeValue, M, Y);
+
+        rtn = this.SERVER_2(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, Pa);
         if (rtn != 0)
             return rtn;
 
@@ -967,118 +988,5 @@ var MPIN_ZZZ = {
         Q.toBytes(Pa);
         return 0;
 
-    },
-
-    /* DVS signature message */
-    CLIENT_DVS_SIGN: function(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT, Message, TimeValue, Y) {
-
-        var rtn = 0;
-        var pID;
-        var M = [];
-        if (date == 0) {
-            pID = xID;
-        } else {
-            pID = xCID;
-            xID = null;
-        }
-
-        rtn = this.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, xID, xCID, PERMIT);
-        if (rtn != 0)
-            return rtn;
-
-        M = pID.slice();
-
-        if (Message != null) {
-            for (var i = 0; i < Message.length; i++)
-                M.push(Message[i]);
-        }
-
-            this.GET_Y(sha, TimeValue, M, Y);
-
-        rtn = this.CLIENT_2(X, Y, SEC);
-        if (rtn != 0)
-            return rtn;
-
-        return 0;
-    },
-
-    /* Verify DVS signature */
-    SERVER_DVS_VERIFY: function(sha, date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, Pa, CID, Message, TimeValue) {
-        var rtn = 0;
-        var pID;
-        var M = [];
-        if (date == 0) {
-            pID = xID;
-        } else {
-            pID = xCID;
-        }
-
-        this.SERVER_1(sha, date, CID, HID, HTID);
-
-        M = pID.slice();
-
-        if (Message != null) {
-            for (var i = 0; i < Message.length; i++)
-                M.push(Message[i]);
-        }
-
-        this.GET_Y(sha, TimeValue, M, Y);
-
-        var Q = ECP2_ZZZ.fromBytes(Pa);
-        if (Q.is_infinity()) return this.INVALID_POINT;
-
-
-        var sQ = ECP2_ZZZ.fromBytes(SST);
-        if (sQ.is_infinity()) return this.INVALID_POINT;
-
-        var R;
-        if (date !== 0)
-            R = ECP_ZZZ.fromBytes(xCID);
-        else {
-            if (xID == null) return this.BAD_PARAMS;
-            R = ECP_ZZZ.fromBytes(xID);
-        }
-        if (R.is_infinity()) return this.INVALID_POINT;
-
-        var y = BIG_XXX.fromBytes(Y);
-        var P;
-
-        if (date != 0) P = ECP_ZZZ.fromBytes(HTID);
-        else {
-            if (HID == null) return this.BAD_PARAMS;
-            P = ECP_ZZZ.fromBytes(HID);
-        }
-        if (P.is_infinity()) return this.INVALID_POINT;
-
-        P = PAIR_ZZZ.G1mul(P, y);
-        P.add(R);
-        P.affine();
-        R = ECP_ZZZ.fromBytes(mSEC);
-        if (R.is_infinity()) return this.INVALID_POINT;
-
-        var g = PAIR_ZZZ.ate2(Q, R, sQ, P);
-        g = PAIR_ZZZ.fexp(g);
-
-        if (!g.isunity()) {
-            if (HID != null && xID != null && E != null && F != null) {
-                g.toBytes(E);
-                if (date !== 0) {
-                    P = ECP_ZZZ.fromBytes(HID);
-                    if (P.is_infinity()) return this.INVALID_POINT;
-                    R = ECP_ZZZ.fromBytes(xID);
-                    if (R.is_infinity()) return this.INVALID_POINT;
-
-                    P = PAIR_ZZZ.G1mul(P, y);
-                    P.add(R);
-                    P.affine();
-                }
-                g = PAIR_ZZZ.ate(Q, P);
-                g = PAIR_ZZZ.fexp(g);
-
-                g.toBytes(F);
-            }
-            return this.BAD_PIN;
-        }
-        return 0;
     }
 };
