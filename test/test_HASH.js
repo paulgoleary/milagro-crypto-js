@@ -18,7 +18,7 @@ under the License.
 */
 
 
-/* Test ECC - test driver and function exerciser for ECDH_ZZZ/ECIES/ECDSA API Functions */
+/* Test HASH function - test driver and function exerciser for SHA256, SHA384, SHA512 API Functions */
 
 var fs = require('fs');
 var chai = require('chai');

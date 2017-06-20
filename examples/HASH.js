@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
-/* Test DVS - test driver and function exerciser for Designator Verifier Signature API Functions */
+/* Example Hash functions */
 
 var fs = require('fs');
 
