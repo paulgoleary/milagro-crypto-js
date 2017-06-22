@@ -2,45 +2,56 @@ var fresh = require('fresh-require')
 
 CTX = function(config) {
   this.config = config
-  this.BIG = fresh("./BIG", require)
-  this.this.BIG.ctx = this
+
+  var imp = fresh("./allbig", require)
+  this.BIG = imp.BIG
+  this.BIG.ctx = this
   this.BIG.MODBYTES = config["@NB"];
   this.BIG.BASEBITS = config["@BASE"];
+  
+  this.DBIG = imp.DBIG
+  this.DBIG.ctx = this
 
-  this.DBIG = fresh("./DBIG", require)
-  this.Dthis.BIG.ctx = this
-
-  this.ECDH = fresh("./ECDH", require)
+  imp = fresh("./ecdh", require)
+  this.ECDH = imp.ECDH
   this.ECDH.ctx = this
 
-  this.ECP = fresh("./ECP", require)
-  this.this.ECP.ctx = this
+  imp = fresh("./ecp", require)
+  this.ECP = imp.ECP
+  this.ECP.ctx = this
   this.ECP.CURVETYPE = config["@CT"]; //
   this.ECP.CURVE_PAIRING_TYPE = config["@PF"]; //
 
-  this.FP = fresh("./FP", require)
+  imp = fresh("./fp", require)
+  this.FP = imp.FP
   this.FP.ctx = this
   this.FP.MODBITS = config["@NBT"];
   this.FP.MOD8 = config["@M8"];
   this.FP.MODTYPE = config["@MT"]; //
 
   if (config["@PF"] != "0") {
-	  this.ECP2 = fresh("./ECP2", require)
+	  imp = fresh("./ecp2", require)
+	  this.ECP2 = imp.ECP2
 	  this.ECP2.ctx = this
 
-	  this.FP12 = fresh("./FP12", require)
+	  imp = fresh("./fp12", require)
+	  this.FP12 = imp.FP12
 	  this.FP12.ctx = this
 
-	  this.FP4 = fresh("./FP4", require)
+	  imp = fresh("./fp4", require)
+	  this.FP4 = imp.FP4
 	  this.FP4.ctx = this
 
-	  this.FP2 = fresh("./FP2", require)
+	  imp = fresh("./fp2", require)
+	  this.FP2 = imp.FP2
 	  this.FP2.ctx = this
 
-	  this.MPIN = fresh("./MPIN", require)
+	  imp = fresh("./mpin", require)
+    this.MPIN = imp.MPIN
 	  this.MPIN.ctx = this
 
-	  this.PAIR = fresh("./PAIR", require)
+	  imp = fresh("./pair", require)
+	  this.PAIR = imp.PAIR
 	  this.PAIR.ctx = this
 	}
 }
