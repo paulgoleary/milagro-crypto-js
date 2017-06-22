@@ -91,7 +91,7 @@ task('build', function () {
           var refPath = buildsrcdir + '/' + refFile; 
           if(file != refFile) {
             // TODO dont replace within comment blocks
-            replace(refPath, refRegex, '$1module.exports.ctx.' + className);
+            replace(refPath, refRegex, '$1module.exports.' + className + '.ctx.' + className);
           }
         });
       }
