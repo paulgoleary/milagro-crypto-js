@@ -74,6 +74,28 @@ task('build', function () {
   jake.cpR(srcdir + '/ctx.js', buildsrcdir);
   jake.cpR(srcdir + '/curves.js', buildsrcdir);
 
+  // concatenate all ROM_CURVE files
+  fs.readdirSync(buildsrcdir).forEach(file => {
+      var path = buildsrcdir + '/' + file; 
+      match = /^(ROM_CURVE.*).js$/.exec(file);
+      if(match != null) {
+        var curve = fs.readFileSync(path);
+        fs.appendFileSync(buildsrcdir + '/ROM_CURVE_ZZZ.js', curve);
+        fs.unlink(path);
+      }
+  });
+
+  // concatenate all ROM_FIELD files
+  fs.readdirSync(buildsrcdir).forEach(file => {
+      var path = buildsrcdir + '/' + file; 
+      match = /^(ROM_FIELD.*).js$/.exec(file);
+      if(match != null) {
+        var curve = fs.readFileSync(path);
+        fs.appendFileSync(buildsrcdir + '/ROM_FIELD_YYY.js', curve);
+        fs.unlink(path);
+      }
+  });
+
   fs.readdirSync(buildsrcdir).forEach(file => {
 
       var path = buildsrcdir + '/' + file; 
