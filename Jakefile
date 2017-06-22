@@ -75,23 +75,29 @@ task('build', function () {
   jake.cpR(srcdir + '/curves.js', buildsrcdir);
 
   // concatenate all ROM_CURVE files
+  var romCurveFile = buildsrcdir + '/ROM_CURVE_ZZZ.js';
   fs.readdirSync(buildsrcdir).forEach(file => {
       var path = buildsrcdir + '/' + file; 
       match = /^(ROM_CURVE.*).js$/.exec(file);
       if(match != null) {
-        var curve = fs.readFileSync(path);
-        fs.appendFileSync(buildsrcdir + '/ROM_CURVE_ZZZ.js', curve);
+        var curveName = match[1];
+        var data = fs.readFileSync(path);
+        fs.appendFileSync(romCurveFile, data);
+        addExport(romCurveFile, curveName); // add export line
         fs.unlink(path);
       }
   });
 
   // concatenate all ROM_FIELD files
+  var romFieldFile = buildsrcdir + '/ROM_FIELD_YYY.js';
   fs.readdirSync(buildsrcdir).forEach(file => {
       var path = buildsrcdir + '/' + file; 
       match = /^(ROM_FIELD.*).js$/.exec(file);
       if(match != null) {
-        var curve = fs.readFileSync(path);
-        fs.appendFileSync(buildsrcdir + '/ROM_FIELD_YYY.js', curve);
+        var fieldName = match[1];
+        var data = fs.readFileSync(path);
+        fs.appendFileSync(romFieldFile, data);
+        addExport(romFieldFile, fieldName); // add export line
         fs.unlink(path);
       }
   });
