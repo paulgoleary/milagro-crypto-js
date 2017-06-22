@@ -19,35 +19,36 @@
 
 /* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
 
-var UInt64 = function(top, bot) {
-    this.top = top;
-    this.bot = bot;
+var UInt64 = function(top,bot) {
+	this.top=top;
+	this.bot=bot;
 };
 
-UInt64.prototype = {
-    add: function(y) {
-        var t = (this.bot >>> 0) + (y.bot >>> 0);
-        var low = t >>> 0;
-        var high = (this.top >>> 0) + (y.top >>> 0);
+UInt64.prototype={
+	add: function(y)
+	{
+		var t=(this.bot>>>0)+(y.bot>>>0);
+		var low=t >>> 0;
+		var high=(this.top>>>0)+(y.top>>>0);
 
-        this.bot = low;
-        if (low != t)
-            this.top = (high + 1) >>> 0;
-        else
-            this.top = high;
+		this.bot=low;
+		if (low!=t)
+			this.top=(high+1)>>>0;
+		else
+			this.top=high;
 
-        return this;
-    },
-    copy: function() {
-        var r = new UInt64(this.top, this.bot);
-        return r;
-    },
-    shlb: function() {
-        var t = this.bot >>> 24;
-        this.top = t + (this.top << 8);
-        this.bot <<= 8;
-        return this;
-    }
+		return this;
+	},
+	copy: function()
+	{
+		var r=new UInt64(this.top,this.bot);
+		return r;
+	},
+	shlb: function()
+	{
+		var t=this.bot>>>24;
+		this.top=t+(this.top<<8);
+		this.bot<<=8;
+		return this;
+	}
 };
-
-module.exports = UInt64;

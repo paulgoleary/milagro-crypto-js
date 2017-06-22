@@ -19,14 +19,12 @@
 
 /* Fixed Data in ROM - Field and Curve parameters */
 
-var ROM_FIELD_254MF = {
+var ROM_FIELD_254MF={
 
-    // MF254 modulus
+// MF254 modulus
 
-    Modulus: [0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x3F80],
-    MConst: 0x3F81,
+	Modulus: [0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0x3F80],
+	MConst:0x3F81,
 
 
 };
-
-module.exports = ROM_FIELD_254MF;

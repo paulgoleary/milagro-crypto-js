@@ -19,13 +19,11 @@
 
 /* Fixed Data in ROM - Field and Curve parameters */
 
-var ROM_FIELD_256MS = {
+var ROM_FIELD_256MS={
 
-    // MS256 modulus
+// MS256 modulus
 
-    Modulus: [0xFFFF43, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFF],
-    MConst: 0xBD,
+Modulus: [0xFFFF43,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFFFF,0xFFFF],
+MConst:0xBD,
 
 };
-
-module.exports = ROM_FIELD_256MS;
