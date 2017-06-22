@@ -3,9 +3,10 @@ var fresh = require('fresh-require')
 CTX = function(config) {
   this.config = config
 
-  var imp = fresh("./allbig", require)
+
+  var imp = fresh("./big", require)
+  imp.ctx = this
   this.BIG = imp.BIG
-  this.BIG.ctx = this
   this.BIG.MODBYTES = config["@NB"];
   this.BIG.BASEBITS = config["@BASE"];
   
@@ -55,3 +56,5 @@ CTX = function(config) {
 	  this.PAIR.ctx = this
 	}
 }
+
+module.exports = CTX;
