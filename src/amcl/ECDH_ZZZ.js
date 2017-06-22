@@ -17,7 +17,8 @@
 	under the License.
 */
 
-var ECDH_ZZZ = {
+ECDH = function() {
+  return {
 
 	INVALID_PUBLIC_KEY:-2,
 	ERROR:-3,
@@ -596,4 +597,4 @@ var ECDH_ZZZ = {
 	
 		return M;
 	}
-};
+}};

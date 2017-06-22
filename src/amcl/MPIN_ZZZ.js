@@ -19,7 +19,8 @@
 
 /* MPIN_ZZZ API Functions */
 
-var MPIN_ZZZ = {
+function MPIN_ZZZ() {
+  return {
 	BAD_PARAMS:-11,
 	INVALID_POINT:-14,
 	WRONG_ORDER:-18,
@@ -933,4 +934,4 @@ var MPIN_ZZZ = {
 
 		return 0;
 	}
-};
+}};
