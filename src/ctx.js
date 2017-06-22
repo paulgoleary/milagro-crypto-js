@@ -52,6 +52,15 @@ CTX = function(config) {
     imp.ctx = this;
     this.PAIR = imp.PAIR;
   }
+
+  imp = fresh("./rom_curve_"+config["ZZZ"].toLowerCase(), require);
+  imp.ctx = this;
+  this.ROM_CURVE = imp.ROM_CURVE;
+
+  imp = fresh("./rom_field_"+config["YYY"].toLowerCase(), require);
+  imp.ctx = this;
+  this.ROM_FIELD = imp.ROM_FIELD;
+
 }
 
 module.exports = CTX;
