@@ -1,66 +1,65 @@
-var fresh = require('fresh-require')
-
-CTX = function(config) {
+CTX = function(config) {;
   this.config = config;
 
-  var imp = fresh("./big", require)
-  imp.ctx = this;
-  this.BIG = imp.BIG;
-  this.BIG.MODBYTES = config["@NB"];
-  this.BIG.BASEBITS = config["@BASE"];
-  this.DBIG = imp.DBIG
+  var aes = require('./aes');
+  this.AES = aes.AES(this);
 
-  imp = fresh("./ecdh", require)
-  imp.ctx = this;
-  this.ECDH = imp.ECDH();
+  var rand = require('./rand');
+  this.RAND = rand.RAND(this);
 
-  imp = fresh("./ecp", require)
-  imp.ctx = this;
-  this.ECP = imp.ECP;
-  this.ECP.CURVETYPE = config["@CT"];
-  this.ECP.CURVE_PAIRING_TYPE = config["@PF"];
+  var uint64 = require('./uint64');
+  this.UInt64 = uint64.UInt64(this);
 
-  imp = fresh("./fp", require)
-  imp.ctx = this;
-  this.FP = imp.FP;
-  this.FP.MODBITS = config["@NBT"];
-  this.FP.MOD8 = config["@M8"];
-  this.FP.MODTYPE = config["@MT"];
+  var hash256 = require('./hash256');
+  this.HASH256 = hash256.HASH256(this);
 
-  if (config["@PF"] != "0") {
-    imp = fresh("./ecp2", require)
-    imp.ctx = this;
-    this.ECP2 = imp.ECP2;
+  var hash384 = require('./hash384');
+  this.HASH384 = hash384.HASH384(this);
 
-    imp = fresh("./fp12", require)
-    imp.ctx = this;
-    this.FP12 = imp.FP12;
+  var hash512 = require('./hash512');
+  this.HASH512 = hash512.HASH512(this);
 
-    imp = fresh("./fp4", require)
-    imp.ctx = this;
-    this.FP4 = imp.FP4;
+  var big = require('./big');
+  this.BIG = big.BIG(this);
+  this.DBIG = big.DBIG(this);
 
-    imp = fresh("./fp2", require)
-    imp.ctx = this;
-    this.FP2 = imp.FP2;
+  var ecdh = require('./ecdh');
+  this.ECDH = ecdh.ECDH(this);
 
-    imp = fresh("./mpin", require)
-    imp.ctx = this;
-    this.MPIN = imp.MPIN;
+  var ecp = require('./ecp');
+  this.ECP = ecp.ECP(this);
 
-    imp = fresh("./pair", require)
-    imp.ctx = this;
-    this.PAIR = imp.PAIR;
-  }
+  var fp = require('./fp');
+  this.FP = fp.FP(this);
 
-  imp = require("./rom_curve");
-  imp.ctx = this;
-  this.ROM_CURVE = imp["ROM_CURVE_"+config["ZZZ"]];
+  if (config['@PF'] != '0') {;
+    var ecp2 = require('./ecp2');
+    this.ECP2 = ecp2.ECP2(this);
 
-  imp = require("./rom_field");
-  imp.ctx = this;
-  this.ROM_FIELD = imp["ROM_FIELD_"+config["YYY"]];
+    var fp12 = require('./fp12');
+    this.FP12 = fp12.FP12(this);
 
-}
+    var fp4 = require('./fp4');
+    this.FP4 = fp4.FP4(this);
+
+    var fp2 = require('./fp2');
+    this.FP2 = fp2.FP2(this);
+
+    var mpin = require('./mpin');
+    this.MPIN = mpin.MPIN(this);
+
+    var pair = require('./pair');
+    this.PAIR = pair.PAIR(this);
+  };
+
+  var curve = 'ROM_CURVE_' + config['ZZZ'];
+  var romCurve = require('./' + curve.toLowerCase());
+  this.ROM_CURVE = romCurve[curve](this);
+
+  var field = 'ROM_FIELD_' + config['YYY'];
+  var romField = require('./' + field.toLowerCase());
+  this.ROM_FIELD = romField[field](this);
+
+};
 
 module.exports = CTX;

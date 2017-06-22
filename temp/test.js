@@ -22,8 +22,6 @@ under the License.
 
 var CTX = require("./build/src/ctx");
 var CURVES = require("./build/src/curves");
-var RAND = require("./build/src/rand");
-var HASH256 = require("./build/src/hash256");
 
 var ctx1 = new CTX(CURVES["BN254"]);
 var ctx2 = new CTX(CURVES["NIST521"]);
@@ -55,7 +53,7 @@ var T = new Array(12); // must specify required length
 var CS = [];
 var DS = [];
 
-var rng = new RAND();
+var rng = new ctx1.RAND();
 
 rng.clean();
 for (i = 0; i < 100; i++) RAW[i] = i;
@@ -146,7 +144,7 @@ var T = new Array(12); // must specify required length
 var CS = [];
 var DS = [];
 
-var rng = new RAND();
+var rng = new ctx2.RAND();
 
 rng.clean();
 for (i = 0; i < 100; i++) RAW[i] = i;

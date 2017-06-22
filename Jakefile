@@ -29,12 +29,12 @@ function replace(namefile,oldtext,newtext) {
 }
 
 // Add exports line to file
-function addExport(jsFilename, className) {
+function lazy(jsFilename, className) {
 	var code = fs.readFileSync(jsFilename,'utf8')
-  var exportline = 'module.exports.' + className + ' = ' + className + ';';
-	if (!(code.includes(exportline))) {
-		fs.appendFileSync(jsFilename, exportline + '\n');
-	}
+  var pre = 'module.exports.' + className + ' = function(ctx) {\n\n';
+  var ctx = '\n;\n' + className + '.ctx = ctx;\n';
+  var post = 'return ' + className + ';\n};\n\n'
+	fs.writeFileSync(jsFilename, pre + code + ctx + post);
 }
 
 // run tests with mocha
@@ -71,58 +71,48 @@ task('build', function () {
  
   jake.cpR(srcdir + '/amcl', builddir);
   fs.renameSync(builddir + '/amcl', buildsrcdir);
-  jake.cpR(srcdir + '/ctx.js', buildsrcdir);
-  jake.cpR(srcdir + '/curves.js', buildsrcdir);
-
-  // concatenate all ROM_CURVE files
-  var romCurveFile = buildsrcdir + '/ROM_CURVE_ZZZ.js';
-  fs.readdirSync(buildsrcdir).forEach(file => {
-      var path = buildsrcdir + '/' + file; 
-      match = /^(ROM_CURVE.*).js$/.exec(file);
-      if(match != null) {
-        var curveName = match[1];
-        var data = fs.readFileSync(path);
-        fs.appendFileSync(romCurveFile, data);
-        addExport(romCurveFile, curveName); // add export line
-        fs.unlink(path);
-      }
-  });
-
-  // concatenate all ROM_FIELD files
-  var romFieldFile = buildsrcdir + '/ROM_FIELD_YYY.js';
-  fs.readdirSync(buildsrcdir).forEach(file => {
-      var path = buildsrcdir + '/' + file; 
-      match = /^(ROM_FIELD.*).js$/.exec(file);
-      if(match != null) {
-        var fieldName = match[1];
-        var data = fs.readFileSync(path);
-        fs.appendFileSync(romFieldFile, data);
-        addExport(romFieldFile, fieldName); // add export line
-        fs.unlink(path);
-      }
-  });
 
   fs.readdirSync(buildsrcdir).forEach(file => {
 
       var path = buildsrcdir + '/' + file; 
-      match = /^(.*_(?:WWW|XXX|YYY|ZZZ)).js$/.exec(file);
+      match = /^(.*).js$/.exec(file);
       if(match != null) {
         var className = match[1];
 
-        addExport(path, className); // add export line
+        lazy(path, className);
         
-        replace(path, /@[^@]+@/g, 'undefined'); // replace '@var@' placeholders
+        replace(path, /(?:\w+\.)?(@[^@]+)@/g, 'ctx.config["$1"]'); // replace '@var@' placeholders
 
         // find any references to this class in all other files
-        var refRegex = new RegExp('([^A-Z\.])' + className, 'g')
+        var refRegex = new RegExp('(\\W)' + className + '(\\W)', 'g')
         fs.readdirSync(buildsrcdir).forEach(refFile => {
           var refPath = buildsrcdir + '/' + refFile; 
           if(file != refFile) {
             // TODO dont replace within comment blocks
-            replace(refPath, refRegex, '$1module.exports.ctx.' + className);
+            replace(refPath, refRegex, '$1ctx.' + className + '$2');
           }
         });
       }
+  });
+
+  var className = 'ROM_CURVE_ZZZ';
+  var refRegex = new RegExp('(\\W)' + className + '(\\W)', 'g')
+  fs.readdirSync(buildsrcdir).forEach(refFile => {
+    var refPath = buildsrcdir + '/' + refFile; 
+    if(file != refFile) {
+      // TODO dont replace within comment blocks
+      replace(refPath, refRegex, '$1ctx.' + className + '$2');
+    }
+  });
+
+  var className = 'ROM_FIELD_YYY';
+  var refRegex = new RegExp('(\\W)' + className + '(\\W)', 'g')
+  fs.readdirSync(buildsrcdir).forEach(refFile => {
+    var refPath = buildsrcdir + '/' + refFile; 
+    if(file != refFile) {
+      // TODO dont replace within comment blocks
+      replace(refPath, refRegex, '$1ctx.' + className + '$2');
+    }
   });
 
   fs.readdirSync(buildsrcdir).forEach(file => {
@@ -149,6 +139,9 @@ task('build', function () {
   var dbig = fs.readFileSync(buildsrcdir + '/dbig.js');
   fs.appendFileSync(buildsrcdir + '/big.js', dbig);
   fs.unlink(buildsrcdir + '/dbig.js');
+
+  jake.cpR(srcdir + '/ctx.js', buildsrcdir);
+  jake.cpR(srcdir + '/curves.js', buildsrcdir);
 
 	complete();
 });
