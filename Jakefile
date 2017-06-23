@@ -57,10 +57,7 @@ task('default', function () {
   jake.logger.log('Type `jake -T` to see the list of all thew tasks.');
 });
 
-
-
-
-// Build with default curve BN254CX and RSA2048 
+// Build from AMCL to milagro-crypto-js
 desc('Build library'.blue);
 task('build', function () {
 	jake.logger.log('Build library'.red);
@@ -157,6 +154,19 @@ task('build', function () {
   jake.cpR(srcdir + '/ctx.js', buildsrcdir);
   jake.cpR(srcdir + '/curves.js', buildsrcdir);
 
+  // copy tests
+  fs.readdirSync(testdir).forEach(file => {
+
+    var infile = testdir + '/' + file;
+    var outfile = buildtestdir + '/' + file;
+    match = /^(.*).js$/.exec(file);
+    if(match != null) {
+      jake.cpR(infile, outfile);
+      replace(outfile, /@TVD/g, testvectordir); // replace '@TVD' with the right test vector path
+      replace(outfile, /@SWD/g, buildsrcdir); // replace '@SWD' with the right source path
+    }
+  });
+
 	complete();
 });
 
@@ -167,7 +177,7 @@ task('clean', function () {
 	jake.mkdirP(targetdir);
 });
 
-// Run test on single build
+// Run tests
 desc('Run tests'.blue);
 task('test', {async: true}, function ()
 {
@@ -195,45 +205,7 @@ task('test', {async: true}, function ()
 	});
 });
 
-// Run tests when multiple build
-namespace('test', function ()
-{
-	desc('Test specific build. For example jake test:choice[BN254CX,RSA2048]'.blue);
-	task('choice', {async: true}, function ()
-	{
-		var tempTarg = targetdir+'/build';
-		for (var i=0; i<arguments.length; i++)
-			tempTarg += '_'+arguments[i];
-		fs.readdir(targetdir, function(err, builds)
-		{
-			//if (tempTarg.replace(targetdir+'/','') in builds)
-			if (builds.indexOf(tempTarg.replace(targetdir+'/',''))>-1)
-			{
-				jake.logger.log(('Start testing '+tempTarg).blue);
-		        jake.mkdirP(tempTarg+testingdir);
-				if (fs.existsSync(tempTarg+testingdir+lasttestlog))
-        			fs.unlinkSync(tempTarg+testingdir+lasttestlog);
-		        fs.readdir(tempTarg+targettestdir, function(errors, tests)
-		        {
-		        	if (tests == null)
-		        	{
-		        		jake.logger.error('Nothing to test');
-		        		complete();
-		        	}
-					testrun(tempTarg);
-		        });
-			}
-			else
-			{
-				jake.logger.error('ERROR: Invalid '+tempTarg.replace(targetdir+'/','')+'. Builds available to test:');
-				jake.logger.log(builds);
-				complete();
-			}
-		});
-	});
-});
-
-// Run test on single build
+// Run tests on docker
 desc('Build and run all tests in a docker'.blue);
 task('dockerbuild', {async: true}, function ()
 {
@@ -246,12 +218,12 @@ task('dockerbuild', {async: true}, function ()
 desc('Format code using js-beautify'.blue);
 task('format', {async: true}, function ()
 {
-	var cmd = ['js-beautify -r '+srcdir+'/*js && js-beautify -r '+testdir+'/*js && js-beautify -r '+examplesdir+'/*js']
+	var cmd = ['js-beautify -r '+srcdir+'/**/*js && js-beautify -r '+srcdir+'/*js && js-beautify -r '+testdir+'/*js && js-beautify -r '+examplesdir+'/*js']
 	jake.exec(cmd, {printStdout: true});
 	complete();
 });
 
-// Format code using js-beautify
+// Print version
 desc('Print the version of the repo'.blue);
 task('version', {async: true}, function ()
 {
