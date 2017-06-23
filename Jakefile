@@ -78,10 +78,44 @@ task('build', function () {
       match = /^(.*).js$/.exec(file);
       if(match != null) {
         var className = match[1];
-
         lazy(path, className);
-        
         replace(path, /(?:\w+\.)?(@[^@]+)@/g, 'ctx.config["$1"]'); // replace '@var@' placeholders
+      }
+  });
+
+  // concatenate all ROM_CURVE files
+  var romCurveFile = buildsrcdir + '/ROM_CURVE_ZZZ.js';
+  fs.readdirSync(buildsrcdir).forEach(file => {
+      var path = buildsrcdir + '/' + file; 
+      match = /^(ROM_CURVE.*).js$/.exec(file);
+      if(match != null) {
+        var curveName = match[1];
+        var data = fs.readFileSync(path);
+        fs.appendFileSync(romCurveFile, data);
+        fs.unlink(path);
+      }
+  });
+
+  // concatenate all ROM_FIELD files
+  var romFieldFile = buildsrcdir + '/ROM_FIELD_YYY.js';
+  fs.readdirSync(buildsrcdir).forEach(file => {
+      var path = buildsrcdir + '/' + file; 
+      match = /^(ROM_FIELD.*).js$/.exec(file);
+      if(match != null) {
+        var fieldName = match[1];
+        var data = fs.readFileSync(path);
+        fs.appendFileSync(romFieldFile, data);
+        fs.unlink(path);
+      }
+  });
+
+  
+  fs.readdirSync(buildsrcdir).forEach(file => {
+
+      var path = buildsrcdir + '/' + file; 
+      match = /^(.*).js$/.exec(file);
+      if(match != null) {
+        var className = match[1];
 
         // find any references to this class in all other files
         var refRegex = new RegExp('(\\W)' + className + '(\\W)', 'g')
@@ -93,26 +127,6 @@ task('build', function () {
           }
         });
       }
-  });
-
-  var className = 'ROM_CURVE_ZZZ';
-  var refRegex = new RegExp('(\\W)' + className + '(\\W)', 'g')
-  fs.readdirSync(buildsrcdir).forEach(refFile => {
-    var refPath = buildsrcdir + '/' + refFile; 
-    if(file != refFile) {
-      // TODO dont replace within comment blocks
-      replace(refPath, refRegex, '$1ctx.' + className + '$2');
-    }
-  });
-
-  var className = 'ROM_FIELD_YYY';
-  var refRegex = new RegExp('(\\W)' + className + '(\\W)', 'g')
-  fs.readdirSync(buildsrcdir).forEach(refFile => {
-    var refPath = buildsrcdir + '/' + refFile; 
-    if(file != refFile) {
-      // TODO dont replace within comment blocks
-      replace(refPath, refRegex, '$1ctx.' + className + '$2');
-    }
   });
 
   fs.readdirSync(buildsrcdir).forEach(file => {
