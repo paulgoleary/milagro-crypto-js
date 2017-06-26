@@ -31,7 +31,7 @@
 
 [Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the following node.js modules (root permissions may be required)
 ```
-npm install -g mocha mocha-circleci-reporter mocha-lcov-reporter
+npm install -g mocha coveralls nyc
 npm install chai
 ```
 
