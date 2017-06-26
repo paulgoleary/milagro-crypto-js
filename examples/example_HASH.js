@@ -19,13 +19,10 @@ under the License.
 
 /* Example Hash functions */
 
-var fs = require('fs');
+var CTX = require("../src/ctx");
 
-eval(fs.readFileSync('@SWD/UInt64.js') + '');
-eval(fs.readFileSync('@SWD/RAND.js') + '');
-eval(fs.readFileSync('@SWD/HASH256.js') + '');
-eval(fs.readFileSync('@SWD/HASH384.js') + '');
-eval(fs.readFileSync('@SWD/HASH512.js') + '');
+var ctx = new CTX();
+
 
 var bytestostring = function(b) {
     var s = "";
@@ -50,18 +47,18 @@ var stringtobytes = function(s) {
 var hashit = function(sha, B) {
     var R = [];
 
-    if (sha == HASH256.len) {
-        var H = new HASH256();
+    if (sha == ctx.HASH256.len) {
+        var H = new ctx.HASH256();
         H.process_array(B);
         R = H.hash();
     }
-    if (sha == HASH384.len) {
-        var H = new HASH384();
+    if (sha == ctx.HASH384.len) {
+        var H = new ctx.HASH384();
         H.process_array(B);
         R = H.hash();
     }
-    if (sha == HASH512.len) {
-        var H = new HASH512();
+    if (sha == ctx.HASH512.len) {
+        var H = new ctx.HASH512();
         H.process_array(B);
         R = H.hash();
     }
@@ -73,11 +70,11 @@ var to_hash = "test hash"
 
 console.log("String to hash: ", to_hash);
 
-var hashed = hashit(HASH256.len, stringtobytes(to_hash));
+var hashed = hashit(ctx.HASH256.len, stringtobytes(to_hash));
 console.log("SHA256: ", bytestostring(hashed));
-var hashed = hashit(HASH384.len, stringtobytes(to_hash));
+var hashed = hashit(ctx.HASH384.len, stringtobytes(to_hash));
 console.log("SHA384: ", bytestostring(hashed));
-var hashed = hashit(HASH512.len, stringtobytes(to_hash));
+var hashed = hashit(ctx.HASH512.len, stringtobytes(to_hash));
 console.log("SHA512: ", bytestostring(hashed));
 
 return 0;
