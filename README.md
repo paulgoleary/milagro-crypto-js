@@ -1,4 +1,4 @@
-# AMCL - *Apache Milagro Crypto JavaScript Library*
+# MCJS - *Milagro Crypto JavaScript*
 
 [![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/miracl/milagro-crypto-js/tree/master)
 [![Master Build Status](https://secure.travis-ci.org/miracl/milagro-crypto-js.png?branch=master)](https://travis-ci.org/miracl/milagro-crypto-js?branch=master)
@@ -15,11 +15,11 @@
 
 ## Description
 
-*AMCJL - Apache Milagro Crypto JavaScript Library*
+*MCJS - Milagro Crypto JavaScript*
 
-AMCJL is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source, specifically designed to support the Internet of Things (IoT).
+MCJS is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source.
 
-AMCJL contains the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf).
+MCJS is a refact of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
 NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
 
@@ -27,54 +27,69 @@ NOTE: This product includes software developed at *[The Apache Software Foundati
 
 [Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the following node.js modules (root permissions may be required)
 ```
-npm install -g jake mocha mocha-circleci-reporter
-npm install fs colors handlebars jake chai
+npm install -g mocha mocha-circleci-reporter mocha-lcov-reporter
+npm install chai
 ```
 
-## Build
+## Quick Start
+#### Elliptic Curves
+Suppose you want to implement ECDH with NIST254 elliptic curve. First you need to initialize the context:
 
-The library can be built using [jake](https://www.npmjs.com/package/jake). Type
+```
+var CTX = require("./src/ctx");
+var CTXLIST = require("./src/ctxlist");
 
+var ctx = new CTX(CTXLIST["NIST256"]);
 ```
-jake -T
+then you can call the functions as follows:
 ```
-to see all the options. In order to build the library with the default pairing friendly elliptic curve `BN254CX`, the curve `NIST256` and with the support for `RSA2048` type
+ctx.ECDH.KEY_PAIR_GENERATE(...);
+ctx.ECDH.ECPSVDP_DH(...);
 ```
-jake build
+If you need to use more than one elliptic curve in the same script you just need to initialize two different contexts, for example
 ```
-To build the library supporting other curves or other RSA options you can use the command ```jake build:choice[...]```. For example to build the library supporting the curves `BLS383` and `C25519` with `RSA4096` type
+var ctx1 = new CTX(CTXLIST["NIST256"]);
+var ctx2 = new CTX(CTXLIST["C25519"]);
 ```
-jake build:choice[BLS383,C25519,RSA4096]
+The following is the list of all elliptic curves supported by MCJS
 ```
-To see the list of all the build options type
-``` 
-jake list
+['ED25519','GOLDILOCKS','NIST256','NIST384','NIST521','BRAINPOOL','ANSSI','HIFIVE','C25519','C41417','MF254W','MF254E','MF254M','MF256W','MF256E','MF256M','MS255W','MS255E','MS255M','MS256W','MS256E','MS256M','BN254','BN254CX','BLS383'];
 ```
-To build all the possible configurations (used for testing the library) type
+#### RSA
+This library supports also RSA encryption/decryption and RSA signature. The following is a quick example to use RSA, first initialize the context
 ```
-jake build:all
+var CTX = require("../src/ctx");
+var CTXLIST = require("../src/ctxlist");
+
+var ctx = new CTX(CTXLIST['RSA2048']);
 ```
+then you can call the RSA functions as follows:
+```
+ctx.RSA.ENCRYPT(...);
+ctx.RSA.DECRYPT(...);
+```
+The following is the list of all the RSA security level supported by this library
+```
+['RSA2048','RSA3072','RSA4096']
+```
+#### Other functions
+MCJS supports SHA256, SHA384, SHA512 and AES-GCM encryption. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize the context with emtpy parameter as follows:
+```
+var CTX = require("../src/ctx");
+
+var ctx = new CTX();
+```
+In the `/example` directory there are many simple script that show how to use this library.
 
 ## Run tests
 To run the tests type the following command.
 
 ```
-jake test
-```
-If you made more than one build, then you must to specify which build you want to test, for example
-```
-jake test:choice[BLS383,C25519,RSA4096]
+npm test
 ```
 
 ## Run examples
 We provide also some script examples for [Nodejs](https://nodejs.org/en/). In order to try, for example, the script on ECC functions type the following commands
 ```
-cd target/build_BN254CX_NIST256_RSA2048/examples/
-node ECC_NIST256.js
-```
-
-## Testing all in a docker
-To build the library with all the possible configurations and test it in a docker (used for testing the library) type:
-```
-jake dockerbuild
+node ./example/example_ECC_NIST256.js
 ```
