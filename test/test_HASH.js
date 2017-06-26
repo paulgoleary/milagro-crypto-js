@@ -20,16 +20,13 @@ under the License.
 
 /* Test HASH function - test driver and function exerciser for SHA256, SHA384, SHA512 API Functions */
 
-var fs = require('fs');
+var CTX = require("../src/ctx");
+
 var chai = require('chai');
 
-eval(fs.readFileSync('@SWD/UInt64.js') + '');
-eval(fs.readFileSync('@SWD/RAND.js') + '');
-eval(fs.readFileSync('@SWD/HASH256.js') + '');
-eval(fs.readFileSync('@SWD/HASH384.js') + '');
-eval(fs.readFileSync('@SWD/HASH512.js') + '');
-
 var expect = chai.expect;
+
+var ctx = new CTX();
 
 
 var bytestostring = function(b) {
@@ -52,7 +49,7 @@ var stringtobytes = function(s) {
     return b;
 }
 
-hextobytes = function (value_hex) {
+hextobytes = function(value_hex) {
     // "use strict";
     var len, byte_value, i;
 
@@ -68,18 +65,18 @@ hextobytes = function (value_hex) {
 var hashit = function(sha, B) {
     var R = [];
 
-    if (sha == HASH256.len) {
-        var H = new HASH256();
+    if (sha == ctx.HASH256.len) {
+        var H = new ctx.HASH256();
         H.process_array(B);
         R = H.hash();
     }
-    if (sha == HASH384.len) {
-        var H = new HASH384();
+    if (sha == ctx.HASH384.len) {
+        var H = new ctx.HASH384();
         H.process_array(B);
         R = H.hash();
     }
-    if (sha == HASH512.len) {
-        var H = new HASH512();
+    if (sha == ctx.HASH512.len) {
+        var H = new ctx.HASH512();
         H.process_array(B);
         R = H.hash();
     }
@@ -92,11 +89,11 @@ describe('TEST HASH', function() {
     it('test SHA256', function(done) {
         this.timeout(0);
 
-        var vectors = require('@TVD/SHA256.json');
+        var vectors = require('../testVectors/SHA256.json');
         var dig;
 
-        for(var vector in vectors){
-            dig = hashit(HASH256.len,hextobytes(vectors[vector].IN));
+        for (var vector in vectors) {
+            dig = hashit(ctx.HASH256.len, hextobytes(vectors[vector].IN));
             expect(bytestostring(dig)).to.be.equal(vectors[vector].OUT);
         }
         done();
@@ -105,11 +102,11 @@ describe('TEST HASH', function() {
     it('test SHA384', function(done) {
         this.timeout(0);
 
-        var vectors = require('@TVD/SHA384.json');
+        var vectors = require('../testVectors/SHA384.json');
         var dig;
 
-        for(var vector in vectors){
-            dig = hashit(HASH384.len,hextobytes(vectors[vector].IN));
+        for (var vector in vectors) {
+            dig = hashit(ctx.HASH384.len, hextobytes(vectors[vector].IN));
             expect(bytestostring(dig)).to.be.equal(vectors[vector].OUT);
         }
         done();
@@ -118,11 +115,11 @@ describe('TEST HASH', function() {
     it('test SHA512', function(done) {
         this.timeout(0);
 
-        var vectors = require('@TVD/SHA512.json');
+        var vectors = require('../testVectors/SHA512.json');
         var dig;
 
-        for(var vector in vectors){
-            dig = hashit(HASH512.len,hextobytes(vectors[vector].IN));
+        for (var vector in vectors) {
+            dig = hashit(ctx.HASH512.len, hextobytes(vectors[vector].IN));
             expect(bytestostring(dig)).to.be.equal(vectors[vector].OUT);
         }
         done();
