@@ -17,11 +17,13 @@
 
 *MCJS - Milagro Crypto JavaScript*
 
-MCJS is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source.
+* MCJS is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source.
 
-MCJS is a refact of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
+* MCJS is a refact of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
-NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
+* MCJS is [Nodejs](https://nodejs.org/en/) compatible but it can be used for browsers too through the use of the tool [Browserify](http://browserify.org/) (see some example below)
+
+* NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
 
 ## Requirement for building and testing
 
@@ -73,7 +75,7 @@ The following is the list of all the RSA security level supported by this librar
 ['RSA2048','RSA3072','RSA4096']
 ```
 #### Other functions
-MCJS supports SHA256, SHA384, SHA512 and AES-GCM encryption. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize the context with emtpy parameter as follows:
+MCJS supports SHA256, SHA384, SHA512 and AES-GCM encryption. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize it with no parameter as follows:
 ```
 var CTX = require("../src/ctx");
 
@@ -89,7 +91,9 @@ npm test
 ```
 
 ## Run examples
-We provide also some script examples for [Nodejs](https://nodejs.org/en/). In order to try, for example, the script on ECC functions type the following commands
+We provide also some script examples for [nodejs](https://nodejs.org/en/). In order to try, for example, the script on ECC functions type the following commands
 ```
 node ./example/example_ECC_NIST256.js
 ```
+#### Browsers
+In the `/example/browser` directory we converted all the example scripts with [Browserify](http://browserify.org/).
