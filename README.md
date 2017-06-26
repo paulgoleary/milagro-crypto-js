@@ -77,7 +77,7 @@ The following is the list of all the RSA security level supported by this librar
 ['RSA2048','RSA3072','RSA4096']
 ```
 #### Other functions
-MCJS supports SHA256, SHA384, SHA512 and AES-GCM encryption. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize it with no parameter as follows:
+MCJS supports SHA256, SHA384, SHA512, AES-GCM encryption and Marsaglia & Zaman random number generator. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize it with no parameter as follows:
 ```
 var CTX = require("../src/ctx");
 
