@@ -50,7 +50,7 @@ then you can call the functions as follows:
 ctx.ECDH.KEY_PAIR_GENERATE(...);
 ctx.ECDH.ECPSVDP_DH(...);
 ```
-If you need to use more than one elliptic curve in the same script you just need to initialize two different contexts, for example
+If you need to use more than one elliptic curve in the same script you only need to initialize two different contexts, for example
 ```
 var ctx1 = new CTX(CTXLIST["NIST256"]);
 var ctx2 = new CTX(CTXLIST["C25519"]);
@@ -72,7 +72,7 @@ then you can call the RSA functions as follows:
 ctx.RSA.ENCRYPT(...);
 ctx.RSA.DECRYPT(...);
 ```
-The following is the list of all the RSA security level supported by this library
+The following is the list of all the RSA security level supported by *MCJS*
 ```
 ['RSA2048','RSA3072','RSA4096']
 ```
@@ -98,4 +98,4 @@ We provide also some script examples for [nodejs](https://nodejs.org/en/). In or
 node ./example/example_ECC_NIST256.js
 ```
 #### Browsers
-In the `/example/browser` directory we converted all the example scripts with [Browserify](http://browserify.org/).
+In the `./example/browser` directory we converted all the example scripts with [Browserify](http://browserify.org/).
