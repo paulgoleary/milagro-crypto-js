@@ -29,7 +29,9 @@ describe('TEST RSA RSA2048', function() {
 
     var ctx = new CTX(RSActx['RSA2048']);
 
-    var vectors;
+    // Load test vectors
+    var vectors = require('../testVectors/RSA2048.json');
+
     var i, j = 0,
         res;
     var result;
@@ -46,14 +48,49 @@ describe('TEST RSA RSA2048', function() {
     var M;
     var E;
 
-    j = 1;
-
     before(function(done) {
 
         rng.clean();
         for (i = 0; i < 100; i++) RAW[i] = i;
         rng.seed(100, RAW);
         sha = ctx.RSA.HASH_TYPE;
+        done();
+    });
+
+    it('test RSA Key Generation', function(done) {
+        this.timeout(0);
+
+		pub = new ctx.rsa_public_key(ctx.FF.FFLEN);
+		priv = new ctx.rsa_private_key(ctx.FF.HFLEN);
+
+		ctx.RSA.KEY_PAIR(rng, 65537, priv, pub);
+
+		message = 'Hello World\n';
+
+		M = ctx.RSA.stringtobytes(message);
+
+		E = ctx.RSA.OAEP_ENCODE(sha, M, rng, null); /* OAEP encode message m to e  */
+
+		ctx.RSA.ENCRYPT(pub, E, C); /* encrypt encoded message */
+		ctx.RSA.DECRYPT(priv, C, ML);
+
+		var cmp = true;
+        if (E.length != ML.length) cmp = false;
+        else {
+            for (var j = 0; j < E.length; j++)
+                if (E[j] != ML[j]) cmp = false;
+        }
+        expect(cmp).to.be.equal(true);
+        var MS=ctx.RSA.OAEP_DECODE(sha,null,ML); /* OAEP decode message  */
+	    if (MS.length != M.length) cmp = false;
+        else {
+            for (var j = 0; j < MS.length; j++)
+                if (MS[j] != M[j]) cmp = false;
+        }
+	    expect(cmp).to.be.equal(true);
+		MS = ctx.RSA.OAEP_DECODE(sha, null, ML); /* OAEP decode message  */
+
+		ctx.RSA.PRIVATE_KEY_KILL(priv);
         done();
     });
 
@@ -65,46 +102,65 @@ describe('TEST RSA RSA2048', function() {
         pub = new ctx.rsa_public_key(ctx.FF.FFLEN);
         priv = new ctx.rsa_private_key(ctx.FF.HFLEN);
 
-        // Load test vectors
-        vectors = require('../testVectors/RSA2048.json');
-        ctx.FF.fromBytes(priv.p, new Buffer(vectors['priv.p'], "hex"));
-        ctx.FF.fromBytes(priv.q, new Buffer(vectors['priv.q'], "hex"));
-        ctx.FF.fromBytes(priv.dp, new Buffer(vectors['priv.dp'], "hex"));
-        ctx.FF.fromBytes(priv.dq, new Buffer(vectors['priv.dq'], "hex"));
-        ctx.FF.fromBytes(priv.c, new Buffer(vectors['priv.c'], "hex"));
-        ctx.FF.fromBytes(pub.n, new Buffer(vectors['pub.n'], "hex"));
-        pub.e = vectors['pub.e'];
-        M = ctx.RSA.stringtobytes(message);
-        E = ctx.RSA.OAEP_ENCODE(sha, M, rng, null); /* OAEP encode message m to e  */
-        ctx.RSA.ENCRYPT(pub, E, C); /* encrypt encoded message */
-        ctx.RSA.DECRYPT(priv, C, ML);
-        var cmp = true;
-        if (E.length != ML.length) cmp = false;
-        else {
-            for (var j = 0; j < E.length; j++)
-                if (E[j] != ML[j]) cmp = false;
-        }
-        expect(cmp).to.be.equal(true);
-        // var MS=ctx.RSA.OAEP_DECODE(sha,null,ML); /* OAEP decode message  */
+        for (vector in vectors) {
+
+	        ctx.FF.fromBytes(priv.p, new Buffer(vectors[vector].PrivP, "hex"));
+	        ctx.FF.fromBytes(priv.q, new Buffer(vectors[vector].PrivQ, "hex"));
+	        ctx.FF.fromBytes(priv.dp, new Buffer(vectors[vector].PrivDP, "hex"));
+	        ctx.FF.fromBytes(priv.dq, new Buffer(vectors[vector].PrivDQ, "hex"));
+	        ctx.FF.fromBytes(priv.c, new Buffer(vectors[vector].PrivC, "hex"));
+	        ctx.FF.fromBytes(pub.n, new Buffer(vectors[vector].PubN, "hex"));
+	        pub.e = vectors[vector].PubE;
+	        M = ctx.RSA.stringtobytes(message);
+	        E = ctx.RSA.OAEP_ENCODE(sha, M, rng, null); /* OAEP encode message m to e  */
+	        ctx.RSA.ENCRYPT(pub, E, C); /* encrypt encoded message */
+	        ctx.RSA.DECRYPT(priv, C, ML);
+	        var cmp = true;
+	        if (E.length != ML.length) cmp = false;
+	        else {
+	            for (var j = 0; j < E.length; j++)
+	                if (E[j] != ML[j]) cmp = false;
+	        }
+	        expect(cmp).to.be.equal(true);
+	        var MS=ctx.RSA.OAEP_DECODE(sha,null,ML); /* OAEP decode message  */
+		    if (MS.length != M.length) cmp = false;
+	        else {
+	            for (var j = 0; j < MS.length; j++)
+	                if (MS[j] != M[j]) cmp = false;
+	        }
+		    expect(cmp).to.be.equal(true);
+		    ctx.RSA.PRIVATE_KEY_KILL(priv);
+	    }
         done();
     });
 
     it('test RSA Signature', function(done) {
         this.timeout(0);
 
-        ctx.RSA.PKCS15(sha, M, C);
+        for (vector in vectors) {
 
-        ctx.RSA.DECRYPT(priv, C, S); /* create signature in S */
+	        ctx.FF.fromBytes(priv.p, new Buffer(vectors[vector].PrivP, "hex"));
+	        ctx.FF.fromBytes(priv.q, new Buffer(vectors[vector].PrivQ, "hex"));
+	        ctx.FF.fromBytes(priv.dp, new Buffer(vectors[vector].PrivDP, "hex"));
+	        ctx.FF.fromBytes(priv.dq, new Buffer(vectors[vector].PrivDQ, "hex"));
+	        ctx.FF.fromBytes(priv.c, new Buffer(vectors[vector].PrivC, "hex"));
+	        ctx.FF.fromBytes(pub.n, new Buffer(vectors[vector].PubN, "hex"));
+	        pub.e = vectors[vector].PubE;
 
-        ctx.RSA.ENCRYPT(pub, S, ML);
-        var cmp = true;
-        if (C.length != ML.length) cmp = false;
-        else {
-            for (var j = 0; j < C.length; j++)
-                if (C[j] != ML[j]) cmp = false;
-        }
-        expect(cmp).to.be.equal(true);
-        ctx.RSA.PRIVATE_KEY_KILL(priv);
+	        ctx.RSA.PKCS15(sha, M, C);
+
+	        ctx.RSA.DECRYPT(priv, C, S); /* create signature in S */
+
+	        ctx.RSA.ENCRYPT(pub, S, ML);
+	        var cmp = true;
+	        if (C.length != ML.length) cmp = false;
+	        else {
+	            for (var j = 0; j < C.length; j++)
+	                if (C[j] != ML[j]) cmp = false;
+	        }
+	        expect(cmp).to.be.equal(true);
+	        ctx.RSA.PRIVATE_KEY_KILL(priv);
+	    }
         done();
     });
 });

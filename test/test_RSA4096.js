@@ -25,12 +25,12 @@ var RSActx = require("../src/ctxlist");
 var chai = require('chai');
 var expect = chai.expect;
 
-describe('TEST RSA RSA3072', function() {
+describe('TEST RSA RSA4096', function() {
 
-    var ctx = new CTX(RSActx['RSA3072']);
+    var ctx = new CTX(RSActx['RSA4096']);
 
         // Load test vectors
-    var vectors = require('../testVectors/RSA3072.json');
+    var vectors = require('../testVectors/RSA4096.json');
     var i, j = 0,
         res;
     var result;

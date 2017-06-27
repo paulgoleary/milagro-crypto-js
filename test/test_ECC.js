@@ -111,8 +111,7 @@ for (var i = all_curves.length - 1; i >= 0; i--) {
             done();
         });
 
-
-        if (ctx.ECPCURVETYPE != ctx.ECPMONTGOMERY) {
+        if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
             it('test ECIES', function(done) {
                 this.timeout(0);
                 P1[0] = 0x0;
