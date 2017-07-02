@@ -23,7 +23,7 @@
 
 * MCJS is a refact of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
-* MCJS is [Nodejs](https://nodejs.org/en/) compatible but it can be used for browsers too through the use of the tool [Browserify](http://browserify.org/) (see some example below)
+* MCJS is [Nodejs](https://nodejs.org/en/) compatible but it can be used for browsers too through the use of the tool [Browserify](http://browserify.org/) (see some examples below)
 
 * NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
 
