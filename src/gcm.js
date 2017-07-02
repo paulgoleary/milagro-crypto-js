@@ -18,10 +18,10 @@
 */
 
 /*
- * Implementation of the ctx.AES-GCM Encryption/Authentication
+ * Implementation of the AES-GCM Encryption/Authentication
  *
  * Some restrictions.. 
- * 1. Only for use with ctx.AES
+ * 1. Only for use with AES
  * 2. Returned tag is always 128-bits. Truncate at your own risk.
  * 3. The order of function calls must follow some rules
  *

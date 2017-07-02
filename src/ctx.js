@@ -20,6 +20,7 @@
 var romField = require('./rom_field');
 var romCurve = require('./rom_curve');
 var aes = require('./aes');
+var gcm = require('./gcm');
 var uint64 = require('./uint64');
 var hash256 = require('./hash256');
 var hash384 = require('./hash384');
@@ -43,6 +44,7 @@ var mpin = require('./mpin');
 CTX = function(config) {
     this.config = config;
     this.AES = aes.AES(this);
+    this.GCM = gcm.GCM(this);
     this.UInt64 = uint64.UInt64(this);
     this.HASH256 = hash256.HASH256(this);
     this.HASH384 = hash384.HASH384(this);
