@@ -20,9 +20,8 @@ under the License.
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
 var CTX = require("../src/ctx");
-var CURVES = require("../src/ctxlist");
 
-var ctx = new CTX(CURVES["BN254CX"]);
+var ctx = new CTX("BN254CX");
 
 /* Test M-Pin */
 

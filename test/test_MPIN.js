@@ -20,7 +20,6 @@ under the License.
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
 var CTX = require("../src/ctx");
-var CURVES = require("../src/ctxlist");
 
 var chai = require('chai');
 
@@ -45,7 +44,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
     describe('TEST MPIN ' + pf_curves[i], function() {
 
-        var ctx = new CTX(CURVES[pf_curves[i]]);
+        var ctx = new CTX(pf_curves[i]);
 
         var rng = new ctx.RAND();
 

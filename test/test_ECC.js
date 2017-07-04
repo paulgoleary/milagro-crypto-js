@@ -23,7 +23,6 @@ under the License.
 var chai = require('chai');
 
 var CTX = require("../src/ctx");
-var CURVES = require("../src/ctxlist");
 
 var expect = chai.expect;
 
@@ -34,7 +33,7 @@ var all_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIF
 
 for (var i = all_curves.length - 1; i >= 0; i--) {
 
-    var ctx = new CTX(CURVES[all_curves[i]]);
+    var ctx = new CTX(all_curves[i]);
 
     describe('TEST ECC ' + all_curves[i], function() {
 

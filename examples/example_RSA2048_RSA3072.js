@@ -20,9 +20,8 @@ under the License.
 /* Test RSA - test driver and function exerciser for RSA_WWW API Functions */
 
 var CTX = require("../src/ctx");
-var RSActx = require("../src/ctxlist");
 
-var ctx = new CTX(RSActx['RSA2048']);
+var ctx = new CTX('RSA2048');
 
 console.log('Start test RSA2048');
 
@@ -133,7 +132,7 @@ console.log('SUCCESS')
 
 
 
-var ctx1 = new CTX(RSActx['RSA3072']);
+var ctx1 = new CTX('RSA3072');
 
 console.log('\n\nStart test RSA3072');
 

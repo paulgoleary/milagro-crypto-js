@@ -40,10 +40,9 @@ npm install chai
 Suppose you want to implement ECDH with NIST254 elliptic curve. First you need to initialize the context:
 
 ```
-var CTX = require("./src/ctx");
-var CTXLIST = require("./src/ctxlist");
+var CTX = require("milagro-crypto-js");
 
-var ctx = new CTX(CTXLIST["NIST256"]);
+var ctx = new CTX("NIST256");
 ```
 then you can call the functions as follows:
 ```
@@ -52,8 +51,8 @@ ctx.ECDH.ECPSVDP_DH(...);
 ```
 If you need to use more than one elliptic curve in the same script you only need to initialize two different contexts, for example
 ```
-var ctx1 = new CTX(CTXLIST["NIST256"]);
-var ctx2 = new CTX(CTXLIST["C25519"]);
+var ctx1 = new CTX("NIST256");
+var ctx2 = new CTX("C25519");
 ```
 The following is the list of all elliptic curves supported by MCJS
 ```
@@ -62,10 +61,9 @@ The following is the list of all elliptic curves supported by MCJS
 #### RSA
 This library supports also RSA encryption/decryption and RSA signature. The following is a quick example to use RSA, first initialize the context
 ```
-var CTX = require("../src/ctx");
-var CTXLIST = require("../src/ctxlist");
+var CTX = require("milagro-crypto-js");
 
-var ctx = new CTX(CTXLIST['RSA2048']);
+var ctx = new CTX("RSA2048");
 ```
 then you can call the RSA functions as follows:
 ```
@@ -79,7 +77,7 @@ The following is the list of all the RSA security level supported by *MCJS*
 #### Other functions
 MCJS supports SHA256, SHA384, SHA512, AES-GCM encryption and Marsaglia & Zaman random number generator. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize it with no parameter as follows:
 ```
-var CTX = require("../src/ctx");
+var CTX = require("milagro-crypto-js");
 
 var ctx = new CTX();
 ```
@@ -95,7 +93,7 @@ npm test
 ## Run examples
 We provide also some script examples for [nodejs](https://nodejs.org/en/). In order to try, for example, the script on ECC functions type the following commands
 ```
-node ./example/example_ECC_NIST256.js
+node ./examples/example_ECC_NIST256.js
 ```
 #### Browsers
 In the `./example/browser` directory we converted all the example scripts with [Browserify](http://browserify.org/).
