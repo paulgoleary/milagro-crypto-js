@@ -22,7 +22,6 @@ under the License.
 var chai = require('chai');
 
 var CTX = require("../src/ctx");
-var CURVES = require("../src/ctxlist");
 
 pf_curves = ["BN254", "BN254CX", "BLS383"];
 
@@ -30,7 +29,7 @@ var expect = chai.expect;
 
 for (var i = pf_curves.length - 1; i >= 0; i--) {
 
-    var ctx = new CTX(CURVES[pf_curves[i]]);
+    var ctx = new CTX(pf_curves[i]);
 
     describe('TEST DVS ' + pf_curves[i], function() {
 

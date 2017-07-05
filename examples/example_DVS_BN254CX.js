@@ -20,9 +20,8 @@ under the License.
 /* Test DVS - test driver and function exerciser for Designator Verifier Signature API Functions */
 
 var CTX = require("../src/ctx");
-var CURVES = require("../src/ctxlist");
 
-var ctx = new CTX(CURVES["BN254CX"]);
+var ctx = new CTX("BN254CX");
 
 var RAW = [];
 var rng = new ctx.RAND();

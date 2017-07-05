@@ -21,10 +21,9 @@ under the License.
 /* Test ECC - test driver and function exerciser for ECDH/ECIES/ECDSA API Functions */
 
 var CTX = require("../src/ctx");
-var CURVES = require("../src/ctxlist");
 
-var ctx1 = new CTX(CURVES["BN254"]);
-var ctx2 = new CTX(CURVES["NIST521"]);
+var ctx1 = new CTX("BN254");
+var ctx2 = new CTX("NIST521");
 
 console.log('Start testing BN254');
 

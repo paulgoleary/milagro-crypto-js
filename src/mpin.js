@@ -33,7 +33,7 @@ module.exports.MPIN = function(ctx) {
         /* MAXPIN length in bits */
         TS: 10,
         /* 10 for 4 digit PIN, 14 for 6-digit PIN - 2^TS/TS approx = sqrt(MAXPIN) */
-        TRAP: 200,
+        TRAP: 2000,
         /* 200 for 4 digit PIN, 2000 for 6-digit PIN  - approx 2*sqrt(MAXPIN) */
         EFS: ctx.BIG.MODBYTES,
         EGS: ctx.BIG.MODBYTES,

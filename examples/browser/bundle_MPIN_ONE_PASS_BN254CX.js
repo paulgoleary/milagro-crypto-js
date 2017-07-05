@@ -22,9 +22,8 @@ under the License.
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
 var CTX = require("../src/ctx");
-var CURVES = require("../src/ctxlist");
 
-var ctx = new CTX(CURVES["BN254CX"]);
+var ctx = new CTX("BN254CX");
 
 /* Test M-Pin */
 
@@ -200,7 +199,7 @@ if (rtn == ctx.MPIN.BAD_PIN) {
 }
 console.log('SUCCESS')
 }).call(this,require('_process'))
-},{"../src/ctx":4,"../src/ctxlist":5,"_process":24}],2:[function(require,module,exports){
+},{"../src/ctx":4,"_process":24}],2:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -2047,6 +2046,7 @@ module.exports.DBIG = function(ctx) {
 var romField = require('./rom_field');
 var romCurve = require('./rom_curve');
 var aes = require('./aes');
+var gcm = require('./gcm');
 var uint64 = require('./uint64');
 var hash256 = require('./hash256');
 var hash384 = require('./hash384');
@@ -2066,73 +2066,6 @@ var fp12 = require('./fp12');
 var ecp2 = require('./ecp2');
 var pair = require('./pair');
 var mpin = require('./mpin');
-
-CTX = function(config) {
-    this.config = config;
-    this.AES = aes.AES(this);
-    this.UInt64 = uint64.UInt64(this);
-    this.HASH256 = hash256.HASH256(this);
-    this.HASH384 = hash384.HASH384(this);
-    this.HASH512 = hash512.HASH512(this);
-    this.RAND = rand.RAND(this);
-
-    if (config === undefined)
-        return;
-    else {
-
-        // Set RSA parameters
-        if (config['TFF'] !== undefined) {
-            this.BIG = big.BIG(this);
-            this.DBIG = big.DBIG(this);
-            this.FF = ff.FF(this);
-            this.RSA = rsa.RSA(this);
-            this.rsa_public_key = rsa.rsa_public_key(this);
-            this.rsa_private_key = rsa.rsa_private_key(this);
-        };
-
-        // Set Elliptic Curve parameters
-        if (config['CURVE'] !== undefined) {
-
-            this.ROM_CURVE = romCurve['ROM_CURVE_' + config['CURVE']](this);
-            this.ROM_FIELD = romField['ROM_FIELD_' + config['FIELD']](this);
-            this.BIG = big.BIG(this);
-            this.DBIG = big.DBIG(this);
-            this.FP = fp.FP(this);
-            this.ECP = ecp.ECP(this);
-            this.ECDH = ecdh.ECDH(this);
-
-            if (config['@PF'] != 0) {
-                this.FP2 = fp2.FP2(this);
-                this.FP4 = fp4.FP4(this);
-                this.FP12 = fp12.FP12(this);
-                this.ECP2 = ecp2.ECP2(this);
-                this.PAIR = pair.PAIR(this);
-                this.MPIN = mpin.MPIN(this);
-            };
-        };
-    };
-};
-
-module.exports = CTX;
-},{"./aes":2,"./big":3,"./ecdh":6,"./ecp":7,"./ecp2":8,"./ff":9,"./fp":10,"./fp12":11,"./fp2":12,"./fp4":13,"./hash256":14,"./hash384":15,"./hash512":16,"./mpin":17,"./pair":18,"./rand":19,"./rom_curve":20,"./rom_field":21,"./rsa":22,"./uint64":23}],5:[function(require,module,exports){
-/*
-	Licensed to the Apache Software Foundation (ASF) under one
-	or more contributor license agreements.  See the NOTICE file
-	distributed with this work for additional information
-	regarding copyright ownership.  The ASF licenses this file
-	to you under the Apache License, Version 2.0 (the
-	"License"); you may not use this file except in compliance
-	with the License.  You may obtain a copy of the License at
-	
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the License is distributed on an
-	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	KIND, either express or implied.  See the License for the
-	specific language governing permissions and limitations
-	under the License.
-*/
 
 var CTXLIST = {
     "ED25519": {
@@ -2486,7 +2419,59 @@ var CTXLIST = {
 }
 
 module.exports = CTXLIST;
-},{}],6:[function(require,module,exports){
+
+CTX = function(input_parameter) {
+    this.AES = aes.AES(this);
+    this.GCM = gcm.GCM(this);
+    this.UInt64 = uint64.UInt64(this);
+    this.HASH256 = hash256.HASH256(this);
+    this.HASH384 = hash384.HASH384(this);
+    this.HASH512 = hash512.HASH512(this);
+    this.RAND = rand.RAND(this);
+
+    if (input_parameter === undefined)
+        return;
+    else {
+
+        this.config = CTXLIST[input_parameter];
+
+        // Set RSA parameters
+        if (this.config['TFF'] !== undefined) {
+            this.BIG = big.BIG(this);
+            this.DBIG = big.DBIG(this);
+            this.FF = ff.FF(this);
+            this.RSA = rsa.RSA(this);
+            this.rsa_public_key = rsa.rsa_public_key(this);
+            this.rsa_private_key = rsa.rsa_private_key(this);
+            return;
+        };
+
+        // Set Elliptic Curve parameters
+        if (this.config['CURVE'] !== undefined) {
+
+            this.ROM_CURVE = romCurve['ROM_CURVE_' + this.config['CURVE']](this);
+            this.ROM_FIELD = romField['ROM_FIELD_' + this.config['FIELD']](this);
+            this.BIG = big.BIG(this);
+            this.DBIG = big.DBIG(this);
+            this.FP = fp.FP(this);
+            this.ECP = ecp.ECP(this);
+            this.ECDH = ecdh.ECDH(this);
+
+            if (this.config['@PF'] != 0) {
+                this.FP2 = fp2.FP2(this);
+                this.FP4 = fp4.FP4(this);
+                this.FP12 = fp12.FP12(this);
+                this.ECP2 = ecp2.ECP2(this);
+                this.PAIR = pair.PAIR(this);
+                this.MPIN = mpin.MPIN(this);
+            };
+            return;
+        };
+    };
+};
+
+module.exports = CTX;
+},{"./aes":2,"./big":3,"./ecdh":5,"./ecp":6,"./ecp2":7,"./ff":8,"./fp":9,"./fp12":10,"./fp2":11,"./fp4":12,"./gcm":13,"./hash256":14,"./hash384":15,"./hash512":16,"./mpin":17,"./pair":18,"./rand":19,"./rom_curve":20,"./rom_field":21,"./rsa":22,"./uint64":23}],5:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -3081,7 +3066,7 @@ module.exports.ECDH = function(ctx) {
     ECDH.ctx = ctx;
     return ECDH;
 };
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -4085,7 +4070,7 @@ module.exports.ECP = function(ctx) {
     ECP.ctx = ctx;
     return ECP;
 };
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -4702,7 +4687,7 @@ module.exports.ECP2 = function(ctx) {
     ECP2.ctx = ctx;
     return ECP2;
 };
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -5582,7 +5567,7 @@ module.exports.FF = function(ctx) {
     FF.ctx = ctx;
     return FF;
 };
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -5995,7 +5980,7 @@ module.exports.FP = function(ctx) {
     FP.ctx = ctx;
     return FP;
 };
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -6626,7 +6611,7 @@ module.exports.FP12 = function(ctx) {
     FP12.ctx = ctx;
     return FP12;
 };
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -6997,7 +6982,7 @@ module.exports.FP2 = function(ctx) {
     FP2.ctx = ctx;
     return FP2;
 };
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -7494,6 +7479,341 @@ module.exports.FP4 = function(ctx) {
     };
     FP4.ctx = ctx;
     return FP4;
+};
+},{}],13:[function(require,module,exports){
+/*
+	Licensed to the Apache Software Foundation (ASF) under one
+	or more contributor license agreements.  See the NOTICE file
+	distributed with this work for additional information
+	regarding copyright ownership.  The ASF licenses this file
+	to you under the Apache License, Version 2.0 (the
+	"License"); you may not use this file except in compliance
+	with the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the License is distributed on an
+	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	KIND, either express or implied.  See the License for the
+	specific language governing permissions and limitations
+	under the License.
+*/
+
+/*
+ * Implementation of the AES-GCM Encryption/Authentication
+ *
+ * Some restrictions.. 
+ * 1. Only for use with AES
+ * 2. Returned tag is always 128-bits. Truncate at your own risk.
+ * 3. The order of function calls must follow some rules
+ *
+ * Typical sequence of calls..
+ * 1. call GCM_init
+ * 2. call GCM_add_header any number of times, as long as length of header is multiple of 16 bytes (block size)
+ * 3. call GCM_add_header one last time with any length of header
+ * 4. call GCM_add_cipher any number of times, as long as length of cipher/plaintext is multiple of 16 bytes
+ * 5. call GCM_add_cipher one last time with any length of cipher/plaintext
+ * 6. call GCM_finish to extract the tag.
+ *
+ * See http://www.mindspring.com/~dmcgrew/gcm-nist-6.pdf
+ */
+
+module.exports.GCM = function(ctx) {
+
+    var GCM = function() {
+        this.table = new Array(128);
+        for (var i = 0; i < 128; i++)
+            this.table[i] = new Array(4); /* 2k bytes */
+        this.stateX = [];
+        this.Y_0 = [];
+        this.counter = 0;
+        this.lenA = [];
+        this.lenC = [];
+        this.status = 0;
+        this.a = new ctx.AES();
+    };
+
+    // GCM constants
+
+    GCM.ACCEPTING_HEADER = 0;
+    GCM.ACCEPTING_CIPHER = 1;
+    GCM.NOT_ACCEPTING_MORE = 2;
+    GCM.FINISHED = 3;
+    GCM.ENCRYPTING = 0;
+    GCM.DECRYPTING = 1;
+
+    GCM.prototype = {
+
+        precompute: function(H) {
+            var i, j, c;
+            var b = [];
+
+            for (i = j = 0; i < 4; i++, j += 4) {
+                b[0] = H[j];
+                b[1] = H[j + 1];
+                b[2] = H[j + 2];
+                b[3] = H[j + 3];
+                this.table[0][i] = GCM.pack(b);
+            }
+            for (i = 1; i < 128; i++) {
+                c = 0;
+                for (j = 0; j < 4; j++) {
+                    this.table[i][j] = c | (this.table[i - 1][j]) >>> 1;
+                    c = this.table[i - 1][j] << 31;
+                }
+                if (c !== 0) this.table[i][0] ^= 0xE1000000; /* irreducible polynomial */
+            }
+        },
+
+        gf2mul: function() { /* gf2m mul - Z=H*X mod 2^128 */
+            var i, j, m, k;
+            var P = [];
+            var c;
+            var b = [];
+
+            P[0] = P[1] = P[2] = P[3] = 0;
+            j = 8;
+            m = 0;
+            for (i = 0; i < 128; i++) {
+                c = (this.stateX[m] >>> (--j)) & 1;
+                c = ~c + 1;
+                for (k = 0; k < 4; k++) P[k] ^= (this.table[i][k] & c);
+                if (j === 0) {
+                    j = 8;
+                    m++;
+                    if (m == 16) break;
+                }
+            }
+            for (i = j = 0; i < 4; i++, j += 4) {
+                b = GCM.unpack(P[i]);
+                this.stateX[j] = b[0];
+                this.stateX[j + 1] = b[1];
+                this.stateX[j + 2] = b[2];
+                this.stateX[j + 3] = b[3];
+            }
+        },
+
+        wrap: function() { /* Finish off GHASH */
+            var i, j;
+            var F = [];
+            var L = [];
+            var b = [];
+
+            /* convert lengths from bytes to bits */
+            F[0] = (this.lenA[0] << 3) | (this.lenA[1] & 0xE0000000) >>> 29;
+            F[1] = this.lenA[1] << 3;
+            F[2] = (this.lenC[0] << 3) | (this.lenC[1] & 0xE0000000) >>> 29;
+            F[3] = this.lenC[1] << 3;
+            for (i = j = 0; i < 4; i++, j += 4) {
+                b = GCM.unpack(F[i]);
+                L[j] = b[0];
+                L[j + 1] = b[1];
+                L[j + 2] = b[2];
+                L[j + 3] = b[3];
+            }
+            for (i = 0; i < 16; i++) this.stateX[i] ^= L[i];
+            this.gf2mul();
+        },
+
+        /* Initialize GCM mode */
+        init: function(nk, key, niv, iv) { /* iv size niv is usually 12 bytes (96 bits). ctx.AES key size nk can be 16,24 or 32 bytes */
+            var i;
+            var H = [];
+            var b = [];
+
+            for (i = 0; i < 16; i++) {
+                H[i] = 0;
+                this.stateX[i] = 0;
+            }
+
+            this.a.init(ctx.AES.ECB, nk, key, iv);
+            this.a.ecb_encrypt(H); /* E(K,0) */
+            this.precompute(H);
+
+            this.lenA[0] = this.lenC[0] = this.lenA[1] = this.lenC[1] = 0;
+            if (niv == 12) {
+                for (i = 0; i < 12; i++) this.a.f[i] = iv[i];
+                b = GCM.unpack(1);
+                this.a.f[12] = b[0];
+                this.a.f[13] = b[1];
+                this.a.f[14] = b[2];
+                this.a.f[15] = b[3]; /* initialise IV */
+                for (i = 0; i < 16; i++) this.Y_0[i] = this.a.f[i];
+            } else {
+                this.status = GCM.ACCEPTING_CIPHER;
+                this.ghash(iv, niv); /* GHASH(H,0,IV) */
+                this.wrap();
+                for (i = 0; i < 16; i++) {
+                    this.a.f[i] = this.stateX[i];
+                    this.Y_0[i] = this.a.f[i];
+                    this.stateX[i] = 0;
+                }
+                this.lenA[0] = this.lenC[0] = this.lenA[1] = this.lenC[1] = 0;
+            }
+            this.status = GCM.ACCEPTING_HEADER;
+        },
+
+        /* Add Header data - included but not encrypted */
+        add_header: function(header, len) { /* Add some header. Won't be encrypted, but will be authenticated. len is length of header */
+            var i, j = 0;
+            if (this.status != GCM.ACCEPTING_HEADER) return false;
+
+            while (j < len) {
+                for (i = 0; i < 16 && j < len; i++) {
+                    this.stateX[i] ^= header[j++];
+                    this.lenA[1]++;
+                    this.lenA[1] |= 0;
+                    if (this.lenA[1] === 0) this.lenA[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.ACCEPTING_CIPHER;
+            return true;
+        },
+
+        ghash: function(plain, len) {
+            var i, j = 0;
+
+            if (this.status == GCM.ACCEPTING_HEADER) this.status = GCM.ACCEPTING_CIPHER;
+            if (this.status != GCM.ACCEPTING_CIPHER) return false;
+
+            while (j < len) {
+                for (i = 0; i < 16 && j < len; i++) {
+                    this.stateX[i] ^= plain[j++];
+                    this.lenC[1]++;
+                    this.lenC[1] |= 0;
+                    if (this.lenC[1] === 0) this.lenC[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.NOT_ACCEPTING_MORE;
+            return true;
+        },
+
+        /* Add Plaintext - included and encrypted */
+        add_plain: function(plain, len) {
+            var i, j = 0;
+            var B = [];
+            var b = [];
+            var cipher = [];
+
+            if (this.status == GCM.ACCEPTING_HEADER) this.status = GCM.ACCEPTING_CIPHER;
+            if (this.status != GCM.ACCEPTING_CIPHER) return cipher;
+
+            while (j < len) {
+
+                b[0] = this.a.f[12];
+                b[1] = this.a.f[13];
+                b[2] = this.a.f[14];
+                b[3] = this.a.f[15];
+                this.counter = GCM.pack(b);
+                this.counter++;
+                b = GCM.unpack(this.counter);
+                this.a.f[12] = b[0];
+                this.a.f[13] = b[1];
+                this.a.f[14] = b[2];
+                this.a.f[15] = b[3]; /* increment counter */
+                for (i = 0; i < 16; i++) B[i] = this.a.f[i];
+                this.a.ecb_encrypt(B); /* encrypt it  */
+
+                for (i = 0; i < 16 && j < len; i++) {
+                    cipher[j] = (plain[j] ^ B[i]);
+                    this.stateX[i] ^= cipher[j++];
+                    this.lenC[1]++;
+                    this.lenC[1] |= 0;
+                    if (this.lenC[1] === 0) this.lenC[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.NOT_ACCEPTING_MORE;
+            return cipher;
+        },
+
+        /* Add Ciphertext - decrypts to plaintext */
+        add_cipher: function(cipher, len) {
+            var i, j = 0;
+            var B = [];
+            var b = [];
+            var plain = [];
+
+            if (this.status == GCM.ACCEPTING_HEADER) this.status = GCM.ACCEPTING_CIPHER;
+            if (this.status != GCM.ACCEPTING_CIPHER) return plain;
+
+            while (j < len) {
+                b[0] = this.a.f[12];
+                b[1] = this.a.f[13];
+                b[2] = this.a.f[14];
+                b[3] = this.a.f[15];
+                this.counter = GCM.pack(b);
+                this.counter++;
+                b = GCM.unpack(this.counter);
+                this.a.f[12] = b[0];
+                this.a.f[13] = b[1];
+                this.a.f[14] = b[2];
+                this.a.f[15] = b[3]; /* increment counter */
+                for (i = 0; i < 16; i++) B[i] = this.a.f[i];
+                this.a.ecb_encrypt(B); /* encrypt it  */
+                for (i = 0; i < 16 && j < len; i++) {
+                    var oc = cipher[j];
+                    plain[j] = (cipher[j] ^ B[i]);
+                    this.stateX[i] ^= oc;
+                    j++;
+                    this.lenC[1]++;
+                    this.lenC[1] |= 0;
+                    if (this.lenC[1] === 0) this.lenC[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.NOT_ACCEPTING_MORE;
+            return plain;
+        },
+
+        /* Finish and extract Tag */
+        finish: function(extract) { /* Finish off GHASH and extract tag (MAC) */
+            var i;
+            var tag = [];
+
+            this.wrap();
+            /* extract tag */
+            if (extract) {
+                this.a.ecb_encrypt(this.Y_0); /* E(K,Y0) */
+                for (i = 0; i < 16; i++) this.Y_0[i] ^= this.stateX[i];
+                for (i = 0; i < 16; i++) {
+                    tag[i] = this.Y_0[i];
+                    this.Y_0[i] = this.stateX[i] = 0;
+                }
+            }
+            this.status = GCM.FINISHED;
+            this.a.end();
+            return tag;
+        }
+
+    };
+
+    GCM.pack = function(b) { /* pack 4 bytes into a 32-bit Word */
+        return (((b[0]) & 0xff) << 24) | ((b[1] & 0xff) << 16) | ((b[2] & 0xff) << 8) | (b[3] & 0xff);
+    };
+
+    GCM.unpack = function(a) { /* unpack bytes from a word */
+        var b = [];
+        b[3] = (a & 0xff);
+        b[2] = ((a >>> 8) & 0xff);
+        b[1] = ((a >>> 16) & 0xff);
+        b[0] = ((a >>> 24) & 0xff);
+        return b;
+    };
+
+    GCM.hex2bytes = function(s) {
+        var len = s.length;
+        var data = [];
+        for (var i = 0; i < len; i += 2)
+            data[i / 2] = parseInt(s.substr(i, 2), 16);
+
+        return data;
+    };
+    GCM.ctx = ctx;
+    return GCM;
 };
 },{}],14:[function(require,module,exports){
 /*
@@ -8220,7 +8540,7 @@ module.exports.MPIN = function(ctx) {
         /* MAXPIN length in bits */
         TS: 10,
         /* 10 for 4 digit PIN, 14 for 6-digit PIN - 2^TS/TS approx = sqrt(MAXPIN) */
-        TRAP: 200,
+        TRAP: 2000,
         /* 200 for 4 digit PIN, 2000 for 6-digit PIN  - approx 2*sqrt(MAXPIN) */
         EFS: ctx.BIG.MODBYTES,
         EGS: ctx.BIG.MODBYTES,

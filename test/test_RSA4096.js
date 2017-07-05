@@ -20,14 +20,13 @@ under the License.
 /* Test RSA - test driver and function exerciser for RSA API Functions */
 
 var CTX = require("../src/ctx");
-var RSActx = require("../src/ctxlist");
 
 var chai = require('chai');
 var expect = chai.expect;
 
 describe('TEST RSA RSA4096', function() {
 
-    var ctx = new CTX(RSActx['RSA4096']);
+    var ctx = new CTX('RSA4096');
 
         // Load test vectors
     var vectors = require('../testVectors/RSA4096.json');
