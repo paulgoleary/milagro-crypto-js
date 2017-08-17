@@ -27,12 +27,15 @@
 
 * NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
 
-## Requirement for building and testing
+## Install and run  tests
 
-[Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the following node.js modules (root permissions may be required)
+[Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the node.js modules required with the command
 ```
-npm install -g mocha coveralls nyc
-npm install chai
+npm install
+```
+Run all the tests with the following command
+```
+npm test
 ```
 
 ## Quick Start
@@ -83,12 +86,6 @@ var ctx = new CTX();
 ```
 In the `/example` directory there are many simple script that show how to use this library.
 
-## Run tests
-To run the tests type the following command.
-
-```
-npm test
-```
 
 ## Run examples
 We provide also some script examples for [nodejs](https://nodejs.org/en/). In order to try, for example, the script on ECC functions type the following commands

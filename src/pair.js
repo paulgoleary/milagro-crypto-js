@@ -476,11 +476,12 @@ module.exports.PAIR = function(ctx) {
             var x = new ctx.BIG(0);
             x.rcopy(ctx.ROM_CURVE.CURVE_Bnx);
             var w = new ctx.BIG(e);
-            for (var i = 0; i < 4; i++) {
+            for (var i = 0; i < 3; i++) {
                 u[i] = new ctx.BIG(w);
                 u[i].mod(x);
                 w.div(x);
             }
+            u[3]=new ctx.BIG(w);
         }
         return u;
     };
