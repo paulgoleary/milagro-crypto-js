@@ -17,7 +17,7 @@ specific language governing permissions and limitations
 under the License.
 */
 
-/* Test RSA - test driver and function exerciser for RSA_WWW API Functions */
+/* Test RSA - test driver and function exerciser for RSA_2048 API Functions */
 
 var CTX = require("../src/ctx");
 

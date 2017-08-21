@@ -154,4 +154,7 @@ if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
         return (-1);
     } else console.log("ECDSA Signature/Verification succeeded");
 }
+
+rng.clean();
+
 console.log('SUCCESS');
