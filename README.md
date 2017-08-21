@@ -23,6 +23,8 @@
 
 * MCJS is a refact of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
+* MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384 and SHA512 hash functions and a cryptographically secure random number generator.
+
 * MCJS is [Nodejs](https://nodejs.org/en/) compatible but it can be used for browsers too through the use of the tool [Browserify](http://browserify.org/) (see some examples below)
 
 * NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
@@ -62,7 +64,7 @@ The following is the list of all elliptic curves supported by MCJS
 ['ED25519','GOLDILOCKS','NIST256','NIST384','NIST521','BRAINPOOL','ANSSI','HIFIVE','C25519','C41417','MF254W','MF254E','MF254M','MF256W','MF256E','MF256M','MS255W','MS255E','MS255M','MS256W','MS256E','MS256M','BN254','BN254CX','BLS383'];
 ```
 #### RSA
-This library supports also RSA encryption/decryption and RSA signature. The following is a quick example to use RSA, first initialize the context
+This library supports also RSA encryption/decryption and RSA signature. The following is a quick example on how to use RSA. First initialize the context
 ```
 var CTX = require("milagro-crypto-js");
 
@@ -75,7 +77,7 @@ ctx.RSA.DECRYPT(...);
 ```
 The following is the list of all the RSA security level supported by *MCJS*
 ```
-['RSA2048','RSA3072','RSA4096']
+['RSA2048','RSA3072','RSA4096'];
 ```
 #### Other functions
 MCJS supports SHA256, SHA384, SHA512, AES-GCM encryption and Marsaglia & Zaman random number generator. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize it with no parameter as follows:
@@ -88,7 +90,7 @@ In the `/example` directory there are many simple script that show how to use th
 
 
 ## Run examples
-We provide also some script examples for [nodejs](https://nodejs.org/en/). In order to try, for example, the script on ECC functions type the following commands
+We provide also some script examples for [nodejs](https://nodejs.org/en/). In order to try, for example, the script example on ECC functions type the following commands
 ```
 node ./examples/example_ECC_NIST256.js
 ```
