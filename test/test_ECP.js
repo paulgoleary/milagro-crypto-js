@@ -59,7 +59,6 @@ describe('TEST ECP ARITHMETICS', function() {
 
                 var P1 = readPoint(vectors[k].ECP1,ctx);
                 var Paux1 = new ctx.ECP(0);
-                var Paux2 = new ctx.ECP(0);
                 Paux1.copy(P1);
 
                 if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
@@ -69,10 +68,8 @@ describe('TEST ECP ARITHMETICS', function() {
                     y.sqr();
                     var res = ctx.ECP.RHS(x);
 
-                    expect(res.toString()+" "+k).to.equal(y.toString()+" "+k);
-                }
+                    expect(res.toString()).to.equal(y.toString());
 
-                if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
 		            // test commutativity of the sum
 		            var P2 = readPoint(vectors[k].ECP2,ctx);
 		            var Psum = readPoint(vectors[k].ECPsum,ctx);
