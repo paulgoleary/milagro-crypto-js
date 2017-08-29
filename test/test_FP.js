@@ -28,9 +28,7 @@ var CTX = require("../src/ctx");
 
 var expect = chai.expect;
 
-var all_curves = ['NIST521'];
-
-// ED25519 BN254 ANSSI BLS383 BN254CX BRAINPOOL GOLDILOCKS HIFIVE NIST256 NIST384
+var all_curves = ['ED25519', 'BN254', 'ANSSI', 'BLS383', 'BN254CX', 'BRAINPOOL', 'GOLDILOCKS', 'HIFIVE', 'NIST256'];
 
 // to fix C41417 NIST384 NIST521
 
