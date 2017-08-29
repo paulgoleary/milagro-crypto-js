@@ -51,6 +51,5 @@ module.exports.UInt64 = function(ctx) {
             return this;
         }
     };
-    UInt64.ctx = ctx;
     return UInt64;
 };

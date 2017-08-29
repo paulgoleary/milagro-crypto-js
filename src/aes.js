@@ -620,6 +620,5 @@ module.exports.AES = function(ctx) {
         0x6184cb7b, 0x70b632d5, 0x745c6c48, 0x4257b8d0
     ];
 
-    AES.ctx = ctx;
     return AES;
 };
