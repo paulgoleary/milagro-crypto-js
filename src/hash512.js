@@ -243,6 +243,5 @@ module.exports.HASH512 = function(ctx) {
         new ctx.UInt64(0x4cc5d4be, 0xcb3e42b6), new ctx.UInt64(0x597f299c, 0xfc657e2a),
         new ctx.UInt64(0x5fcb6fab, 0x3ad6faec), new ctx.UInt64(0x6c44198c, 0x4a475817)
     ];
-    HASH512.ctx = ctx;
     return HASH512;
 };

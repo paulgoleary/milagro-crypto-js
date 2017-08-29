@@ -360,7 +360,6 @@ module.exports.RSA = function(ctx) {
     };
 
 
-    RSA.ctx = ctx;
     return RSA;
 };
 
@@ -374,7 +373,6 @@ module.exports.rsa_private_key = function(ctx) {
         this.c = new ctx.FF(n);
     };
 
-    rsa_private_key.ctx = ctx;
     return rsa_private_key;
 };
 
@@ -385,6 +383,5 @@ module.exports.rsa_public_key = function(ctx) {
         this.n = new ctx.FF(m);
     };
 
-    rsa_public_key.ctx = ctx;
     return rsa_public_key;
 };

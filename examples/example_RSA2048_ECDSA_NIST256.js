@@ -25,9 +25,6 @@ var ctx1 = new CTX('RSA2048');
 
 console.log('Start test RSA2048');
 
-// Load test vectors
-var vectors = require('../testVectors/RSA2048.json');
-
 var i, j = 0,
     res;
 var result;
@@ -56,7 +53,7 @@ var W0 = [];
 
 var start, end, time;
 start = new Date().getTime();
-console.log('Load RSA public/private key pair from test vectors');
+console.log('Generate RSA public/private key pair');
 
 ctx1.RSA.KEY_PAIR(rng, 65537, priv, pub);
 

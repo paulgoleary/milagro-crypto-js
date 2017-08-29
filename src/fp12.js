@@ -625,6 +625,5 @@ module.exports.FP12 = function(ctx) {
         return p;
     };
 
-    FP12.ctx = ctx;
     return FP12;
 };

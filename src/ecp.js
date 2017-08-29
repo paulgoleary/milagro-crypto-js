@@ -998,6 +998,5 @@ module.exports.ECP = function(ctx) {
         r.reduce();
         return r;
     };
-    ECP.ctx = ctx;
     return ECP;
 };

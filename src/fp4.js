@@ -492,6 +492,5 @@ module.exports.FP4 = function(ctx) {
         }
 
     };
-    FP4.ctx = ctx;
     return FP4;
 };

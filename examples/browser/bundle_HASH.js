@@ -99,7 +99,7 @@ return 0;
 	under the License.
 */
 
-module.exports.AES = function(ctx) {
+module.exports.AES = function() {
 
     var AES = function() {
         this.Nk = 0;
@@ -702,7 +702,6 @@ module.exports.AES = function(ctx) {
         0x6184cb7b, 0x70b632d5, 0x745c6c48, 0x4257b8d0
     ];
 
-    AES.ctx = ctx;
     return AES;
 };
 },{}],3:[function(require,module,exports){
@@ -1633,7 +1632,6 @@ module.exports.BIG = function(ctx) {
 
         return U;
     };
-    BIG.ctx = ctx;
     return BIG;
 };
 
@@ -1900,7 +1898,6 @@ module.exports.DBIG = function(ctx) {
     };
 
 
-    DBIG.ctx = ctx;
     return DBIG;
 };
 },{}],4:[function(require,module,exports){
@@ -1926,6 +1923,7 @@ module.exports.DBIG = function(ctx) {
 var romField = require('./rom_field');
 var romCurve = require('./rom_curve');
 var aes = require('./aes');
+var gcm = require('./gcm');
 var uint64 = require('./uint64');
 var hash256 = require('./hash256');
 var hash384 = require('./hash384');
@@ -1946,41 +1944,397 @@ var ecp2 = require('./ecp2');
 var pair = require('./pair');
 var mpin = require('./mpin');
 
-CTX = function(config) {
-    this.config = config;
+var CTXLIST = {
+    "ED25519": {
+        "BITS": "256",
+        "FIELD": "25519",
+        "CURVE": "ED25519",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 255,
+        "@M8": 5,
+        "@MT": 1,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "C25519": {
+        "BITS": "256",
+        "FIELD": "25519",
+        "CURVE": "C25519",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 255,
+        "@M8": 5,
+        "@MT": 1,
+        "@CT": 2,
+        "@PF": 0
+    },
+
+    "NIST256": {
+        "BITS": "256",
+        "FIELD": "NIST256",
+        "CURVE": "NIST256",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 7,
+        "@MT": 0,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "NIST384": {
+        "BITS": "384",
+        "FIELD": "NIST384",
+        "CURVE": "NIST384",
+        "@NB": 48,
+        "@BASE": 56,
+        "@NBT": 384,
+        "@M8": 7,
+        "@MT": 0,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "BRAINPOOL": {
+        "BITS": "256",
+        "FIELD": "BRAINPOOL",
+        "CURVE": "BRAINPOOL",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 7,
+        "@MT": 0,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "ANSSI": {
+        "BITS": "256",
+        "FIELD": "ANSSI",
+        "CURVE": "ANSSI",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 7,
+        "@MT": 0,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "HIFIVE": {
+        "BITS": "336",
+        "FIELD": "HIFIVE",
+        "CURVE": "HIFIVE",
+        "@NB": 42,
+        "@BASE": 23,
+        "@NBT": 336,
+        "@M8": 5,
+        "@MT": 1,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "GOLDILOCKS": {
+        "BITS": "448",
+        "FIELD": "GOLDILOCKS",
+        "CURVE": "GOLDILOCKS",
+        "@NB": 56,
+        "@BASE": 23,
+        "@NBT": 448,
+        "@M8": 7,
+        "@MT": 2,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "C41417": {
+        "BITS": "416",
+        "FIELD": "C41417",
+        "CURVE": "C41417",
+        "@NB": 52,
+        "@BASE": 23,
+        "@NBT": 414,
+        "@M8": 7,
+        "@MT": 1,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "NIST521": {
+        "BITS": "528",
+        "FIELD": "NIST521",
+        "CURVE": "NIST521",
+        "@NB": 66,
+        "@BASE": 23,
+        "@NBT": 521,
+        "@M8": 7,
+        "@MT": 1,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "MF254W": {
+        "BITS": "256",
+        "FIELD": "254MF",
+        "CURVE": "MF254W",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 254,
+        "@M8": 7,
+        "@MT": 3,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "MF254E": {
+        "BITS": "256",
+        "FIELD": "254MF",
+        "CURVE": "MF254E",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 254,
+        "@M8": 7,
+        "@MT": 3,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "MF254M": {
+        "BITS": "256",
+        "FIELD": "254MF",
+        "CURVE": "MF254M",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 254,
+        "@M8": 7,
+        "@MT": 3,
+        "@CT": 2,
+        "@PF": 0
+    },
+
+    "MF256W": {
+        "BITS": "256",
+        "FIELD": "256MF",
+        "CURVE": "MF256W",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 7,
+        "@MT": 3,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "MF256E": {
+        "BITS": "256",
+        "FIELD": "256MF",
+        "CURVE": "MF256E",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 7,
+        "@MT": 3,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "MF256M": {
+        "BITS": "256",
+        "FIELD": "256MF",
+        "CURVE": "MF256M",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 7,
+        "@MT": 3,
+        "@CT": 2,
+        "@PF": 0
+    },
+
+    "MS255W": {
+        "BITS": "256",
+        "FIELD": "255MS",
+        "CURVE": "MS255W",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 255,
+        "@M8": 3,
+        "@MT": 1,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "MS255E": {
+        "BITS": "256",
+        "FIELD": "255MS",
+        "CURVE": "MS255E",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 255,
+        "@M8": 3,
+        "@MT": 1,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "MS255M": {
+        "BITS": "256",
+        "FIELD": "255MS",
+        "CURVE": "MS255M",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 255,
+        "@M8": 3,
+        "@MT": 1,
+        "@CT": 2,
+        "@PF": 0
+    },
+
+    "MS256W": {
+        "BITS": "256",
+        "FIELD": "256MS",
+        "CURVE": "MS256W",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 3,
+        "@MT": 1,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "MS256E": {
+        "BITS": "256",
+        "FIELD": "256MS",
+        "CURVE": "MS256E",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 3,
+        "@MT": 1,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "MS256M": {
+        "BITS": "256",
+        "FIELD": "256MS",
+        "CURVE": "MS256M",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 256,
+        "@M8": 3,
+        "@MT": 1,
+        "@CT": 2,
+        "@PF": 0
+    },
+
+    "BN254": {
+        "BITS": "256",
+        "FIELD": "BN254",
+        "CURVE": "BN254",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 254,
+        "@M8": 3,
+        "@MT": 0,
+        "@CT": 0,
+        "@PF": 1
+    },
+
+    "BN254CX": {
+        "BITS": "256",
+        "FIELD": "BN254CX",
+        "CURVE": "BN254CX",
+        "@NB": 32,
+        "@BASE": 24,
+        "@NBT": 254,
+        "@M8": 3,
+        "@MT": 0,
+        "@CT": 0,
+        "@PF": 1
+    },
+
+    "BLS383": {
+        "BITS": "384",
+        "FIELD": "BLS383",
+        "CURVE": "BLS383",
+        "@NB": 48,
+        "@BASE": 23,
+        "@NBT": 383,
+        "@M8": 3,
+        "@MT": 0,
+        "@CT": 0,
+        "@PF": 2
+    },
+
+    "RSA2048": {
+        "BITS": "1024",
+        "TFF": "2048",
+        "@NB": 128,
+        "@BASE": 22,
+        "@ML": 2,
+    },
+
+    "RSA3072": {
+        "BITS": "384",
+        "TFF": "3072",
+        "@NB": 48,
+        "@BASE": 23,
+        "@ML": 8,
+    },
+
+    "RSA4096": {
+        "BITS": "512",
+        "TFF": "4096",
+        "@NB": 64,
+        "@BASE": 23,
+        "@ML": 8,
+    },
+}
+
+module.exports = CTXLIST;
+
+CTX = function(input_parameter) {
     this.AES = aes.AES(this);
+    this.GCM = gcm.GCM(this);
     this.UInt64 = uint64.UInt64(this);
     this.HASH256 = hash256.HASH256(this);
     this.HASH384 = hash384.HASH384(this);
     this.HASH512 = hash512.HASH512(this);
     this.RAND = rand.RAND(this);
 
-    if (config === undefined)
+    if (input_parameter === undefined)
         return;
     else {
 
+        this.config = CTXLIST[input_parameter];
+
         // Set RSA parameters
-        if (config['TFF'] !== undefined) {
+        if (this.config['TFF'] !== undefined) {
             this.BIG = big.BIG(this);
             this.DBIG = big.DBIG(this);
             this.FF = ff.FF(this);
             this.RSA = rsa.RSA(this);
             this.rsa_public_key = rsa.rsa_public_key(this);
             this.rsa_private_key = rsa.rsa_private_key(this);
+            return;
         };
 
         // Set Elliptic Curve parameters
-        if (config['CURVE'] !== undefined) {
+        if (this.config['CURVE'] !== undefined) {
 
-            this.ROM_CURVE = romCurve['ROM_CURVE_' + config['CURVE']](this);
-            this.ROM_FIELD = romField['ROM_FIELD_' + config['FIELD']](this);
+            this.ROM_CURVE = romCurve['ROM_CURVE_' + this.config['CURVE']](this);
+            this.ROM_FIELD = romField['ROM_FIELD_' + this.config['FIELD']](this);
             this.BIG = big.BIG(this);
             this.DBIG = big.DBIG(this);
             this.FP = fp.FP(this);
             this.ECP = ecp.ECP(this);
             this.ECDH = ecdh.ECDH(this);
 
-            if (config['@PF'] != 0) {
+            if (this.config['@PF'] != 0) {
                 this.FP2 = fp2.FP2(this);
                 this.FP4 = fp4.FP4(this);
                 this.FP12 = fp12.FP12(this);
@@ -1988,12 +2342,13 @@ CTX = function(config) {
                 this.PAIR = pair.PAIR(this);
                 this.MPIN = mpin.MPIN(this);
             };
+            return;
         };
     };
 };
 
 module.exports = CTX;
-},{"./aes":2,"./big":3,"./ecdh":5,"./ecp":6,"./ecp2":7,"./ff":8,"./fp":9,"./fp12":10,"./fp2":11,"./fp4":12,"./hash256":13,"./hash384":14,"./hash512":15,"./mpin":16,"./pair":17,"./rand":18,"./rom_curve":19,"./rom_field":20,"./rsa":21,"./uint64":22}],5:[function(require,module,exports){
+},{"./aes":2,"./big":3,"./ecdh":5,"./ecp":6,"./ecp2":7,"./ff":8,"./fp":9,"./fp12":10,"./fp2":11,"./fp4":12,"./gcm":13,"./hash256":14,"./hash384":15,"./hash512":16,"./mpin":17,"./pair":18,"./rand":19,"./rom_curve":20,"./rom_field":21,"./rsa":22,"./uint64":23}],5:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -2585,7 +2940,6 @@ module.exports.ECDH = function(ctx) {
             return M;
         }
     };
-    ECDH.ctx = ctx;
     return ECDH;
 };
 },{}],6:[function(require,module,exports){
@@ -3589,7 +3943,6 @@ module.exports.ECP = function(ctx) {
         r.reduce();
         return r;
     };
-    ECP.ctx = ctx;
     return ECP;
 };
 },{}],7:[function(require,module,exports){
@@ -4206,7 +4559,6 @@ module.exports.ECP2 = function(ctx) {
         return ((x >> 31) & 1);
     };
 
-    ECP2.ctx = ctx;
     return ECP2;
 };
 },{}],8:[function(require,module,exports){
@@ -5086,7 +5438,6 @@ module.exports.FF = function(ctx) {
         }
         return true;
     };
-    FF.ctx = ctx;
     return FF;
 };
 },{}],9:[function(require,module,exports){
@@ -5499,7 +5850,6 @@ module.exports.FP = function(ctx) {
         b.norm();
         return b;
     };
-    FP.ctx = ctx;
     return FP;
 };
 },{}],10:[function(require,module,exports){
@@ -6130,7 +6480,6 @@ module.exports.FP12 = function(ctx) {
         return p;
     };
 
-    FP12.ctx = ctx;
     return FP12;
 };
 },{}],11:[function(require,module,exports){
@@ -6501,7 +6850,6 @@ module.exports.FP2 = function(ctx) {
 
     };
 
-    FP2.ctx = ctx;
     return FP2;
 };
 },{}],12:[function(require,module,exports){
@@ -6999,10 +7347,343 @@ module.exports.FP4 = function(ctx) {
         }
 
     };
-    FP4.ctx = ctx;
     return FP4;
 };
 },{}],13:[function(require,module,exports){
+/*
+	Licensed to the Apache Software Foundation (ASF) under one
+	or more contributor license agreements.  See the NOTICE file
+	distributed with this work for additional information
+	regarding copyright ownership.  The ASF licenses this file
+	to you under the Apache License, Version 2.0 (the
+	"License"); you may not use this file except in compliance
+	with the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the License is distributed on an
+	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	KIND, either express or implied.  See the License for the
+	specific language governing permissions and limitations
+	under the License.
+*/
+
+/*
+ * Implementation of the AES-GCM Encryption/Authentication
+ *
+ * Some restrictions.. 
+ * 1. Only for use with AES
+ * 2. Returned tag is always 128-bits. Truncate at your own risk.
+ * 3. The order of function calls must follow some rules
+ *
+ * Typical sequence of calls..
+ * 1. call GCM_init
+ * 2. call GCM_add_header any number of times, as long as length of header is multiple of 16 bytes (block size)
+ * 3. call GCM_add_header one last time with any length of header
+ * 4. call GCM_add_cipher any number of times, as long as length of cipher/plaintext is multiple of 16 bytes
+ * 5. call GCM_add_cipher one last time with any length of cipher/plaintext
+ * 6. call GCM_finish to extract the tag.
+ *
+ * See http://www.mindspring.com/~dmcgrew/gcm-nist-6.pdf
+ */
+
+module.exports.GCM = function(ctx) {
+
+    var GCM = function() {
+        this.table = new Array(128);
+        for (var i = 0; i < 128; i++)
+            this.table[i] = new Array(4); /* 2k bytes */
+        this.stateX = [];
+        this.Y_0 = [];
+        this.counter = 0;
+        this.lenA = [];
+        this.lenC = [];
+        this.status = 0;
+        this.a = new ctx.AES();
+    };
+
+    // GCM constants
+
+    GCM.ACCEPTING_HEADER = 0;
+    GCM.ACCEPTING_CIPHER = 1;
+    GCM.NOT_ACCEPTING_MORE = 2;
+    GCM.FINISHED = 3;
+    GCM.ENCRYPTING = 0;
+    GCM.DECRYPTING = 1;
+
+    GCM.prototype = {
+
+        precompute: function(H) {
+            var i, j, c;
+            var b = [];
+
+            for (i = j = 0; i < 4; i++, j += 4) {
+                b[0] = H[j];
+                b[1] = H[j + 1];
+                b[2] = H[j + 2];
+                b[3] = H[j + 3];
+                this.table[0][i] = GCM.pack(b);
+            }
+            for (i = 1; i < 128; i++) {
+                c = 0;
+                for (j = 0; j < 4; j++) {
+                    this.table[i][j] = c | (this.table[i - 1][j]) >>> 1;
+                    c = this.table[i - 1][j] << 31;
+                }
+                if (c !== 0) this.table[i][0] ^= 0xE1000000; /* irreducible polynomial */
+            }
+        },
+
+        gf2mul: function() { /* gf2m mul - Z=H*X mod 2^128 */
+            var i, j, m, k;
+            var P = [];
+            var c;
+            var b = [];
+
+            P[0] = P[1] = P[2] = P[3] = 0;
+            j = 8;
+            m = 0;
+            for (i = 0; i < 128; i++) {
+                c = (this.stateX[m] >>> (--j)) & 1;
+                c = ~c + 1;
+                for (k = 0; k < 4; k++) P[k] ^= (this.table[i][k] & c);
+                if (j === 0) {
+                    j = 8;
+                    m++;
+                    if (m == 16) break;
+                }
+            }
+            for (i = j = 0; i < 4; i++, j += 4) {
+                b = GCM.unpack(P[i]);
+                this.stateX[j] = b[0];
+                this.stateX[j + 1] = b[1];
+                this.stateX[j + 2] = b[2];
+                this.stateX[j + 3] = b[3];
+            }
+        },
+
+        wrap: function() { /* Finish off GHASH */
+            var i, j;
+            var F = [];
+            var L = [];
+            var b = [];
+
+            /* convert lengths from bytes to bits */
+            F[0] = (this.lenA[0] << 3) | (this.lenA[1] & 0xE0000000) >>> 29;
+            F[1] = this.lenA[1] << 3;
+            F[2] = (this.lenC[0] << 3) | (this.lenC[1] & 0xE0000000) >>> 29;
+            F[3] = this.lenC[1] << 3;
+            for (i = j = 0; i < 4; i++, j += 4) {
+                b = GCM.unpack(F[i]);
+                L[j] = b[0];
+                L[j + 1] = b[1];
+                L[j + 2] = b[2];
+                L[j + 3] = b[3];
+            }
+            for (i = 0; i < 16; i++) this.stateX[i] ^= L[i];
+            this.gf2mul();
+        },
+
+        /* Initialize GCM mode */
+        init: function(nk, key, niv, iv) { /* iv size niv is usually 12 bytes (96 bits). ctx.AES key size nk can be 16,24 or 32 bytes */
+            var i;
+            var H = [];
+            var b = [];
+
+            for (i = 0; i < 16; i++) {
+                H[i] = 0;
+                this.stateX[i] = 0;
+            }
+
+            this.a.init(ctx.AES.ECB, nk, key, iv);
+            this.a.ecb_encrypt(H); /* E(K,0) */
+            this.precompute(H);
+
+            this.lenA[0] = this.lenC[0] = this.lenA[1] = this.lenC[1] = 0;
+            if (niv == 12) {
+                for (i = 0; i < 12; i++) this.a.f[i] = iv[i];
+                b = GCM.unpack(1);
+                this.a.f[12] = b[0];
+                this.a.f[13] = b[1];
+                this.a.f[14] = b[2];
+                this.a.f[15] = b[3]; /* initialise IV */
+                for (i = 0; i < 16; i++) this.Y_0[i] = this.a.f[i];
+            } else {
+                this.status = GCM.ACCEPTING_CIPHER;
+                this.ghash(iv, niv); /* GHASH(H,0,IV) */
+                this.wrap();
+                for (i = 0; i < 16; i++) {
+                    this.a.f[i] = this.stateX[i];
+                    this.Y_0[i] = this.a.f[i];
+                    this.stateX[i] = 0;
+                }
+                this.lenA[0] = this.lenC[0] = this.lenA[1] = this.lenC[1] = 0;
+            }
+            this.status = GCM.ACCEPTING_HEADER;
+        },
+
+        /* Add Header data - included but not encrypted */
+        add_header: function(header, len) { /* Add some header. Won't be encrypted, but will be authenticated. len is length of header */
+            var i, j = 0;
+            if (this.status != GCM.ACCEPTING_HEADER) return false;
+
+            while (j < len) {
+                for (i = 0; i < 16 && j < len; i++) {
+                    this.stateX[i] ^= header[j++];
+                    this.lenA[1]++;
+                    this.lenA[1] |= 0;
+                    if (this.lenA[1] === 0) this.lenA[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.ACCEPTING_CIPHER;
+            return true;
+        },
+
+        ghash: function(plain, len) {
+            var i, j = 0;
+
+            if (this.status == GCM.ACCEPTING_HEADER) this.status = GCM.ACCEPTING_CIPHER;
+            if (this.status != GCM.ACCEPTING_CIPHER) return false;
+
+            while (j < len) {
+                for (i = 0; i < 16 && j < len; i++) {
+                    this.stateX[i] ^= plain[j++];
+                    this.lenC[1]++;
+                    this.lenC[1] |= 0;
+                    if (this.lenC[1] === 0) this.lenC[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.NOT_ACCEPTING_MORE;
+            return true;
+        },
+
+        /* Add Plaintext - included and encrypted */
+        add_plain: function(plain, len) {
+            var i, j = 0;
+            var B = [];
+            var b = [];
+            var cipher = [];
+
+            if (this.status == GCM.ACCEPTING_HEADER) this.status = GCM.ACCEPTING_CIPHER;
+            if (this.status != GCM.ACCEPTING_CIPHER) return cipher;
+
+            while (j < len) {
+
+                b[0] = this.a.f[12];
+                b[1] = this.a.f[13];
+                b[2] = this.a.f[14];
+                b[3] = this.a.f[15];
+                this.counter = GCM.pack(b);
+                this.counter++;
+                b = GCM.unpack(this.counter);
+                this.a.f[12] = b[0];
+                this.a.f[13] = b[1];
+                this.a.f[14] = b[2];
+                this.a.f[15] = b[3]; /* increment counter */
+                for (i = 0; i < 16; i++) B[i] = this.a.f[i];
+                this.a.ecb_encrypt(B); /* encrypt it  */
+
+                for (i = 0; i < 16 && j < len; i++) {
+                    cipher[j] = (plain[j] ^ B[i]);
+                    this.stateX[i] ^= cipher[j++];
+                    this.lenC[1]++;
+                    this.lenC[1] |= 0;
+                    if (this.lenC[1] === 0) this.lenC[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.NOT_ACCEPTING_MORE;
+            return cipher;
+        },
+
+        /* Add Ciphertext - decrypts to plaintext */
+        add_cipher: function(cipher, len) {
+            var i, j = 0;
+            var B = [];
+            var b = [];
+            var plain = [];
+
+            if (this.status == GCM.ACCEPTING_HEADER) this.status = GCM.ACCEPTING_CIPHER;
+            if (this.status != GCM.ACCEPTING_CIPHER) return plain;
+
+            while (j < len) {
+                b[0] = this.a.f[12];
+                b[1] = this.a.f[13];
+                b[2] = this.a.f[14];
+                b[3] = this.a.f[15];
+                this.counter = GCM.pack(b);
+                this.counter++;
+                b = GCM.unpack(this.counter);
+                this.a.f[12] = b[0];
+                this.a.f[13] = b[1];
+                this.a.f[14] = b[2];
+                this.a.f[15] = b[3]; /* increment counter */
+                for (i = 0; i < 16; i++) B[i] = this.a.f[i];
+                this.a.ecb_encrypt(B); /* encrypt it  */
+                for (i = 0; i < 16 && j < len; i++) {
+                    var oc = cipher[j];
+                    plain[j] = (cipher[j] ^ B[i]);
+                    this.stateX[i] ^= oc;
+                    j++;
+                    this.lenC[1]++;
+                    this.lenC[1] |= 0;
+                    if (this.lenC[1] === 0) this.lenC[0]++;
+                }
+                this.gf2mul();
+            }
+            if (len % 16 !== 0) this.status = GCM.NOT_ACCEPTING_MORE;
+            return plain;
+        },
+
+        /* Finish and extract Tag */
+        finish: function(extract) { /* Finish off GHASH and extract tag (MAC) */
+            var i;
+            var tag = [];
+
+            this.wrap();
+            /* extract tag */
+            if (extract) {
+                this.a.ecb_encrypt(this.Y_0); /* E(K,Y0) */
+                for (i = 0; i < 16; i++) this.Y_0[i] ^= this.stateX[i];
+                for (i = 0; i < 16; i++) {
+                    tag[i] = this.Y_0[i];
+                    this.Y_0[i] = this.stateX[i] = 0;
+                }
+            }
+            this.status = GCM.FINISHED;
+            this.a.end();
+            return tag;
+        }
+
+    };
+
+    GCM.pack = function(b) { /* pack 4 bytes into a 32-bit Word */
+        return (((b[0]) & 0xff) << 24) | ((b[1] & 0xff) << 16) | ((b[2] & 0xff) << 8) | (b[3] & 0xff);
+    };
+
+    GCM.unpack = function(a) { /* unpack bytes from a word */
+        var b = [];
+        b[3] = (a & 0xff);
+        b[2] = ((a >>> 8) & 0xff);
+        b[1] = ((a >>> 16) & 0xff);
+        b[0] = ((a >>> 24) & 0xff);
+        return b;
+    };
+
+    GCM.hex2bytes = function(s) {
+        var len = s.length;
+        var data = [];
+        for (var i = 0; i < len; i += 2)
+            data[i / 2] = parseInt(s.substr(i, 2), 16);
+
+        return data;
+    };
+    return GCM;
+};
+},{}],14:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -7188,10 +7869,9 @@ module.exports.HASH256 = function(ctx) {
         0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
     ];
 
-    HASH256.ctx = ctx;
     return HASH256;
 };
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -7439,10 +8119,9 @@ module.exports.HASH384 = function(ctx) {
         new ctx.UInt64(0x4cc5d4be, 0xcb3e42b6), new ctx.UInt64(0x597f299c, 0xfc657e2a),
         new ctx.UInt64(0x5fcb6fab, 0x3ad6faec), new ctx.UInt64(0x6c44198c, 0x4a475817)
     ];
-    HASH384.ctx = ctx;
     return HASH384;
 };
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
     /*
     	Licensed to the Apache Software Foundation (ASF) under one
     	or more contributor license agreements.  See the NOTICE file
@@ -7688,10 +8367,9 @@ module.exports.HASH512 = function(ctx) {
         new ctx.UInt64(0x4cc5d4be, 0xcb3e42b6), new ctx.UInt64(0x597f299c, 0xfc657e2a),
         new ctx.UInt64(0x5fcb6fab, 0x3ad6faec), new ctx.UInt64(0x6c44198c, 0x4a475817)
     ];
-    HASH512.ctx = ctx;
     return HASH512;
 };
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -7727,7 +8405,7 @@ module.exports.MPIN = function(ctx) {
         /* MAXPIN length in bits */
         TS: 10,
         /* 10 for 4 digit PIN, 14 for 6-digit PIN - 2^TS/TS approx = sqrt(MAXPIN) */
-        TRAP: 200,
+        TRAP: 2000,
         /* 200 for 4 digit PIN, 2000 for 6-digit PIN  - approx 2*sqrt(MAXPIN) */
         EFS: ctx.BIG.MODBYTES,
         EGS: ctx.BIG.MODBYTES,
@@ -8683,10 +9361,9 @@ module.exports.MPIN = function(ctx) {
             return 0;
         }
     };
-    MPIN.ctx = ctx;
     return MPIN;
 };
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -9165,11 +9842,12 @@ module.exports.PAIR = function(ctx) {
             var x = new ctx.BIG(0);
             x.rcopy(ctx.ROM_CURVE.CURVE_Bnx);
             var w = new ctx.BIG(e);
-            for (var i = 0; i < 4; i++) {
+            for (var i = 0; i < 3; i++) {
                 u[i] = new ctx.BIG(w);
                 u[i].mod(x);
                 w.div(x);
             }
+            u[3]=new ctx.BIG(w);
         }
         return u;
     };
@@ -9327,10 +10005,9 @@ module.exports.PAIR = function(ctx) {
     	return w.equals(r);
     };
     */
-    PAIR.ctx = ctx;
     return PAIR;
 };
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -9470,10 +10147,9 @@ module.exports.RAND = function(ctx) {
         return (((b[3]) & 0xff) << 24) | ((b[2] & 0xff) << 16) | ((b[1] & 0xff) << 8) | (b[0] & 0xff);
     };
 
-    RAND.ctx = ctx;
     return RAND;
 };
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -9493,7 +10169,7 @@ module.exports.RAND = function(ctx) {
 	under the License.
 */
 
-module.exports.ROM_CURVE_ANSSI = function(ctx) {
+module.exports.ROM_CURVE_ANSSI = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9508,11 +10184,10 @@ module.exports.ROM_CURVE_ANSSI = function(ctx) {
         CURVE_Gy: [0x62CFB, 0x5A1554, 0xE18311, 0xE8E4C9, 0x1C307, 0xEF8C27, 0xF0F3EC, 0x1F9271, 0xB20491, 0xE0F7C8, 0x6142],
 
     };
-    ROM_CURVE_ANSSI.ctx = ctx;
     return ROM_CURVE_ANSSI;
 };
 
-module.exports.ROM_CURVE_BLS383 = function(ctx) {
+module.exports.ROM_CURVE_BLS383 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9592,11 +10267,10 @@ module.exports.ROM_CURVE_BLS383 = function(ctx) {
 
     };
 
-    ROM_CURVE_BLS383.ctx = ctx;
     return ROM_CURVE_BLS383;
 };
 
-module.exports.ROM_CURVE_BN254 = function(ctx) {
+module.exports.ROM_CURVE_BN254 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9672,11 +10346,10 @@ module.exports.ROM_CURVE_BN254 = function(ctx) {
 
     };
 
-    ROM_CURVE_BN254.ctx = ctx;
     return ROM_CURVE_BN254;
 };
 
-module.exports.ROM_CURVE_BN254CX = function(ctx) {
+module.exports.ROM_CURVE_BN254CX = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9754,11 +10427,10 @@ module.exports.ROM_CURVE_BN254CX = function(ctx) {
 
     };
 
-    ROM_CURVE_BN254CX.ctx = ctx;
     return ROM_CURVE_BN254CX;
 };
 
-module.exports.ROM_CURVE_BRAINPOOL = function(ctx) {
+module.exports.ROM_CURVE_BRAINPOOL = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9773,11 +10445,10 @@ module.exports.ROM_CURVE_BRAINPOOL = function(ctx) {
         CURVE_Gy: [0x25C9BE, 0xE8F35B, 0x1DAB, 0x39D027, 0xBCB6DE, 0x417E69, 0xE14644, 0x7F7B22, 0x39C56D, 0x6C8234, 0x2D99],
 
     };
-    ROM_CURVE_BRAINPOOL.ctx = ctx;
     return ROM_CURVE_BRAINPOOL;
 };
 
-module.exports.ROM_CURVE_C25519 = function(ctx) {
+module.exports.ROM_CURVE_C25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9792,11 +10463,10 @@ module.exports.ROM_CURVE_C25519 = function(ctx) {
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
 
     };
-    ROM_CURVE_C25519.ctx = ctx;
     return ROM_CURVE_C25519;
 };
 
-module.exports.ROM_CURVE_C41417 = function(ctx) {
+module.exports.ROM_CURVE_C41417 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9812,11 +10482,10 @@ module.exports.ROM_CURVE_C41417 = function(ctx) {
 
     };
 
-    ROM_CURVE_C41417.ctx = ctx;
     return ROM_CURVE_C41417;
 };
 
-module.exports.ROM_CURVE_ED25519 = function(ctx) {
+module.exports.ROM_CURVE_ED25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9831,11 +10500,10 @@ module.exports.ROM_CURVE_ED25519 = function(ctx) {
         CURVE_Gy: [0x666658, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x6666],
 
     };
-    ROM_CURVE_ED25519.ctx = ctx;
     return ROM_CURVE_ED25519;
 };
 
-module.exports.ROM_CURVE_GOLDILOCKS = function(ctx) {
+module.exports.ROM_CURVE_GOLDILOCKS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9850,11 +10518,10 @@ module.exports.ROM_CURVE_GOLDILOCKS = function(ctx) {
         CURVE_Gy: [0x1386ED, 0x779BD5, 0x2F6BAB, 0xE6D03, 0x4B2BED, 0x131777, 0x4E8A8C, 0x32B2C1, 0x44B80D, 0x6515B1, 0x5F8DB5, 0x426EBD, 0x7A0358, 0x6DDA, 0x21B0AC, 0x6B1028, 0xDB359, 0x15AE09, 0x17A58D, 0x570],
 
     };
-    ROM_CURVE_GOLDILOCKS.ctx = ctx;
     return ROM_CURVE_GOLDILOCKS;
 };
 
-module.exports.ROM_CURVE_HIFIVE = function(ctx) {
+module.exports.ROM_CURVE_HIFIVE = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9869,11 +10536,10 @@ module.exports.ROM_CURVE_HIFIVE = function(ctx) {
         CURVE_Gy: [0x7E8632, 0xD0A0B, 0x6C4AFB, 0x501B2E, 0x55650C, 0x36DB6B, 0x1FBD0D, 0x61C08E, 0x314B46, 0x70A7A3, 0x587401, 0xC70E0, 0x56502E, 0x38C2D6, 0x303],
 
     };
-    ROM_CURVE_HIFIVE.ctx = ctx;
     return ROM_CURVE_HIFIVE;
 };
 
-module.exports.ROM_CURVE_MF254E = function(ctx) {
+module.exports.ROM_CURVE_MF254E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9888,11 +10554,10 @@ module.exports.ROM_CURVE_MF254E = function(ctx) {
         CURVE_Gy: [0x2701E5, 0xD0FDAF, 0x187C52, 0xE3212, 0x329A84, 0x3F4E36, 0xD50236, 0x951D00, 0xA4C335, 0xE690D6, 0x19F0],
 
     };
-    ROM_CURVE_MF254E.ctx = ctx;
     return ROM_CURVE_MF254E;
 };
 
-module.exports.ROM_CURVE_MF254M = function(ctx) {
+module.exports.ROM_CURVE_MF254M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9906,11 +10571,10 @@ module.exports.ROM_CURVE_MF254M = function(ctx) {
         CURVE_Gx: [0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MF254M.ctx = ctx;
     return ROM_CURVE_MF254M;
 };
 
-module.exports.ROM_CURVE_MF254W = function(ctx) {
+module.exports.ROM_CURVE_MF254W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9925,11 +10589,10 @@ module.exports.ROM_CURVE_MF254W = function(ctx) {
         CURVE_Gy: [0xD4EBC, 0xDF37F9, 0x31AD65, 0xF85119, 0xB738E3, 0x8AEBDF, 0x75BD77, 0x4AE15A, 0x2E5601, 0x3FD33B, 0x140E],
 
     };
-    ROM_CURVE_MF254W.ctx = ctx;
     return ROM_CURVE_MF254W;
 };
 
-module.exports.ROM_CURVE_MF256E = function(ctx) {
+module.exports.ROM_CURVE_MF256E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9943,11 +10606,10 @@ module.exports.ROM_CURVE_MF256E = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0xF3C908, 0xA722F2, 0x8D7DEA, 0x8DFEA6, 0xC05E64, 0x1AACA0, 0xF3DB2C, 0xEAEBEE, 0xCC4D5A, 0xD4F8F8, 0xDAD8],
     };
-    ROM_CURVE_MF256E.ctx = ctx;
     return ROM_CURVE_MF256E;
 };
 
-module.exports.ROM_CURVE_MF256M = function(ctx) {
+module.exports.ROM_CURVE_MF256M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9961,11 +10623,10 @@ module.exports.ROM_CURVE_MF256M = function(ctx) {
         CURVE_Gx: [0x8, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MF256M.ctx = ctx;
     return ROM_CURVE_MF256M;
 };
 
-module.exports.ROM_CURVE_MF256W = function(ctx) {
+module.exports.ROM_CURVE_MF256W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9979,11 +10640,10 @@ module.exports.ROM_CURVE_MF256W = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x724D2A, 0x954C2B, 0x661007, 0x8D94DC, 0x6947EB, 0xAE2895, 0x26123D, 0x7BABBA, 0x1808CE, 0x7C87BE, 0x2088],
     };
-    ROM_CURVE_MF256W.ctx = ctx;
     return ROM_CURVE_MF256W;
 };
 
-module.exports.ROM_CURVE_MS255E = function(ctx) {
+module.exports.ROM_CURVE_MS255E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -9997,11 +10657,10 @@ module.exports.ROM_CURVE_MS255E = function(ctx) {
         CURVE_Gx: [0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x8736A0, 0x255BD0, 0x45BA2A, 0xED445A, 0x914B8A, 0x47E552, 0xDD8E0C, 0xEC254C, 0x7BB545, 0x78534A, 0x26CB],
     };
-    ROM_CURVE_MS255E.ctx = ctx;
     return ROM_CURVE_MS255E;
 };
 
-module.exports.ROM_CURVE_MS255M = function(ctx) {
+module.exports.ROM_CURVE_MS255M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10015,11 +10674,10 @@ module.exports.ROM_CURVE_MS255M = function(ctx) {
         CURVE_Gx: [0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MS255M.ctx = ctx;
     return ROM_CURVE_MS255M;
 };
 
-module.exports.ROM_CURVE_MS255W = function(ctx) {
+module.exports.ROM_CURVE_MS255W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10033,11 +10691,10 @@ module.exports.ROM_CURVE_MS255W = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0xCB44BA, 0xFF6769, 0xD1733, 0xDDFDA6, 0xB6C78C, 0x7D177D, 0xF9B2FF, 0x921EBF, 0xBA7833, 0x6AC0ED, 0x6F7A],
     };
-    ROM_CURVE_MS255W.ctx = ctx;
     return ROM_CURVE_MS255W;
 };
 
-module.exports.ROM_CURVE_MS256E = function(ctx) {
+module.exports.ROM_CURVE_MS256E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10051,11 +10708,10 @@ module.exports.ROM_CURVE_MS256E = function(ctx) {
         CURVE_Gx: [0xD, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x1CADBA, 0x6FB533, 0x3F707F, 0x824D30, 0x2A6D63, 0x46BFBE, 0xB39FA0, 0xA3D330, 0x1276DB, 0xB41E2A, 0x7D0A],
     };
-    ROM_CURVE_MS256E.ctx = ctx;
     return ROM_CURVE_MS256E;
 };
 
-module.exports.ROM_CURVE_MS256M = function(ctx) {
+module.exports.ROM_CURVE_MS256M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10069,11 +10725,10 @@ module.exports.ROM_CURVE_MS256M = function(ctx) {
         CURVE_Gx: [0xb, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MS256M.ctx = ctx;
     return ROM_CURVE_MS256M;
 };
 
-module.exports.ROM_CURVE_MS256W = function(ctx) {
+module.exports.ROM_CURVE_MS256W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10088,11 +10743,10 @@ module.exports.ROM_CURVE_MS256W = function(ctx) {
         CURVE_Gy: [0xB56C77, 0x6306C2, 0xC10BF4, 0x75894E, 0x2C2F93, 0xDD6BD0, 0x6CCEEE, 0xFC82C9, 0xE466D7, 0x1853C1, 0x696F],
 
     };
-    ROM_CURVE_MS256W.ctx = ctx;
     return ROM_CURVE_MS256W;
 };
 
-module.exports.ROM_CURVE_NIST256 = function(ctx) {
+module.exports.ROM_CURVE_NIST256 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10107,11 +10761,10 @@ module.exports.ROM_CURVE_NIST256 = function(ctx) {
         CURVE_Gy: [0xBF51F5, 0x406837, 0xCECBB6, 0x6B315E, 0xCE3357, 0x9E162B, 0x4A7C0F, 0x8EE7EB, 0x1A7F9B, 0x42E2FE, 0x4FE3],
 
     };
-    ROM_CURVE_NIST256.ctx = ctx;
     return ROM_CURVE_NIST256;
 };
 
-module.exports.ROM_CURVE_NIST384 = function(ctx) {
+module.exports.ROM_CURVE_NIST384 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10126,11 +10779,10 @@ module.exports.ROM_CURVE_NIST384 = function(ctx) {
         CURVE_Gy: [0x6A0E5F, 0x3AF921, 0x75E90C, 0x6BF40C, 0xB1CE1, 0x18014C, 0x6D7C2E, 0x6D1889, 0x147CE9, 0x7A5134, 0x63D076, 0x16E14F, 0xBF929, 0x6BB3D3, 0x98B1B, 0x6F254B, 0x3617],
 
     };
-    ROM_CURVE_NIST384.ctx = ctx;
     return ROM_CURVE_NIST384;
 };
 
-module.exports.ROM_CURVE_NIST521 = function(ctx) {
+module.exports.ROM_CURVE_NIST521 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10145,10 +10797,9 @@ module.exports.ROM_CURVE_NIST521 = function(ctx) {
         CURVE_Gy: [0x516650, 0x28ED3F, 0x222FA, 0x139612, 0x47086A, 0x6C26A7, 0x4FEB41, 0x285C80, 0x2640C5, 0x32BDE8, 0x5FB9CA, 0x733164, 0x517273, 0x2F5F7, 0x66D11A, 0x2224AB, 0x5998F5, 0x58FA37, 0x297ED0, 0x22E4, 0x9A3BC, 0x252D4F, 0x460E],
 
     };
-    ROM_CURVE_NIST521.ctx = ctx;
     return ROM_CURVE_NIST521;
 };
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -10159,6 +10810,7 @@ module.exports.ROM_CURVE_NIST521 = function(ctx) {
 	with the License.  You may obtain a copy of the License at
 	
 	http://www.apache.org/licenses/LICENSE-2.0
+
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an
 	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -10167,7 +10819,7 @@ module.exports.ROM_CURVE_NIST521 = function(ctx) {
 	under the License.
 */
 
-module.exports.ROM_FIELD_254MF = function(ctx) {
+module.exports.ROM_FIELD_254MF = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_254MF = {
@@ -10176,10 +10828,9 @@ module.exports.ROM_FIELD_254MF = function(ctx) {
         MConst: 0x3F81,
 
     };
-    ROM_FIELD_254MF.ctx = ctx;
     return ROM_FIELD_254MF;
 };
-module.exports.ROM_FIELD_25519 = function(ctx) {
+module.exports.ROM_FIELD_25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_25519 = {
@@ -10187,10 +10838,9 @@ module.exports.ROM_FIELD_25519 = function(ctx) {
         Modulus: [0xFFFFED, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x7FFF],
         MConst: 19,
     };
-    ROM_FIELD_25519.ctx = ctx;
     return ROM_FIELD_25519;
 };
-module.exports.ROM_FIELD_255MS = function(ctx) {
+module.exports.ROM_FIELD_255MS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_255MS = {
@@ -10198,10 +10848,9 @@ module.exports.ROM_FIELD_255MS = function(ctx) {
         Modulus: [0xFFFD03, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x7FFF],
         MConst: 0x2FD,
     };
-    ROM_FIELD_255MS.ctx = ctx;
     return ROM_FIELD_255MS;
 };
-module.exports.ROM_FIELD_256MF = function(ctx) {
+module.exports.ROM_FIELD_256MF = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_256MF = {
@@ -10209,10 +10858,9 @@ module.exports.ROM_FIELD_256MF = function(ctx) {
         Modulus: [0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFA7],
         MConst: 0xFFA8,
     };
-    ROM_FIELD_256MF.ctx = ctx;
     return ROM_FIELD_256MF;
 };
-module.exports.ROM_FIELD_256MS = function(ctx) {
+module.exports.ROM_FIELD_256MS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_256MS = {
@@ -10220,10 +10868,9 @@ module.exports.ROM_FIELD_256MS = function(ctx) {
         Modulus: [0xFFFF43, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFF],
         MConst: 0xBD,
     };
-    ROM_FIELD_256MS.ctx = ctx;
     return ROM_FIELD_256MS;
 };
-module.exports.ROM_FIELD_ANSSI = function(ctx) {
+module.exports.ROM_FIELD_ANSSI = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_ANSSI = {
@@ -10232,10 +10879,9 @@ module.exports.ROM_FIELD_ANSSI = function(ctx) {
         MConst: 0x4E1155,
 
     };
-    ROM_FIELD_ANSSI.ctx = ctx;
     return ROM_FIELD_ANSSI;
 };
-module.exports.ROM_FIELD_BLS383 = function(ctx) {
+module.exports.ROM_FIELD_BLS383 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BLS383 = {
@@ -10245,10 +10891,9 @@ module.exports.ROM_FIELD_BLS383 = function(ctx) {
         Fra: [0x34508B, 0x4B3525, 0x4D0CAE, 0x503777, 0x463DB7, 0x3BF78E, 0xD072C, 0x2AE9A0, 0x69D32D, 0x282C73, 0x1730DB, 0xCD9F8, 0x6AB98B, 0x7DC9B0, 0x1CBCC8, 0x7D8CC3, 0x5A5],
         Frb: [0x7904E0, 0xA352F, 0x28DE04, 0x537843, 0x3B7D49, 0x6FB715, 0x4FBAE2, 0x4AA1C7, 0x183C6C, 0x3BDDEF, 0x5272CD, 0x532FB2, 0x3FBEC7, 0x22EEF9, 0x611A4F, 0x12B391, 0x751F],
     };
-    ROM_FIELD_BLS383.ctx = ctx;
     return ROM_FIELD_BLS383;
 };
-module.exports.ROM_FIELD_BN254 = function(ctx) {
+module.exports.ROM_FIELD_BN254 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BN254 = {
@@ -10258,10 +10903,9 @@ module.exports.ROM_FIELD_BN254 = function(ctx) {
         Fra: [0x2A6DE9, 0xE6C06F, 0xC2E17D, 0x4D3F77, 0x97492, 0x953F85, 0x50A846, 0xB6499B, 0x2E7C8C, 0x761921, 0x1B37],
         Frb: [0xD5922A, 0x193F90, 0x50C582, 0xB2C088, 0x178B6D, 0x6AC8DC, 0x2F57B9, 0x3EAB2, 0xD18375, 0xEE691E, 0x9EB],
     };
-    ROM_FIELD_BN254.ctx = ctx;
     return ROM_FIELD_BN254;
 };
-module.exports.ROM_FIELD_BN254CX = function(ctx) {
+module.exports.ROM_FIELD_BN254CX = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BN254CX = {
@@ -10271,10 +10915,9 @@ module.exports.ROM_FIELD_BN254CX = function(ctx) {
         Fra: [0xC80EA3, 0x83355, 0x215BD9, 0xF173F8, 0x677326, 0x189868, 0x8AACA7, 0xAFE18B, 0x3A0164, 0x82FA6, 0x1359],
         Frb: [0x534710, 0x1BBC06, 0xC0628D, 0x269546, 0xD863C7, 0x4E3ABB, 0xD9CDBC, 0xDC53, 0x3628A9, 0xF7D062, 0x10A6],
     };
-    ROM_FIELD_BN254CX.ctx = ctx;
     return ROM_FIELD_BN254CX;
 };
-module.exports.ROM_FIELD_BRAINPOOL = function(ctx) {
+module.exports.ROM_FIELD_BRAINPOOL = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BRAINPOOL = {
@@ -10282,10 +10925,9 @@ module.exports.ROM_FIELD_BRAINPOOL = function(ctx) {
         Modulus: [0x6E5377, 0x481D1F, 0x282013, 0xD52620, 0x3BF623, 0x8D726E, 0x909D83, 0x3E660A, 0xEEA9BC, 0x57DBA1, 0xA9FB],
         MConst: 0xFD89B9,
     };
-    ROM_FIELD_BRAINPOOL.ctx = ctx;
     return ROM_FIELD_BRAINPOOL;
 };
-module.exports.ROM_FIELD_C41417 = function(ctx) {
+module.exports.ROM_FIELD_C41417 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10294,10 +10936,9 @@ module.exports.ROM_FIELD_C41417 = function(ctx) {
         Modulus: [0x7FFFEF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF],
         MConst: 0x11,
     };
-    ROM_FIELD_C41417.ctx = ctx;
     return ROM_FIELD_C41417;
 };
-module.exports.ROM_FIELD_GOLDILOCKS = function(ctx) {
+module.exports.ROM_FIELD_GOLDILOCKS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_GOLDILOCKS = {
@@ -10306,10 +10947,9 @@ module.exports.ROM_FIELD_GOLDILOCKS = function(ctx) {
         MConst: 0x1,
 
     };
-    ROM_FIELD_GOLDILOCKS.ctx = ctx;
     return ROM_FIELD_GOLDILOCKS;
 };
-module.exports.ROM_FIELD_HIFIVE = function(ctx) {
+module.exports.ROM_FIELD_HIFIVE = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_HIFIVE = {
@@ -10318,10 +10958,9 @@ module.exports.ROM_FIELD_HIFIVE = function(ctx) {
         MConst: 0x3,
 
     };
-    ROM_FIELD_HIFIVE.ctx = ctx;
     return ROM_FIELD_HIFIVE;
 };
-module.exports.ROM_FIELD_NIST256 = function(ctx) {
+module.exports.ROM_FIELD_NIST256 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST256 = {
@@ -10330,10 +10969,9 @@ module.exports.ROM_FIELD_NIST256 = function(ctx) {
         MConst: 0x1,
 
     };
-    ROM_FIELD_NIST256.ctx = ctx;
     return ROM_FIELD_NIST256;
 };
-module.exports.ROM_FIELD_NIST384 = function(ctx) {
+module.exports.ROM_FIELD_NIST384 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST384 = {
@@ -10341,10 +10979,9 @@ module.exports.ROM_FIELD_NIST384 = function(ctx) {
         Modulus: [0x7FFFFF, 0x1FF, 0x0, 0x0, 0x7FFFF0, 0x7FDFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0xFFFF],
         MConst: 0x1,
     };
-    ROM_FIELD_NIST384.ctx = ctx;
     return ROM_FIELD_NIST384;
 };
-module.exports.ROM_FIELD_NIST521 = function(ctx) {
+module.exports.ROM_FIELD_NIST521 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST521 = {
@@ -10352,10 +10989,9 @@ module.exports.ROM_FIELD_NIST521 = function(ctx) {
         Modulus: [0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFF],
         MConst: 0x1,
     };
-    ROM_FIELD_NIST521.ctx = ctx;
     return ROM_FIELD_NIST521;
 };
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -10718,7 +11354,6 @@ module.exports.RSA = function(ctx) {
     };
 
 
-    RSA.ctx = ctx;
     return RSA;
 };
 
@@ -10732,7 +11367,6 @@ module.exports.rsa_private_key = function(ctx) {
         this.c = new ctx.FF(n);
     };
 
-    rsa_private_key.ctx = ctx;
     return rsa_private_key;
 };
 
@@ -10743,10 +11377,9 @@ module.exports.rsa_public_key = function(ctx) {
         this.n = new ctx.FF(m);
     };
 
-    rsa_public_key.ctx = ctx;
     return rsa_public_key;
 };
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -10768,7 +11401,7 @@ module.exports.rsa_public_key = function(ctx) {
 
 /* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
 
-module.exports.UInt64 = function(ctx) {
+module.exports.UInt64 = function() {
 
     var UInt64 = function(top, bot) {
         this.top = top;
@@ -10800,7 +11433,6 @@ module.exports.UInt64 = function(ctx) {
             return this;
         }
     };
-    UInt64.ctx = ctx;
     return UInt64;
 };
 },{}]},{},[1]);

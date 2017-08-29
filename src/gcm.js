@@ -329,6 +329,5 @@ module.exports.GCM = function(ctx) {
 
         return data;
     };
-    GCM.ctx = ctx;
     return GCM;
 };

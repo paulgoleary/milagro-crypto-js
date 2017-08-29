@@ -611,6 +611,5 @@ module.exports.ECP2 = function(ctx) {
         return ((x >> 31) & 1);
     };
 
-    ECP2.ctx = ctx;
     return ECP2;
 };
