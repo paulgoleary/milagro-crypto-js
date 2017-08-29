@@ -18,7 +18,7 @@ under the License.
 */
 
 
-/* Test ECP ARITHMETICS - test driver and function exerciser for ECP API Functions */
+/* Test ECP2 ARITHMETICS - test driver and function exerciser for ECP2 API Functions */
 
 var chai = require('chai');
 
@@ -51,7 +51,7 @@ var readPoint2 = function(string, ctx) {
     return P;
 }
 
-describe('TEST ECP ARITHMETICS', function() {
+describe('TEST ECP2 ARITHMETICS', function() {
 
 	var j = all_curves.length - 1;
 
