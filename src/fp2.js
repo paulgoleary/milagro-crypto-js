@@ -365,6 +365,5 @@ module.exports.FP2 = function(ctx) {
 
     };
 
-    FP2.ctx = ctx;
     return FP2;
 };

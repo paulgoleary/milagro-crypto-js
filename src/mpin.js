@@ -989,6 +989,5 @@ module.exports.MPIN = function(ctx) {
             return 0;
         }
     };
-    MPIN.ctx = ctx;
     return MPIN;
 };

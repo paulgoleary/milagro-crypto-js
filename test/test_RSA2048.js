@@ -29,7 +29,7 @@ describe('TEST RSA RSA2048', function() {
     var ctx = new CTX('RSA2048');
 
     // Load test vectors
-    var vectors = require('../testVectors/RSA2048.json');
+    var vectors = require('../testVectors/rsa/RSA2048.json');
 
     var i, j = 0,
         res;

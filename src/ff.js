@@ -874,6 +874,5 @@ module.exports.FF = function(ctx) {
         }
         return true;
     };
-    FF.ctx = ctx;
     return FF;
 };

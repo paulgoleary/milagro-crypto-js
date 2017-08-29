@@ -407,6 +407,5 @@ module.exports.FP = function(ctx) {
         b.norm();
         return b;
     };
-    FP.ctx = ctx;
     return FP;
 };

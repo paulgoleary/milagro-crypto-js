@@ -159,7 +159,7 @@ describe('TEST AES', function() {
     it('test AES-128-ECB encryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/AES_ECB_MMT128_ENC.json');
+        var vectors = require('../testVectors/aes/AES_ECB_MMT128_ENC.json');
         
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);
@@ -175,7 +175,7 @@ describe('TEST AES', function() {
     it('test AES-128-ECB decryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/AES_ECB_MMT128_DEC.json');
+        var vectors = require('../testVectors/aes/AES_ECB_MMT128_DEC.json');
 
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);
@@ -191,7 +191,7 @@ describe('TEST AES', function() {
     it('test AES-128-CTR encryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/AES_CTR_MLC128.json');
+        var vectors = require('../testVectors/aes/AES_CTR_MLC128.json');
         
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);
@@ -208,7 +208,7 @@ describe('TEST AES', function() {
     it('test AES-128-CTR decryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/AES_CTR_MLC128.json');
+        var vectors = require('../testVectors/aes/AES_CTR_MLC128.json');
 
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);
@@ -225,7 +225,7 @@ describe('TEST AES', function() {
     it('test AES-128-CBC encryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/AES_CBC_MMT128.json');
+        var vectors = require('../testVectors/aes/AES_CBC_MMT128.json');
         
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);
@@ -242,7 +242,7 @@ describe('TEST AES', function() {
     it('test AES-128-CBC decryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/AES_CBC_MMT128.json');
+        var vectors = require('../testVectors/aes/AES_CBC_MMT128.json');
 
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);

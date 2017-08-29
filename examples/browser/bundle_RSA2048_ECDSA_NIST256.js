@@ -27,9 +27,6 @@ var ctx1 = new CTX('RSA2048');
 
 console.log('Start test RSA2048');
 
-// Load test vectors
-var vectors = require('../testVectors/RSA2048.json');
-
 var i, j = 0,
     res;
 var result;
@@ -58,7 +55,7 @@ var W0 = [];
 
 var start, end, time;
 start = new Date().getTime();
-console.log('Load RSA public/private key pair from test vectors');
+console.log('Generate RSA public/private key pair');
 
 ctx1.RSA.KEY_PAIR(rng, 65537, priv, pub);
 
@@ -165,7 +162,7 @@ rng.clean();
 
 console.log('SUCCESS')
 }).call(this,require('_process'))
-},{"../src/ctx":4,"../testVectors/RSA2048.json":24,"_process":25}],2:[function(require,module,exports){
+},{"../src/ctx":4,"_process":24}],2:[function(require,module,exports){
 /*
 	Licensed to the Apache Software Foundation (ASF) under one
 	or more contributor license agreements.  See the NOTICE file
@@ -185,7 +182,7 @@ console.log('SUCCESS')
 	under the License.
 */
 
-module.exports.AES = function(ctx) {
+module.exports.AES = function() {
 
     var AES = function() {
         this.Nk = 0;
@@ -788,7 +785,6 @@ module.exports.AES = function(ctx) {
         0x6184cb7b, 0x70b632d5, 0x745c6c48, 0x4257b8d0
     ];
 
-    AES.ctx = ctx;
     return AES;
 };
 },{}],3:[function(require,module,exports){
@@ -1719,7 +1715,6 @@ module.exports.BIG = function(ctx) {
 
         return U;
     };
-    BIG.ctx = ctx;
     return BIG;
 };
 
@@ -1986,7 +1981,6 @@ module.exports.DBIG = function(ctx) {
     };
 
 
-    DBIG.ctx = ctx;
     return DBIG;
 };
 },{}],4:[function(require,module,exports){
@@ -3029,7 +3023,6 @@ module.exports.ECDH = function(ctx) {
             return M;
         }
     };
-    ECDH.ctx = ctx;
     return ECDH;
 };
 },{}],6:[function(require,module,exports){
@@ -4033,7 +4026,6 @@ module.exports.ECP = function(ctx) {
         r.reduce();
         return r;
     };
-    ECP.ctx = ctx;
     return ECP;
 };
 },{}],7:[function(require,module,exports){
@@ -4650,7 +4642,6 @@ module.exports.ECP2 = function(ctx) {
         return ((x >> 31) & 1);
     };
 
-    ECP2.ctx = ctx;
     return ECP2;
 };
 },{}],8:[function(require,module,exports){
@@ -5530,7 +5521,6 @@ module.exports.FF = function(ctx) {
         }
         return true;
     };
-    FF.ctx = ctx;
     return FF;
 };
 },{}],9:[function(require,module,exports){
@@ -5943,7 +5933,6 @@ module.exports.FP = function(ctx) {
         b.norm();
         return b;
     };
-    FP.ctx = ctx;
     return FP;
 };
 },{}],10:[function(require,module,exports){
@@ -6574,7 +6563,6 @@ module.exports.FP12 = function(ctx) {
         return p;
     };
 
-    FP12.ctx = ctx;
     return FP12;
 };
 },{}],11:[function(require,module,exports){
@@ -6945,7 +6933,6 @@ module.exports.FP2 = function(ctx) {
 
     };
 
-    FP2.ctx = ctx;
     return FP2;
 };
 },{}],12:[function(require,module,exports){
@@ -7443,7 +7430,6 @@ module.exports.FP4 = function(ctx) {
         }
 
     };
-    FP4.ctx = ctx;
     return FP4;
 };
 },{}],13:[function(require,module,exports){
@@ -7778,7 +7764,6 @@ module.exports.GCM = function(ctx) {
 
         return data;
     };
-    GCM.ctx = ctx;
     return GCM;
 };
 },{}],14:[function(require,module,exports){
@@ -7967,7 +7952,6 @@ module.exports.HASH256 = function(ctx) {
         0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
     ];
 
-    HASH256.ctx = ctx;
     return HASH256;
 };
 },{}],15:[function(require,module,exports){
@@ -8218,7 +8202,6 @@ module.exports.HASH384 = function(ctx) {
         new ctx.UInt64(0x4cc5d4be, 0xcb3e42b6), new ctx.UInt64(0x597f299c, 0xfc657e2a),
         new ctx.UInt64(0x5fcb6fab, 0x3ad6faec), new ctx.UInt64(0x6c44198c, 0x4a475817)
     ];
-    HASH384.ctx = ctx;
     return HASH384;
 };
 },{}],16:[function(require,module,exports){
@@ -8467,7 +8450,6 @@ module.exports.HASH512 = function(ctx) {
         new ctx.UInt64(0x4cc5d4be, 0xcb3e42b6), new ctx.UInt64(0x597f299c, 0xfc657e2a),
         new ctx.UInt64(0x5fcb6fab, 0x3ad6faec), new ctx.UInt64(0x6c44198c, 0x4a475817)
     ];
-    HASH512.ctx = ctx;
     return HASH512;
 };
 },{}],17:[function(require,module,exports){
@@ -9462,7 +9444,6 @@ module.exports.MPIN = function(ctx) {
             return 0;
         }
     };
-    MPIN.ctx = ctx;
     return MPIN;
 };
 },{}],18:[function(require,module,exports){
@@ -10107,7 +10088,6 @@ module.exports.PAIR = function(ctx) {
     	return w.equals(r);
     };
     */
-    PAIR.ctx = ctx;
     return PAIR;
 };
 },{}],19:[function(require,module,exports){
@@ -10250,7 +10230,6 @@ module.exports.RAND = function(ctx) {
         return (((b[3]) & 0xff) << 24) | ((b[2] & 0xff) << 16) | ((b[1] & 0xff) << 8) | (b[0] & 0xff);
     };
 
-    RAND.ctx = ctx;
     return RAND;
 };
 },{}],20:[function(require,module,exports){
@@ -10273,7 +10252,7 @@ module.exports.RAND = function(ctx) {
 	under the License.
 */
 
-module.exports.ROM_CURVE_ANSSI = function(ctx) {
+module.exports.ROM_CURVE_ANSSI = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10288,11 +10267,10 @@ module.exports.ROM_CURVE_ANSSI = function(ctx) {
         CURVE_Gy: [0x62CFB, 0x5A1554, 0xE18311, 0xE8E4C9, 0x1C307, 0xEF8C27, 0xF0F3EC, 0x1F9271, 0xB20491, 0xE0F7C8, 0x6142],
 
     };
-    ROM_CURVE_ANSSI.ctx = ctx;
     return ROM_CURVE_ANSSI;
 };
 
-module.exports.ROM_CURVE_BLS383 = function(ctx) {
+module.exports.ROM_CURVE_BLS383 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10372,11 +10350,10 @@ module.exports.ROM_CURVE_BLS383 = function(ctx) {
 
     };
 
-    ROM_CURVE_BLS383.ctx = ctx;
     return ROM_CURVE_BLS383;
 };
 
-module.exports.ROM_CURVE_BN254 = function(ctx) {
+module.exports.ROM_CURVE_BN254 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10452,11 +10429,10 @@ module.exports.ROM_CURVE_BN254 = function(ctx) {
 
     };
 
-    ROM_CURVE_BN254.ctx = ctx;
     return ROM_CURVE_BN254;
 };
 
-module.exports.ROM_CURVE_BN254CX = function(ctx) {
+module.exports.ROM_CURVE_BN254CX = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10534,11 +10510,10 @@ module.exports.ROM_CURVE_BN254CX = function(ctx) {
 
     };
 
-    ROM_CURVE_BN254CX.ctx = ctx;
     return ROM_CURVE_BN254CX;
 };
 
-module.exports.ROM_CURVE_BRAINPOOL = function(ctx) {
+module.exports.ROM_CURVE_BRAINPOOL = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10553,11 +10528,10 @@ module.exports.ROM_CURVE_BRAINPOOL = function(ctx) {
         CURVE_Gy: [0x25C9BE, 0xE8F35B, 0x1DAB, 0x39D027, 0xBCB6DE, 0x417E69, 0xE14644, 0x7F7B22, 0x39C56D, 0x6C8234, 0x2D99],
 
     };
-    ROM_CURVE_BRAINPOOL.ctx = ctx;
     return ROM_CURVE_BRAINPOOL;
 };
 
-module.exports.ROM_CURVE_C25519 = function(ctx) {
+module.exports.ROM_CURVE_C25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10572,11 +10546,10 @@ module.exports.ROM_CURVE_C25519 = function(ctx) {
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
 
     };
-    ROM_CURVE_C25519.ctx = ctx;
     return ROM_CURVE_C25519;
 };
 
-module.exports.ROM_CURVE_C41417 = function(ctx) {
+module.exports.ROM_CURVE_C41417 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10592,11 +10565,10 @@ module.exports.ROM_CURVE_C41417 = function(ctx) {
 
     };
 
-    ROM_CURVE_C41417.ctx = ctx;
     return ROM_CURVE_C41417;
 };
 
-module.exports.ROM_CURVE_ED25519 = function(ctx) {
+module.exports.ROM_CURVE_ED25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10611,11 +10583,10 @@ module.exports.ROM_CURVE_ED25519 = function(ctx) {
         CURVE_Gy: [0x666658, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x6666],
 
     };
-    ROM_CURVE_ED25519.ctx = ctx;
     return ROM_CURVE_ED25519;
 };
 
-module.exports.ROM_CURVE_GOLDILOCKS = function(ctx) {
+module.exports.ROM_CURVE_GOLDILOCKS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10630,11 +10601,10 @@ module.exports.ROM_CURVE_GOLDILOCKS = function(ctx) {
         CURVE_Gy: [0x1386ED, 0x779BD5, 0x2F6BAB, 0xE6D03, 0x4B2BED, 0x131777, 0x4E8A8C, 0x32B2C1, 0x44B80D, 0x6515B1, 0x5F8DB5, 0x426EBD, 0x7A0358, 0x6DDA, 0x21B0AC, 0x6B1028, 0xDB359, 0x15AE09, 0x17A58D, 0x570],
 
     };
-    ROM_CURVE_GOLDILOCKS.ctx = ctx;
     return ROM_CURVE_GOLDILOCKS;
 };
 
-module.exports.ROM_CURVE_HIFIVE = function(ctx) {
+module.exports.ROM_CURVE_HIFIVE = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10649,11 +10619,10 @@ module.exports.ROM_CURVE_HIFIVE = function(ctx) {
         CURVE_Gy: [0x7E8632, 0xD0A0B, 0x6C4AFB, 0x501B2E, 0x55650C, 0x36DB6B, 0x1FBD0D, 0x61C08E, 0x314B46, 0x70A7A3, 0x587401, 0xC70E0, 0x56502E, 0x38C2D6, 0x303],
 
     };
-    ROM_CURVE_HIFIVE.ctx = ctx;
     return ROM_CURVE_HIFIVE;
 };
 
-module.exports.ROM_CURVE_MF254E = function(ctx) {
+module.exports.ROM_CURVE_MF254E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10668,11 +10637,10 @@ module.exports.ROM_CURVE_MF254E = function(ctx) {
         CURVE_Gy: [0x2701E5, 0xD0FDAF, 0x187C52, 0xE3212, 0x329A84, 0x3F4E36, 0xD50236, 0x951D00, 0xA4C335, 0xE690D6, 0x19F0],
 
     };
-    ROM_CURVE_MF254E.ctx = ctx;
     return ROM_CURVE_MF254E;
 };
 
-module.exports.ROM_CURVE_MF254M = function(ctx) {
+module.exports.ROM_CURVE_MF254M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10686,11 +10654,10 @@ module.exports.ROM_CURVE_MF254M = function(ctx) {
         CURVE_Gx: [0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MF254M.ctx = ctx;
     return ROM_CURVE_MF254M;
 };
 
-module.exports.ROM_CURVE_MF254W = function(ctx) {
+module.exports.ROM_CURVE_MF254W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10705,11 +10672,10 @@ module.exports.ROM_CURVE_MF254W = function(ctx) {
         CURVE_Gy: [0xD4EBC, 0xDF37F9, 0x31AD65, 0xF85119, 0xB738E3, 0x8AEBDF, 0x75BD77, 0x4AE15A, 0x2E5601, 0x3FD33B, 0x140E],
 
     };
-    ROM_CURVE_MF254W.ctx = ctx;
     return ROM_CURVE_MF254W;
 };
 
-module.exports.ROM_CURVE_MF256E = function(ctx) {
+module.exports.ROM_CURVE_MF256E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10723,11 +10689,10 @@ module.exports.ROM_CURVE_MF256E = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0xF3C908, 0xA722F2, 0x8D7DEA, 0x8DFEA6, 0xC05E64, 0x1AACA0, 0xF3DB2C, 0xEAEBEE, 0xCC4D5A, 0xD4F8F8, 0xDAD8],
     };
-    ROM_CURVE_MF256E.ctx = ctx;
     return ROM_CURVE_MF256E;
 };
 
-module.exports.ROM_CURVE_MF256M = function(ctx) {
+module.exports.ROM_CURVE_MF256M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10741,11 +10706,10 @@ module.exports.ROM_CURVE_MF256M = function(ctx) {
         CURVE_Gx: [0x8, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MF256M.ctx = ctx;
     return ROM_CURVE_MF256M;
 };
 
-module.exports.ROM_CURVE_MF256W = function(ctx) {
+module.exports.ROM_CURVE_MF256W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10759,11 +10723,10 @@ module.exports.ROM_CURVE_MF256W = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x724D2A, 0x954C2B, 0x661007, 0x8D94DC, 0x6947EB, 0xAE2895, 0x26123D, 0x7BABBA, 0x1808CE, 0x7C87BE, 0x2088],
     };
-    ROM_CURVE_MF256W.ctx = ctx;
     return ROM_CURVE_MF256W;
 };
 
-module.exports.ROM_CURVE_MS255E = function(ctx) {
+module.exports.ROM_CURVE_MS255E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10777,11 +10740,10 @@ module.exports.ROM_CURVE_MS255E = function(ctx) {
         CURVE_Gx: [0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x8736A0, 0x255BD0, 0x45BA2A, 0xED445A, 0x914B8A, 0x47E552, 0xDD8E0C, 0xEC254C, 0x7BB545, 0x78534A, 0x26CB],
     };
-    ROM_CURVE_MS255E.ctx = ctx;
     return ROM_CURVE_MS255E;
 };
 
-module.exports.ROM_CURVE_MS255M = function(ctx) {
+module.exports.ROM_CURVE_MS255M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10795,11 +10757,10 @@ module.exports.ROM_CURVE_MS255M = function(ctx) {
         CURVE_Gx: [0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MS255M.ctx = ctx;
     return ROM_CURVE_MS255M;
 };
 
-module.exports.ROM_CURVE_MS255W = function(ctx) {
+module.exports.ROM_CURVE_MS255W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10813,11 +10774,10 @@ module.exports.ROM_CURVE_MS255W = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0xCB44BA, 0xFF6769, 0xD1733, 0xDDFDA6, 0xB6C78C, 0x7D177D, 0xF9B2FF, 0x921EBF, 0xBA7833, 0x6AC0ED, 0x6F7A],
     };
-    ROM_CURVE_MS255W.ctx = ctx;
     return ROM_CURVE_MS255W;
 };
 
-module.exports.ROM_CURVE_MS256E = function(ctx) {
+module.exports.ROM_CURVE_MS256E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10831,11 +10791,10 @@ module.exports.ROM_CURVE_MS256E = function(ctx) {
         CURVE_Gx: [0xD, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x1CADBA, 0x6FB533, 0x3F707F, 0x824D30, 0x2A6D63, 0x46BFBE, 0xB39FA0, 0xA3D330, 0x1276DB, 0xB41E2A, 0x7D0A],
     };
-    ROM_CURVE_MS256E.ctx = ctx;
     return ROM_CURVE_MS256E;
 };
 
-module.exports.ROM_CURVE_MS256M = function(ctx) {
+module.exports.ROM_CURVE_MS256M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10849,11 +10808,10 @@ module.exports.ROM_CURVE_MS256M = function(ctx) {
         CURVE_Gx: [0xb, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MS256M.ctx = ctx;
     return ROM_CURVE_MS256M;
 };
 
-module.exports.ROM_CURVE_MS256W = function(ctx) {
+module.exports.ROM_CURVE_MS256W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10868,11 +10826,10 @@ module.exports.ROM_CURVE_MS256W = function(ctx) {
         CURVE_Gy: [0xB56C77, 0x6306C2, 0xC10BF4, 0x75894E, 0x2C2F93, 0xDD6BD0, 0x6CCEEE, 0xFC82C9, 0xE466D7, 0x1853C1, 0x696F],
 
     };
-    ROM_CURVE_MS256W.ctx = ctx;
     return ROM_CURVE_MS256W;
 };
 
-module.exports.ROM_CURVE_NIST256 = function(ctx) {
+module.exports.ROM_CURVE_NIST256 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10887,11 +10844,10 @@ module.exports.ROM_CURVE_NIST256 = function(ctx) {
         CURVE_Gy: [0xBF51F5, 0x406837, 0xCECBB6, 0x6B315E, 0xCE3357, 0x9E162B, 0x4A7C0F, 0x8EE7EB, 0x1A7F9B, 0x42E2FE, 0x4FE3],
 
     };
-    ROM_CURVE_NIST256.ctx = ctx;
     return ROM_CURVE_NIST256;
 };
 
-module.exports.ROM_CURVE_NIST384 = function(ctx) {
+module.exports.ROM_CURVE_NIST384 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10906,11 +10862,10 @@ module.exports.ROM_CURVE_NIST384 = function(ctx) {
         CURVE_Gy: [0x6A0E5F, 0x3AF921, 0x75E90C, 0x6BF40C, 0xB1CE1, 0x18014C, 0x6D7C2E, 0x6D1889, 0x147CE9, 0x7A5134, 0x63D076, 0x16E14F, 0xBF929, 0x6BB3D3, 0x98B1B, 0x6F254B, 0x3617],
 
     };
-    ROM_CURVE_NIST384.ctx = ctx;
     return ROM_CURVE_NIST384;
 };
 
-module.exports.ROM_CURVE_NIST521 = function(ctx) {
+module.exports.ROM_CURVE_NIST521 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -10925,7 +10880,6 @@ module.exports.ROM_CURVE_NIST521 = function(ctx) {
         CURVE_Gy: [0x516650, 0x28ED3F, 0x222FA, 0x139612, 0x47086A, 0x6C26A7, 0x4FEB41, 0x285C80, 0x2640C5, 0x32BDE8, 0x5FB9CA, 0x733164, 0x517273, 0x2F5F7, 0x66D11A, 0x2224AB, 0x5998F5, 0x58FA37, 0x297ED0, 0x22E4, 0x9A3BC, 0x252D4F, 0x460E],
 
     };
-    ROM_CURVE_NIST521.ctx = ctx;
     return ROM_CURVE_NIST521;
 };
 },{}],21:[function(require,module,exports){
@@ -10939,6 +10893,7 @@ module.exports.ROM_CURVE_NIST521 = function(ctx) {
 	with the License.  You may obtain a copy of the License at
 	
 	http://www.apache.org/licenses/LICENSE-2.0
+
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an
 	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -10947,7 +10902,7 @@ module.exports.ROM_CURVE_NIST521 = function(ctx) {
 	under the License.
 */
 
-module.exports.ROM_FIELD_254MF = function(ctx) {
+module.exports.ROM_FIELD_254MF = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_254MF = {
@@ -10956,10 +10911,9 @@ module.exports.ROM_FIELD_254MF = function(ctx) {
         MConst: 0x3F81,
 
     };
-    ROM_FIELD_254MF.ctx = ctx;
     return ROM_FIELD_254MF;
 };
-module.exports.ROM_FIELD_25519 = function(ctx) {
+module.exports.ROM_FIELD_25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_25519 = {
@@ -10967,10 +10921,9 @@ module.exports.ROM_FIELD_25519 = function(ctx) {
         Modulus: [0xFFFFED, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x7FFF],
         MConst: 19,
     };
-    ROM_FIELD_25519.ctx = ctx;
     return ROM_FIELD_25519;
 };
-module.exports.ROM_FIELD_255MS = function(ctx) {
+module.exports.ROM_FIELD_255MS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_255MS = {
@@ -10978,10 +10931,9 @@ module.exports.ROM_FIELD_255MS = function(ctx) {
         Modulus: [0xFFFD03, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x7FFF],
         MConst: 0x2FD,
     };
-    ROM_FIELD_255MS.ctx = ctx;
     return ROM_FIELD_255MS;
 };
-module.exports.ROM_FIELD_256MF = function(ctx) {
+module.exports.ROM_FIELD_256MF = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_256MF = {
@@ -10989,10 +10941,9 @@ module.exports.ROM_FIELD_256MF = function(ctx) {
         Modulus: [0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFA7],
         MConst: 0xFFA8,
     };
-    ROM_FIELD_256MF.ctx = ctx;
     return ROM_FIELD_256MF;
 };
-module.exports.ROM_FIELD_256MS = function(ctx) {
+module.exports.ROM_FIELD_256MS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_256MS = {
@@ -11000,10 +10951,9 @@ module.exports.ROM_FIELD_256MS = function(ctx) {
         Modulus: [0xFFFF43, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFF],
         MConst: 0xBD,
     };
-    ROM_FIELD_256MS.ctx = ctx;
     return ROM_FIELD_256MS;
 };
-module.exports.ROM_FIELD_ANSSI = function(ctx) {
+module.exports.ROM_FIELD_ANSSI = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_ANSSI = {
@@ -11012,10 +10962,9 @@ module.exports.ROM_FIELD_ANSSI = function(ctx) {
         MConst: 0x4E1155,
 
     };
-    ROM_FIELD_ANSSI.ctx = ctx;
     return ROM_FIELD_ANSSI;
 };
-module.exports.ROM_FIELD_BLS383 = function(ctx) {
+module.exports.ROM_FIELD_BLS383 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BLS383 = {
@@ -11025,10 +10974,9 @@ module.exports.ROM_FIELD_BLS383 = function(ctx) {
         Fra: [0x34508B, 0x4B3525, 0x4D0CAE, 0x503777, 0x463DB7, 0x3BF78E, 0xD072C, 0x2AE9A0, 0x69D32D, 0x282C73, 0x1730DB, 0xCD9F8, 0x6AB98B, 0x7DC9B0, 0x1CBCC8, 0x7D8CC3, 0x5A5],
         Frb: [0x7904E0, 0xA352F, 0x28DE04, 0x537843, 0x3B7D49, 0x6FB715, 0x4FBAE2, 0x4AA1C7, 0x183C6C, 0x3BDDEF, 0x5272CD, 0x532FB2, 0x3FBEC7, 0x22EEF9, 0x611A4F, 0x12B391, 0x751F],
     };
-    ROM_FIELD_BLS383.ctx = ctx;
     return ROM_FIELD_BLS383;
 };
-module.exports.ROM_FIELD_BN254 = function(ctx) {
+module.exports.ROM_FIELD_BN254 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BN254 = {
@@ -11038,10 +10986,9 @@ module.exports.ROM_FIELD_BN254 = function(ctx) {
         Fra: [0x2A6DE9, 0xE6C06F, 0xC2E17D, 0x4D3F77, 0x97492, 0x953F85, 0x50A846, 0xB6499B, 0x2E7C8C, 0x761921, 0x1B37],
         Frb: [0xD5922A, 0x193F90, 0x50C582, 0xB2C088, 0x178B6D, 0x6AC8DC, 0x2F57B9, 0x3EAB2, 0xD18375, 0xEE691E, 0x9EB],
     };
-    ROM_FIELD_BN254.ctx = ctx;
     return ROM_FIELD_BN254;
 };
-module.exports.ROM_FIELD_BN254CX = function(ctx) {
+module.exports.ROM_FIELD_BN254CX = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BN254CX = {
@@ -11051,10 +10998,9 @@ module.exports.ROM_FIELD_BN254CX = function(ctx) {
         Fra: [0xC80EA3, 0x83355, 0x215BD9, 0xF173F8, 0x677326, 0x189868, 0x8AACA7, 0xAFE18B, 0x3A0164, 0x82FA6, 0x1359],
         Frb: [0x534710, 0x1BBC06, 0xC0628D, 0x269546, 0xD863C7, 0x4E3ABB, 0xD9CDBC, 0xDC53, 0x3628A9, 0xF7D062, 0x10A6],
     };
-    ROM_FIELD_BN254CX.ctx = ctx;
     return ROM_FIELD_BN254CX;
 };
-module.exports.ROM_FIELD_BRAINPOOL = function(ctx) {
+module.exports.ROM_FIELD_BRAINPOOL = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BRAINPOOL = {
@@ -11062,10 +11008,9 @@ module.exports.ROM_FIELD_BRAINPOOL = function(ctx) {
         Modulus: [0x6E5377, 0x481D1F, 0x282013, 0xD52620, 0x3BF623, 0x8D726E, 0x909D83, 0x3E660A, 0xEEA9BC, 0x57DBA1, 0xA9FB],
         MConst: 0xFD89B9,
     };
-    ROM_FIELD_BRAINPOOL.ctx = ctx;
     return ROM_FIELD_BRAINPOOL;
 };
-module.exports.ROM_FIELD_C41417 = function(ctx) {
+module.exports.ROM_FIELD_C41417 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -11074,10 +11019,9 @@ module.exports.ROM_FIELD_C41417 = function(ctx) {
         Modulus: [0x7FFFEF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF],
         MConst: 0x11,
     };
-    ROM_FIELD_C41417.ctx = ctx;
     return ROM_FIELD_C41417;
 };
-module.exports.ROM_FIELD_GOLDILOCKS = function(ctx) {
+module.exports.ROM_FIELD_GOLDILOCKS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_GOLDILOCKS = {
@@ -11086,10 +11030,9 @@ module.exports.ROM_FIELD_GOLDILOCKS = function(ctx) {
         MConst: 0x1,
 
     };
-    ROM_FIELD_GOLDILOCKS.ctx = ctx;
     return ROM_FIELD_GOLDILOCKS;
 };
-module.exports.ROM_FIELD_HIFIVE = function(ctx) {
+module.exports.ROM_FIELD_HIFIVE = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_HIFIVE = {
@@ -11098,10 +11041,9 @@ module.exports.ROM_FIELD_HIFIVE = function(ctx) {
         MConst: 0x3,
 
     };
-    ROM_FIELD_HIFIVE.ctx = ctx;
     return ROM_FIELD_HIFIVE;
 };
-module.exports.ROM_FIELD_NIST256 = function(ctx) {
+module.exports.ROM_FIELD_NIST256 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST256 = {
@@ -11110,10 +11052,9 @@ module.exports.ROM_FIELD_NIST256 = function(ctx) {
         MConst: 0x1,
 
     };
-    ROM_FIELD_NIST256.ctx = ctx;
     return ROM_FIELD_NIST256;
 };
-module.exports.ROM_FIELD_NIST384 = function(ctx) {
+module.exports.ROM_FIELD_NIST384 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST384 = {
@@ -11121,10 +11062,9 @@ module.exports.ROM_FIELD_NIST384 = function(ctx) {
         Modulus: [0x7FFFFF, 0x1FF, 0x0, 0x0, 0x7FFFF0, 0x7FDFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0xFFFF],
         MConst: 0x1,
     };
-    ROM_FIELD_NIST384.ctx = ctx;
     return ROM_FIELD_NIST384;
 };
-module.exports.ROM_FIELD_NIST521 = function(ctx) {
+module.exports.ROM_FIELD_NIST521 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST521 = {
@@ -11132,7 +11072,6 @@ module.exports.ROM_FIELD_NIST521 = function(ctx) {
         Modulus: [0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFF],
         MConst: 0x1,
     };
-    ROM_FIELD_NIST521.ctx = ctx;
     return ROM_FIELD_NIST521;
 };
 },{}],22:[function(require,module,exports){
@@ -11498,7 +11437,6 @@ module.exports.RSA = function(ctx) {
     };
 
 
-    RSA.ctx = ctx;
     return RSA;
 };
 
@@ -11512,7 +11450,6 @@ module.exports.rsa_private_key = function(ctx) {
         this.c = new ctx.FF(n);
     };
 
-    rsa_private_key.ctx = ctx;
     return rsa_private_key;
 };
 
@@ -11523,7 +11460,6 @@ module.exports.rsa_public_key = function(ctx) {
         this.n = new ctx.FF(m);
     };
 
-    rsa_public_key.ctx = ctx;
     return rsa_public_key;
 };
 },{}],23:[function(require,module,exports){
@@ -11548,7 +11484,7 @@ module.exports.rsa_public_key = function(ctx) {
 
 /* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
 
-module.exports.UInt64 = function(ctx) {
+module.exports.UInt64 = function() {
 
     var UInt64 = function(top, bot) {
         this.top = top;
@@ -11580,18 +11516,9 @@ module.exports.UInt64 = function(ctx) {
             return this;
         }
     };
-    UInt64.ctx = ctx;
     return UInt64;
 };
 },{}],24:[function(require,module,exports){
-module.exports=[
-{"PrivP" : "f6f575715c4bdf42801110aa872083fdfe161ec5b1cdb24f118f43f9e6f5e4eb09396c27c54595a555f9f45c04ba30a6caf275a15a4961043d8ff6abd31b9bcd499236587e0e0799bd357c91f4f67fb3650fce7e98aecb6ac849e7965e806c185edd5a81d21f1f9173271d6595117dffb12fa604a4caf5e298694f56e65f543b", "PrivQ" : "b217ecd0264bed14172aaa5dfd53d90c7dcbf9eb2545c003c4e4899cdda0000b489bc762fbe7e6e18534c81acaed3a46c7888467e2ba9f39cdad6995b65e80a7a97eff9f9642016f79a37ad307b6e5f70f17614ab0b31db309f012b5a82aa72feb8c18a89c3b10717cca61c452b982a00e4e5a5ba3193f5714c37ea414beea0b", "PrivDP" : "a42e97bf9faec964faa35dc32146dab9979cb924918ac10a940ffd0f3d1f28eba11c4ded3ad7821f834343d39148ff6343f56182bdf59ecc24e97b02ccbcc41dfcd579cfe72e089b8b10ee1a531335dedc475fef062edf09c4d26d66a8b91424379d4db8952b1fdfa100d6285cac5e6a0930365d4bf9aaf2d484debc5537f755", "PrivDQ" : "300b6447830d5897e2e80fadeb7983446b6b6bb0940d8d0f773e70217168889a82ac03ce20471f72178d75ae44b05ad85d5be6dc5fbe18d66f362915ca6d14282701abd451a4dcde45e2647029d49d9558ece5c2508901aa1b3438d7e8d618e4449736cfc5d5e949b470a48f6201c9cb84107f2fd980262647e3b5766e6252a1", "PrivC" : "6c2fefc7c97b1c5cd2db12b77a5b1bbd42fef79b68b0ce5b7120344bcd165e8c849da00661bf7f502066f1655e56067ba493b8d550f3fa70a4ad10c2c4c799b786aa41ae1e5ba6be8751a5c99792f34fd5663fbf8f7de44ae64683f0019c0e2ca641d187cc14b94cc04c074813e43118b684d0bcb8ee082bd29af674699431e8",  "PubN" : "abcdc0297401a74b16a5b60eb50bed0ff7fc20e5d1611a0d22edb9188078271b729a412aee73077a77730232e31c24dc3573e5758a3415c112f8b375ad5dd3902eba2c93e5ed14db2bfbb9c18e3f8f14518b94cc39695626bca9a1463ae32e756e847c0b58898dad7db92581501f20517d02d5ab44987db9e3a2ccb0512d952f2d2b82c8577749445f3099df6c103ee646ce1091a4c61dd5d775d5c5eb3df4249f61d7aa0fb418b425fc4af0362a95940963b38bd90aa35cf4cdb3384b3abdba5fc1a10a032e7407ccbcb8b80f23316c11974370982888dc1e6baf9b8dbcf5a291ba85a0e63b06994ff81922323c68e54ba123680826b3b5c102447028e08c89", "PubE" : 65537},
-{"PrivP" : "fff866a5cb444b5e30772752049de1960e6d212de8bec02e95685a795a520db0f345604c0641609411ad7be56357644003ddc37db1f0df2543787786bf0394d4683ecac5d125959340fa670f311291b154eb195363f8593a78c9430f90ad29f4326018a7a7132421ce82064e85f56d4684b4af9268162f74664d91fd4068241b", "PrivQ" : "c66776f3fa65ddbc9fdb964604888ab1ac21db98291f9eed117f2b87c6123fa1b008eb8f942d7f10c5e2a1945dc84c64e57a3e57db42e9a69b0355a73415a589daad2ebacbedbf4e4324636aa8f272d5b8d6d7d1b8377d8b8eb166924cef0978366fba2cd1e096ef76be3f11bab34edda42d67d723051730277ebc485cc7effb", "PrivDP" : "92de10ef8200ae89dd9f107593e68ec00d88fa27a04a8a74700f8f11e00c02850c203b4f83ab5161c3fed97ed590181a4edd98446fabb82d665821a4b3c6b7476484dacdc3e21fbf7ce1efee1c86fe0754a50c43f7b150692752bb629bed6f8c08b7708e096407304a8ffa5465b25b3fc1f6f66237ccbaefbb9f386ba9dfd70f", "PrivDQ" : "1ee10b8a7d764d44863cceeea6d5f9801da247632f4354a0e11041de27ddbf39930450655052a46c1fe05df591831320c0f67dad7edab332d2fd79df4423fa57b24931f4b0b89805be3d739bae1fcdefa58d0a9a0169e1884ef51d59b7cf9c51b167423aa78fa4ee3034fbebee7ae9d365320bef57ebfae7ebbdb5e02d5090f1", "PrivC" : "0cbaa1c587add6b8f77ee7aae03d62b6c9c6bc95f26a1d4e8861e13eaf2f5467345a646c038535864c458ecf16a18a0086b0b1e1c300fa3e92f735d81671c34f23feaf330da2cc6cc10f57be4ece06e3929a616f7154238d4a57b48b6909e913642e774737085a5cdf41201d8ca5e280b06c3b7ebe27ec9c270db3bd79a85934",  "PubN" : "c6619345fa63e4cb0bbbda62792f2a504aa6992fdbffe1053d360eaf33885df96423e5395a9b51bebc31678e97e24cc8e812d942a9290171b73d107879c8072a6efca8a100e40f8c2fedd761e9fb68294fe7a91cefc39bc081382199b3eeeae10cb4ef2109b2d44f82352a3312747f0339f9de41b257bd6b061277066751331fe4fc75666ea559afbd89413e6a745bdbb61e212f9ea050ec561a37952fce4a8f32b23d9a584ef095503ac4f7347d9afe865c225177ff45d62ecd546ad846a7035560b666e642f298a4ff6bbe2b3ad09710e6824eb53cff71e63075c3efc89163f00ef4f76b78aac66b619ff810f57830d06584397d1666beb2740bf524cd9b79", "PubE" : 65537},
-{"PrivP" : "d985f38e25fc4de6045dc7a998893633080c01514c0f4771f711951918dfe2e9c59565e787f5a33941e8433e27c81924c1017bee446106859294b08ea214b6cf4d0767b94e48923098a94190a7dba3522382e6f415e37d3527106da45002e2b382d091e2806293313a2405bc4adbd14905f744a05c47e2ea5ed23aa2e8d1ab47", "PrivQ" : "9b96312e23a3834e0b696c2340b03170fdcff4684a316889b5813036a4269ea87c74c0b657abaafc8d0254367173015a5000fcebadacda737919b2b5eeb3ec51f2143fa91c1063ca623ea07f068e0354bb1d9694fa9c12ce3df841095b74b6201c76df4aa724c1a294275797e232ef3417b3c3fb2e5c86da1fd6498d6537106f", "PrivDP" : "1f51a60ba5747a52cff620b54e7d130cadefec90a3fedf2e8d803e936a7d71d26edc5fdbc23b9fd0b2a89a65ec9c66e25fd7b2dc4f8418c84a9e95fd3361002140d9fc19362844c43276cc35e3b54002a7924566877045aacd811408406ce9ef26ba99069fad91bbd8bf2f04395305031a94cb90bb38ae774847c4a1881c0829", "PrivDQ" : "84fd0218a019d9d851e4d0abe955314d9585b53197895803ad833984db16afb2f07e9362c8d9519401aba5f3cb51342cd009a826831326be611ad828ae5a587b4ae287efb2af47bcebf1001ad3ad7ba76731494f1a4f61bbac3890cec0bfa815167f7d29406928a220e4e7f8493ea43bf0ae95ac13dabee19f28f941c4ec263d", "PrivC" : "5ae76b451c8b6fcc1ca8a093b03cf2c5a121771e2f6f6483b0a7fc99337f5ac7f9d4f36c352492ed29f6a48ec23541defc1cfaeb4b257cc44ab848b5fcab52b251db17822b390af182a9272099aa58be353fa5030e6120fc189fbb51e14464fed01f6d42b804c519a07b686d41d3b79e04870aa055544a3516f43f4fde01b77d",  "PubN" : "8433b8bd9e423df8668253579b8cb87e0f628975ef000fb00d412fe6d075d5f07e014744a491adfac1a409f06cf2c4a7a0bd015ca61b097ef11b5df5f29edd0b8eb1856114290b6c7e08c173e77987202f5a16ace5d5c3d15d54206e56ff19206882490dfdf30d6daf5ee6cf21c4c0874db78b9daa11ecbb28c3e7fa511b660dc410b43efc74a867fc7a036dd6eeff1faaa250d8fd59f74cae8e0352afc189c8f9e22df8cd7a35ca3584966964fc48fc4f4991f3dd132131ba85c64b998be286ae661ed255c9942204238aca7547a0ea0c8596ea1ffc840043b6c5189d9b3790e8576c26dea6a4dd2665784955a6913ab2d81090f5b7216feb58ede9dcdeb3c9", "PubE" : 65537},
-{"PrivP" : "ae9a8aa7ff27fa61e4156eccbcf06181bda4e0b1f390a24153c918419b310bca385a95692f7fb19882c0dcdcc4997d2ce3a4a32f9116c8123bf251fa9892a8f625701864cd9a6834b6830eecd11fc017ada90b3e80a2c9e5cf8dd66b1316ea1842b27bf06a03fcea6ae31949ffa5bf64d7b6118e85f44d5a6b4b5b124a515ea3", "PrivQ" : "80097eaffa0a7c9ebd99f81298d249711eb6d846239beea514e1df456802922201555cee206379fd96969d0da13ccc1d6d27b9ebbccef5a6b5339a4eea140197c882e50c3ba4d77d3c1bcc5f4d97ff1d8fb09a887ae7e90a2a3299747e19ba3fed9395f276d78520f41a8bac9a7e5f98df71a272c8afc4d74d8f396cd6d8bedf", "PrivDP" : "0257824a948a85ba3063f5337bc941958ae49e3ae4c868d4b579fa004f438e23ed3391d37256a51c258ccea98b5d7fa74d7a54d1fb8131b7c4e410236b4e7443b0e6dafce7210e0abef3ed0c5215b9eed75e700f2b8c8366b8acef564a50415d87ef7ae81393f01d78c788fc4c187e03ad3cfce94b74a660f31574a83f24ee3f", "PrivDQ" : "49ea3152d21c7fb8fc68088863e4f234f5b044c6a903fa0f1f310e3df93f92b142e7ced041ae6bdc73b4db51e5053e28b6bd3a5dd70ffb4c944b08080aa6260d43da1cf4a4f212dcdf7884d177f0097d3d588cbdc186644853f80612f44151fe59dedbafafdfd7a1208aba9b984ce04f569f3952de7c6a3c892fe7cce773152d", "PrivC" : "4277307a4c613bf7011c22bd1bb0bd5d1d762de7186fc6f082e272faead2d9b6794f101cc6d607c422c31dedd30eefe45246857e46d42aa27cd2488f739e00d93babddef411d40c22f9f411b54df7ff25f47ae48086d15f730c482f481acd982b516f9d27fdca3cb895b8fbedb5e9d86199648b1e191dfd97bdadbb8b19b1e87",  "PubN" : "5753bf2af5e9807672a5249c3e91d3057b60d91d6e898486254c2be8e2ece9710597e1fae4626204f27518058783a5899267be41b8feb4fc02114e62ec839779355a2f0f1734dd7fa6545499bbff2600367c6010fbb2ebfdfc6486eb391558978ba7040370bb610fb9fe385882649da2d254e401323e2acbbfafe807a791e1761eea9db73570c8867fef546e69d0fc251317b54767a47fe5269f51ff9866fd20e70fe0fba6ae7397c393070cfcc145f7af133c2a265344f6bf21f2e4ec20bd07d513d143fb60af7b70593f1b09c72d21a560e6682347bd0c0833e8792f71abec59a73957a0c913e97fe419fa54271efaff93d64a060fc52ee23dd99f3ca669fd", "PubE" : 65537},
-{"PrivP" : "9cd32fee83c1f359fd16527bbedf1ef57b07a14c9767ca2ba0914992cbc7991bdcea5ab3637363c61737249a456ff64a1954ca664856f522b209ca67675b0cc6e55520ff7c929a8031f0469bc45edc552b9bf8a321b40ad5098a4f40c667ba6fac69242ab50d7aceace53f14e9c5a4e8ad74ced2e557b16b270bbbbc052ad547", "PrivQ" : "93f9b234e2f0adb896f4f6012dfe2c53ec4d2d927ecdb84b2379b58d8e3e9b083c69d773105b0302a30d3f5aab1fa8dadd288f6384c5039ec490603a33634104629f215cd016c2533565d29207b7d2f9b848b14a8d7d980cc413cddbd1a6d56b7a958cd326c02daa5a6796598e18f8c08a45487bf6c7bbfec2121f99515f3217", "PrivDP" : "67e906b96353ff8a80c7699fd4b8c22aa57a48c6170c0e4919fb2a64b9e166f1af4f190a03bb5140cfe119bf9e82b10e27faa6a15f0d3f1fde17dea4e536cf207a940d693b81681dc8f90bcfea2d70907e74ba2a5d0a8ea2d9cf6af3e0829a65a437865f45d7c8a768a7fd443e21574354ab30df4c56ee97b127751cffcf81c1", "PrivDQ" : "72696dd05667a0ea484dbea7cad7eb8e37f6b475c0756f392984c14b61e0261e88178dedf987651c74d5995691593945801a0c43f6341e4873d2ed9412877b8dd8731168a1bbf7243ef52b8a9d4d1462e089d40ac0bb8b04d3d63c24ea45045ec5b93bd946ecf061f6e480eb5d6311724d76a444b4da5a10f01cf331a828e2a1", "PrivC" : "7aa72f1e80c613afb6d28ed4434950ec30ef3c59eb298287025069009f9165c3cb2a36aceb5b08ec68a31e46dbe173b938cf25414704824cb0354f04fffe58a3fcfef09c9b634f692c549023641f9be297c74f8418393b0c60e221cad7252c6a13e8294bff95caf581b3f6b1fcea4cdf8e20fcdf1b1075817ca65ae16673e752",  "PubN" : "5aa63b1ad1e5fb2b490a2b89ab17b4364c81e5dbeb8c0d7eff57cebfa4cb421e3a12c08d88879d6c9c8225ffecdcae9985238b6ef7cd4a91d0effd255f9b4450ec5189c04dee2732729f291f16fd7b803190e00943ceb06d1463dec8254c209213afc564839d09f5d300e958492bb64c0305282505ed88e02736cfc9d0f711e35d55681ee0c9efa9df22a0aa045bb6a6e7af83192fa4438eea876afca7af50dad2370835c5c56dec8274825f0e4d30b7c32314ec72654b1733f0d00f5d6f94db0db9ae31d9f8669a1dff8e49b6a06faac67251f7d0adc106249bcfa74b1363121e30af8288d3b3706863765ad9648cea735580f659035616088c1fb670da0761", "PubE" : 65537}
-]
-},{}],25:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

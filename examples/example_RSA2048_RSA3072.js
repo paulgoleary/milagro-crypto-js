@@ -26,7 +26,7 @@ var ctx = new CTX('RSA2048');
 console.log('Start test RSA2048');
 
 // Load test vectors
-var vectors = require('../testVectors/RSA2048.json');
+var vectors = require('../testVectors/rsa/RSA2048.json');
 
 var i, j = 0,
     res;
@@ -52,13 +52,13 @@ var start, end, time;
 start = new Date().getTime();
 console.log('Load RSA public/private key pair from test vectors');
 
-ctx.FF.fromBytes(priv.p, new Buffer(vectors['priv.p'], "hex"));
-ctx.FF.fromBytes(priv.q, new Buffer(vectors['priv.q'], "hex"));
-ctx.FF.fromBytes(priv.dp, new Buffer(vectors['priv.dp'], "hex"));
-ctx.FF.fromBytes(priv.dq, new Buffer(vectors['priv.dq'], "hex"));
-ctx.FF.fromBytes(priv.c, new Buffer(vectors['priv.c'], "hex"));
-ctx.FF.fromBytes(pub.n, new Buffer(vectors['pub.n'], "hex"));
-pub.e = vectors['pub.e'];
+ctx.FF.fromBytes(priv.p, new Buffer(vectors[0].PrivP, "hex"));
+ctx.FF.fromBytes(priv.q, new Buffer(vectors[0].PrivQ, "hex"));
+ctx.FF.fromBytes(priv.dp, new Buffer(vectors[0].PrivDP, "hex"));
+ctx.FF.fromBytes(priv.dq, new Buffer(vectors[0].PrivDQ, "hex"));
+ctx.FF.fromBytes(priv.c, new Buffer(vectors[0].PrivC, "hex"));
+ctx.FF.fromBytes(pub.n, new Buffer(vectors[0].PubN, "hex"));
+pub.e = vectors[0].PubE;
 
 end = new Date().getTime();
 time = end - start;
@@ -137,7 +137,7 @@ var ctx1 = new CTX('RSA3072');
 console.log('\n\nStart test RSA3072');
 
 // Load test vectors
-var vectors = require('../testVectors/RSA3072.json');
+var vectors = require('../testVectors/rsa/RSA3072.json');
 
 var i, j = 0,
     res;
@@ -163,13 +163,13 @@ var start, end, time;
 start = new Date().getTime();
 console.log('Load RSA public/private key pair from test vectors');
 
-ctx1.FF.fromBytes(priv.p, new Buffer(vectors['priv.p'], "hex"));
-ctx1.FF.fromBytes(priv.q, new Buffer(vectors['priv.q'], "hex"));
-ctx1.FF.fromBytes(priv.dp, new Buffer(vectors['priv.dp'], "hex"));
-ctx1.FF.fromBytes(priv.dq, new Buffer(vectors['priv.dq'], "hex"));
-ctx1.FF.fromBytes(priv.c, new Buffer(vectors['priv.c'], "hex"));
-ctx1.FF.fromBytes(pub.n, new Buffer(vectors['pub.n'], "hex"));
-pub.e = vectors['pub.e'];
+ctx1.FF.fromBytes(priv.p, new Buffer(vectors[0].PrivP, "hex"));
+ctx1.FF.fromBytes(priv.q, new Buffer(vectors[0].PrivQ, "hex"));
+ctx1.FF.fromBytes(priv.dp, new Buffer(vectors[0].PrivDP, "hex"));
+ctx1.FF.fromBytes(priv.dq, new Buffer(vectors[0].PrivDQ, "hex"));
+ctx1.FF.fromBytes(priv.c, new Buffer(vectors[0].PrivC, "hex"));
+ctx1.FF.fromBytes(pub.n, new Buffer(vectors[0].PubN, "hex"));
+pub.e = vectors[0].PubE;
 
 end = new Date().getTime();
 time = end - start;

@@ -17,7 +17,7 @@
 	under the License.
 */
 
-module.exports.ROM_CURVE_ANSSI = function(ctx) {
+module.exports.ROM_CURVE_ANSSI = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -32,11 +32,10 @@ module.exports.ROM_CURVE_ANSSI = function(ctx) {
         CURVE_Gy: [0x62CFB, 0x5A1554, 0xE18311, 0xE8E4C9, 0x1C307, 0xEF8C27, 0xF0F3EC, 0x1F9271, 0xB20491, 0xE0F7C8, 0x6142],
 
     };
-    ROM_CURVE_ANSSI.ctx = ctx;
     return ROM_CURVE_ANSSI;
 };
 
-module.exports.ROM_CURVE_BLS383 = function(ctx) {
+module.exports.ROM_CURVE_BLS383 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -116,11 +115,10 @@ module.exports.ROM_CURVE_BLS383 = function(ctx) {
 
     };
 
-    ROM_CURVE_BLS383.ctx = ctx;
     return ROM_CURVE_BLS383;
 };
 
-module.exports.ROM_CURVE_BN254 = function(ctx) {
+module.exports.ROM_CURVE_BN254 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -196,11 +194,10 @@ module.exports.ROM_CURVE_BN254 = function(ctx) {
 
     };
 
-    ROM_CURVE_BN254.ctx = ctx;
     return ROM_CURVE_BN254;
 };
 
-module.exports.ROM_CURVE_BN254CX = function(ctx) {
+module.exports.ROM_CURVE_BN254CX = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -278,11 +275,10 @@ module.exports.ROM_CURVE_BN254CX = function(ctx) {
 
     };
 
-    ROM_CURVE_BN254CX.ctx = ctx;
     return ROM_CURVE_BN254CX;
 };
 
-module.exports.ROM_CURVE_BRAINPOOL = function(ctx) {
+module.exports.ROM_CURVE_BRAINPOOL = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -297,11 +293,10 @@ module.exports.ROM_CURVE_BRAINPOOL = function(ctx) {
         CURVE_Gy: [0x25C9BE, 0xE8F35B, 0x1DAB, 0x39D027, 0xBCB6DE, 0x417E69, 0xE14644, 0x7F7B22, 0x39C56D, 0x6C8234, 0x2D99],
 
     };
-    ROM_CURVE_BRAINPOOL.ctx = ctx;
     return ROM_CURVE_BRAINPOOL;
 };
 
-module.exports.ROM_CURVE_C25519 = function(ctx) {
+module.exports.ROM_CURVE_C25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -316,11 +311,10 @@ module.exports.ROM_CURVE_C25519 = function(ctx) {
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
 
     };
-    ROM_CURVE_C25519.ctx = ctx;
     return ROM_CURVE_C25519;
 };
 
-module.exports.ROM_CURVE_C41417 = function(ctx) {
+module.exports.ROM_CURVE_C41417 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -336,11 +330,10 @@ module.exports.ROM_CURVE_C41417 = function(ctx) {
 
     };
 
-    ROM_CURVE_C41417.ctx = ctx;
     return ROM_CURVE_C41417;
 };
 
-module.exports.ROM_CURVE_ED25519 = function(ctx) {
+module.exports.ROM_CURVE_ED25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -355,11 +348,10 @@ module.exports.ROM_CURVE_ED25519 = function(ctx) {
         CURVE_Gy: [0x666658, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x666666, 0x6666],
 
     };
-    ROM_CURVE_ED25519.ctx = ctx;
     return ROM_CURVE_ED25519;
 };
 
-module.exports.ROM_CURVE_GOLDILOCKS = function(ctx) {
+module.exports.ROM_CURVE_GOLDILOCKS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -374,11 +366,10 @@ module.exports.ROM_CURVE_GOLDILOCKS = function(ctx) {
         CURVE_Gy: [0x1386ED, 0x779BD5, 0x2F6BAB, 0xE6D03, 0x4B2BED, 0x131777, 0x4E8A8C, 0x32B2C1, 0x44B80D, 0x6515B1, 0x5F8DB5, 0x426EBD, 0x7A0358, 0x6DDA, 0x21B0AC, 0x6B1028, 0xDB359, 0x15AE09, 0x17A58D, 0x570],
 
     };
-    ROM_CURVE_GOLDILOCKS.ctx = ctx;
     return ROM_CURVE_GOLDILOCKS;
 };
 
-module.exports.ROM_CURVE_HIFIVE = function(ctx) {
+module.exports.ROM_CURVE_HIFIVE = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -393,11 +384,10 @@ module.exports.ROM_CURVE_HIFIVE = function(ctx) {
         CURVE_Gy: [0x7E8632, 0xD0A0B, 0x6C4AFB, 0x501B2E, 0x55650C, 0x36DB6B, 0x1FBD0D, 0x61C08E, 0x314B46, 0x70A7A3, 0x587401, 0xC70E0, 0x56502E, 0x38C2D6, 0x303],
 
     };
-    ROM_CURVE_HIFIVE.ctx = ctx;
     return ROM_CURVE_HIFIVE;
 };
 
-module.exports.ROM_CURVE_MF254E = function(ctx) {
+module.exports.ROM_CURVE_MF254E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -412,11 +402,10 @@ module.exports.ROM_CURVE_MF254E = function(ctx) {
         CURVE_Gy: [0x2701E5, 0xD0FDAF, 0x187C52, 0xE3212, 0x329A84, 0x3F4E36, 0xD50236, 0x951D00, 0xA4C335, 0xE690D6, 0x19F0],
 
     };
-    ROM_CURVE_MF254E.ctx = ctx;
     return ROM_CURVE_MF254E;
 };
 
-module.exports.ROM_CURVE_MF254M = function(ctx) {
+module.exports.ROM_CURVE_MF254M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -430,11 +419,10 @@ module.exports.ROM_CURVE_MF254M = function(ctx) {
         CURVE_Gx: [0x3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MF254M.ctx = ctx;
     return ROM_CURVE_MF254M;
 };
 
-module.exports.ROM_CURVE_MF254W = function(ctx) {
+module.exports.ROM_CURVE_MF254W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -449,11 +437,10 @@ module.exports.ROM_CURVE_MF254W = function(ctx) {
         CURVE_Gy: [0xD4EBC, 0xDF37F9, 0x31AD65, 0xF85119, 0xB738E3, 0x8AEBDF, 0x75BD77, 0x4AE15A, 0x2E5601, 0x3FD33B, 0x140E],
 
     };
-    ROM_CURVE_MF254W.ctx = ctx;
     return ROM_CURVE_MF254W;
 };
 
-module.exports.ROM_CURVE_MF256E = function(ctx) {
+module.exports.ROM_CURVE_MF256E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -467,11 +454,10 @@ module.exports.ROM_CURVE_MF256E = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0xF3C908, 0xA722F2, 0x8D7DEA, 0x8DFEA6, 0xC05E64, 0x1AACA0, 0xF3DB2C, 0xEAEBEE, 0xCC4D5A, 0xD4F8F8, 0xDAD8],
     };
-    ROM_CURVE_MF256E.ctx = ctx;
     return ROM_CURVE_MF256E;
 };
 
-module.exports.ROM_CURVE_MF256M = function(ctx) {
+module.exports.ROM_CURVE_MF256M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -485,11 +471,10 @@ module.exports.ROM_CURVE_MF256M = function(ctx) {
         CURVE_Gx: [0x8, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MF256M.ctx = ctx;
     return ROM_CURVE_MF256M;
 };
 
-module.exports.ROM_CURVE_MF256W = function(ctx) {
+module.exports.ROM_CURVE_MF256W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -503,11 +488,10 @@ module.exports.ROM_CURVE_MF256W = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x724D2A, 0x954C2B, 0x661007, 0x8D94DC, 0x6947EB, 0xAE2895, 0x26123D, 0x7BABBA, 0x1808CE, 0x7C87BE, 0x2088],
     };
-    ROM_CURVE_MF256W.ctx = ctx;
     return ROM_CURVE_MF256W;
 };
 
-module.exports.ROM_CURVE_MS255E = function(ctx) {
+module.exports.ROM_CURVE_MS255E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -521,11 +505,10 @@ module.exports.ROM_CURVE_MS255E = function(ctx) {
         CURVE_Gx: [0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x8736A0, 0x255BD0, 0x45BA2A, 0xED445A, 0x914B8A, 0x47E552, 0xDD8E0C, 0xEC254C, 0x7BB545, 0x78534A, 0x26CB],
     };
-    ROM_CURVE_MS255E.ctx = ctx;
     return ROM_CURVE_MS255E;
 };
 
-module.exports.ROM_CURVE_MS255M = function(ctx) {
+module.exports.ROM_CURVE_MS255M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -539,11 +522,10 @@ module.exports.ROM_CURVE_MS255M = function(ctx) {
         CURVE_Gx: [0x4, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MS255M.ctx = ctx;
     return ROM_CURVE_MS255M;
 };
 
-module.exports.ROM_CURVE_MS255W = function(ctx) {
+module.exports.ROM_CURVE_MS255W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -557,11 +539,10 @@ module.exports.ROM_CURVE_MS255W = function(ctx) {
         CURVE_Gx: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0xCB44BA, 0xFF6769, 0xD1733, 0xDDFDA6, 0xB6C78C, 0x7D177D, 0xF9B2FF, 0x921EBF, 0xBA7833, 0x6AC0ED, 0x6F7A],
     };
-    ROM_CURVE_MS255W.ctx = ctx;
     return ROM_CURVE_MS255W;
 };
 
-module.exports.ROM_CURVE_MS256E = function(ctx) {
+module.exports.ROM_CURVE_MS256E = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -575,11 +556,10 @@ module.exports.ROM_CURVE_MS256E = function(ctx) {
         CURVE_Gx: [0xD, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x1CADBA, 0x6FB533, 0x3F707F, 0x824D30, 0x2A6D63, 0x46BFBE, 0xB39FA0, 0xA3D330, 0x1276DB, 0xB41E2A, 0x7D0A],
     };
-    ROM_CURVE_MS256E.ctx = ctx;
     return ROM_CURVE_MS256E;
 };
 
-module.exports.ROM_CURVE_MS256M = function(ctx) {
+module.exports.ROM_CURVE_MS256M = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -593,11 +573,10 @@ module.exports.ROM_CURVE_MS256M = function(ctx) {
         CURVE_Gx: [0xb, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Gy: [0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
     };
-    ROM_CURVE_MS256M.ctx = ctx;
     return ROM_CURVE_MS256M;
 };
 
-module.exports.ROM_CURVE_MS256W = function(ctx) {
+module.exports.ROM_CURVE_MS256W = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -612,11 +591,10 @@ module.exports.ROM_CURVE_MS256W = function(ctx) {
         CURVE_Gy: [0xB56C77, 0x6306C2, 0xC10BF4, 0x75894E, 0x2C2F93, 0xDD6BD0, 0x6CCEEE, 0xFC82C9, 0xE466D7, 0x1853C1, 0x696F],
 
     };
-    ROM_CURVE_MS256W.ctx = ctx;
     return ROM_CURVE_MS256W;
 };
 
-module.exports.ROM_CURVE_NIST256 = function(ctx) {
+module.exports.ROM_CURVE_NIST256 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -631,11 +609,10 @@ module.exports.ROM_CURVE_NIST256 = function(ctx) {
         CURVE_Gy: [0xBF51F5, 0x406837, 0xCECBB6, 0x6B315E, 0xCE3357, 0x9E162B, 0x4A7C0F, 0x8EE7EB, 0x1A7F9B, 0x42E2FE, 0x4FE3],
 
     };
-    ROM_CURVE_NIST256.ctx = ctx;
     return ROM_CURVE_NIST256;
 };
 
-module.exports.ROM_CURVE_NIST384 = function(ctx) {
+module.exports.ROM_CURVE_NIST384 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -650,11 +627,10 @@ module.exports.ROM_CURVE_NIST384 = function(ctx) {
         CURVE_Gy: [0x6A0E5F, 0x3AF921, 0x75E90C, 0x6BF40C, 0xB1CE1, 0x18014C, 0x6D7C2E, 0x6D1889, 0x147CE9, 0x7A5134, 0x63D076, 0x16E14F, 0xBF929, 0x6BB3D3, 0x98B1B, 0x6F254B, 0x3617],
 
     };
-    ROM_CURVE_NIST384.ctx = ctx;
     return ROM_CURVE_NIST384;
 };
 
-module.exports.ROM_CURVE_NIST521 = function(ctx) {
+module.exports.ROM_CURVE_NIST521 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -669,6 +645,5 @@ module.exports.ROM_CURVE_NIST521 = function(ctx) {
         CURVE_Gy: [0x516650, 0x28ED3F, 0x222FA, 0x139612, 0x47086A, 0x6C26A7, 0x4FEB41, 0x285C80, 0x2640C5, 0x32BDE8, 0x5FB9CA, 0x733164, 0x517273, 0x2F5F7, 0x66D11A, 0x2224AB, 0x5998F5, 0x58FA37, 0x297ED0, 0x22E4, 0x9A3BC, 0x252D4F, 0x460E],
 
     };
-    ROM_CURVE_NIST521.ctx = ctx;
     return ROM_CURVE_NIST521;
 };

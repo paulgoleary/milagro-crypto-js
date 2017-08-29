@@ -925,7 +925,6 @@ module.exports.BIG = function(ctx) {
 
         return U;
     };
-    BIG.ctx = ctx;
     return BIG;
 };
 
@@ -1192,6 +1191,5 @@ module.exports.DBIG = function(ctx) {
     };
 
 
-    DBIG.ctx = ctx;
     return DBIG;
 };

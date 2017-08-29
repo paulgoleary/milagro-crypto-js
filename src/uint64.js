@@ -19,7 +19,7 @@
 
 /* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
 
-module.exports.UInt64 = function(ctx) {
+module.exports.UInt64 = function() {
 
     var UInt64 = function(top, bot) {
         this.top = top;
@@ -51,6 +51,5 @@ module.exports.UInt64 = function(ctx) {
             return this;
         }
     };
-    UInt64.ctx = ctx;
     return UInt64;
 };

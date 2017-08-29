@@ -589,6 +589,5 @@ module.exports.ECDH = function(ctx) {
             return M;
         }
     };
-    ECDH.ctx = ctx;
     return ECDH;
 };

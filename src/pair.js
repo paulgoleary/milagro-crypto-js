@@ -639,6 +639,5 @@ module.exports.PAIR = function(ctx) {
     	return w.equals(r);
     };
     */
-    PAIR.ctx = ctx;
     return PAIR;
 };

@@ -8,6 +8,7 @@
 	with the License.  You may obtain a copy of the License at
 	
 	http://www.apache.org/licenses/LICENSE-2.0
+
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an
 	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -16,7 +17,7 @@
 	under the License.
 */
 
-module.exports.ROM_FIELD_254MF = function(ctx) {
+module.exports.ROM_FIELD_254MF = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_254MF = {
@@ -25,10 +26,9 @@ module.exports.ROM_FIELD_254MF = function(ctx) {
         MConst: 0x3F81,
 
     };
-    ROM_FIELD_254MF.ctx = ctx;
     return ROM_FIELD_254MF;
 };
-module.exports.ROM_FIELD_25519 = function(ctx) {
+module.exports.ROM_FIELD_25519 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_25519 = {
@@ -36,10 +36,9 @@ module.exports.ROM_FIELD_25519 = function(ctx) {
         Modulus: [0xFFFFED, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x7FFF],
         MConst: 19,
     };
-    ROM_FIELD_25519.ctx = ctx;
     return ROM_FIELD_25519;
 };
-module.exports.ROM_FIELD_255MS = function(ctx) {
+module.exports.ROM_FIELD_255MS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_255MS = {
@@ -47,10 +46,9 @@ module.exports.ROM_FIELD_255MS = function(ctx) {
         Modulus: [0xFFFD03, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0x7FFF],
         MConst: 0x2FD,
     };
-    ROM_FIELD_255MS.ctx = ctx;
     return ROM_FIELD_255MS;
 };
-module.exports.ROM_FIELD_256MF = function(ctx) {
+module.exports.ROM_FIELD_256MF = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_256MF = {
@@ -58,10 +56,9 @@ module.exports.ROM_FIELD_256MF = function(ctx) {
         Modulus: [0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFA7],
         MConst: 0xFFA8,
     };
-    ROM_FIELD_256MF.ctx = ctx;
     return ROM_FIELD_256MF;
 };
-module.exports.ROM_FIELD_256MS = function(ctx) {
+module.exports.ROM_FIELD_256MS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_256MS = {
@@ -69,10 +66,9 @@ module.exports.ROM_FIELD_256MS = function(ctx) {
         Modulus: [0xFFFF43, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFF],
         MConst: 0xBD,
     };
-    ROM_FIELD_256MS.ctx = ctx;
     return ROM_FIELD_256MS;
 };
-module.exports.ROM_FIELD_ANSSI = function(ctx) {
+module.exports.ROM_FIELD_ANSSI = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_ANSSI = {
@@ -81,10 +77,9 @@ module.exports.ROM_FIELD_ANSSI = function(ctx) {
         MConst: 0x4E1155,
 
     };
-    ROM_FIELD_ANSSI.ctx = ctx;
     return ROM_FIELD_ANSSI;
 };
-module.exports.ROM_FIELD_BLS383 = function(ctx) {
+module.exports.ROM_FIELD_BLS383 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BLS383 = {
@@ -94,10 +89,9 @@ module.exports.ROM_FIELD_BLS383 = function(ctx) {
         Fra: [0x34508B, 0x4B3525, 0x4D0CAE, 0x503777, 0x463DB7, 0x3BF78E, 0xD072C, 0x2AE9A0, 0x69D32D, 0x282C73, 0x1730DB, 0xCD9F8, 0x6AB98B, 0x7DC9B0, 0x1CBCC8, 0x7D8CC3, 0x5A5],
         Frb: [0x7904E0, 0xA352F, 0x28DE04, 0x537843, 0x3B7D49, 0x6FB715, 0x4FBAE2, 0x4AA1C7, 0x183C6C, 0x3BDDEF, 0x5272CD, 0x532FB2, 0x3FBEC7, 0x22EEF9, 0x611A4F, 0x12B391, 0x751F],
     };
-    ROM_FIELD_BLS383.ctx = ctx;
     return ROM_FIELD_BLS383;
 };
-module.exports.ROM_FIELD_BN254 = function(ctx) {
+module.exports.ROM_FIELD_BN254 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BN254 = {
@@ -107,10 +101,9 @@ module.exports.ROM_FIELD_BN254 = function(ctx) {
         Fra: [0x2A6DE9, 0xE6C06F, 0xC2E17D, 0x4D3F77, 0x97492, 0x953F85, 0x50A846, 0xB6499B, 0x2E7C8C, 0x761921, 0x1B37],
         Frb: [0xD5922A, 0x193F90, 0x50C582, 0xB2C088, 0x178B6D, 0x6AC8DC, 0x2F57B9, 0x3EAB2, 0xD18375, 0xEE691E, 0x9EB],
     };
-    ROM_FIELD_BN254.ctx = ctx;
     return ROM_FIELD_BN254;
 };
-module.exports.ROM_FIELD_BN254CX = function(ctx) {
+module.exports.ROM_FIELD_BN254CX = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BN254CX = {
@@ -120,10 +113,9 @@ module.exports.ROM_FIELD_BN254CX = function(ctx) {
         Fra: [0xC80EA3, 0x83355, 0x215BD9, 0xF173F8, 0x677326, 0x189868, 0x8AACA7, 0xAFE18B, 0x3A0164, 0x82FA6, 0x1359],
         Frb: [0x534710, 0x1BBC06, 0xC0628D, 0x269546, 0xD863C7, 0x4E3ABB, 0xD9CDBC, 0xDC53, 0x3628A9, 0xF7D062, 0x10A6],
     };
-    ROM_FIELD_BN254CX.ctx = ctx;
     return ROM_FIELD_BN254CX;
 };
-module.exports.ROM_FIELD_BRAINPOOL = function(ctx) {
+module.exports.ROM_FIELD_BRAINPOOL = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_BRAINPOOL = {
@@ -131,10 +123,9 @@ module.exports.ROM_FIELD_BRAINPOOL = function(ctx) {
         Modulus: [0x6E5377, 0x481D1F, 0x282013, 0xD52620, 0x3BF623, 0x8D726E, 0x909D83, 0x3E660A, 0xEEA9BC, 0x57DBA1, 0xA9FB],
         MConst: 0xFD89B9,
     };
-    ROM_FIELD_BRAINPOOL.ctx = ctx;
     return ROM_FIELD_BRAINPOOL;
 };
-module.exports.ROM_FIELD_C41417 = function(ctx) {
+module.exports.ROM_FIELD_C41417 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
 
@@ -143,10 +134,9 @@ module.exports.ROM_FIELD_C41417 = function(ctx) {
         Modulus: [0x7FFFEF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF],
         MConst: 0x11,
     };
-    ROM_FIELD_C41417.ctx = ctx;
     return ROM_FIELD_C41417;
 };
-module.exports.ROM_FIELD_GOLDILOCKS = function(ctx) {
+module.exports.ROM_FIELD_GOLDILOCKS = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_GOLDILOCKS = {
@@ -155,10 +145,9 @@ module.exports.ROM_FIELD_GOLDILOCKS = function(ctx) {
         MConst: 0x1,
 
     };
-    ROM_FIELD_GOLDILOCKS.ctx = ctx;
     return ROM_FIELD_GOLDILOCKS;
 };
-module.exports.ROM_FIELD_HIFIVE = function(ctx) {
+module.exports.ROM_FIELD_HIFIVE = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_HIFIVE = {
@@ -167,10 +156,9 @@ module.exports.ROM_FIELD_HIFIVE = function(ctx) {
         MConst: 0x3,
 
     };
-    ROM_FIELD_HIFIVE.ctx = ctx;
     return ROM_FIELD_HIFIVE;
 };
-module.exports.ROM_FIELD_NIST256 = function(ctx) {
+module.exports.ROM_FIELD_NIST256 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST256 = {
@@ -179,10 +167,9 @@ module.exports.ROM_FIELD_NIST256 = function(ctx) {
         MConst: 0x1,
 
     };
-    ROM_FIELD_NIST256.ctx = ctx;
     return ROM_FIELD_NIST256;
 };
-module.exports.ROM_FIELD_NIST384 = function(ctx) {
+module.exports.ROM_FIELD_NIST384 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST384 = {
@@ -190,10 +177,9 @@ module.exports.ROM_FIELD_NIST384 = function(ctx) {
         Modulus: [0x7FFFFF, 0x1FF, 0x0, 0x0, 0x7FFFF0, 0x7FDFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0xFFFF],
         MConst: 0x1,
     };
-    ROM_FIELD_NIST384.ctx = ctx;
     return ROM_FIELD_NIST384;
 };
-module.exports.ROM_FIELD_NIST521 = function(ctx) {
+module.exports.ROM_FIELD_NIST521 = function() {
 
     /* Fixed Data in ROM - Field and Curve parameters */
     var ROM_FIELD_NIST521 = {
@@ -201,6 +187,5 @@ module.exports.ROM_FIELD_NIST521 = function(ctx) {
         Modulus: [0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFF],
         MConst: 0x1,
     };
-    ROM_FIELD_NIST521.ctx = ctx;
     return ROM_FIELD_NIST521;
 };
