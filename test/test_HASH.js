@@ -70,12 +70,12 @@ var hashit = function(sha, B) {
         H.process_array(B);
         R = H.hash();
     }
-    if (sha == ctx.HASH384.len) {
+    else if (sha == ctx.HASH384.len) {
         var H = new ctx.HASH384();
         H.process_array(B);
         R = H.hash();
     }
-    if (sha == ctx.HASH512.len) {
+    else if (sha == ctx.HASH512.len) {
         var H = new ctx.HASH512();
         H.process_array(B);
         R = H.hash();
@@ -89,7 +89,7 @@ describe('TEST HASH', function() {
     it('test SHA256', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/SHA256.json');
+        var vectors = require('../testVectors/sha/SHA256.json');
         var dig;
 
         for (var vector in vectors) {
@@ -102,7 +102,7 @@ describe('TEST HASH', function() {
     it('test SHA384', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/SHA384.json');
+        var vectors = require('../testVectors/sha/SHA384.json');
         var dig;
 
         for (var vector in vectors) {
@@ -115,7 +115,7 @@ describe('TEST HASH', function() {
     it('test SHA512', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/SHA512.json');
+        var vectors = require('../testVectors/sha/SHA512.json');
         var dig;
 
         for (var vector in vectors) {

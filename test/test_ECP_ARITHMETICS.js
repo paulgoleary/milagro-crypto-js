@@ -26,11 +26,9 @@ var CTX = require("../src/ctx");
 
 var expect = chai.expect;
 
-var all_curves = ["C41417"];
-// ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'C25519', 'NIST384', 'C41417',
-//                     'NIST521', 'MF254W', 'MF254E', 'MF254M', 'MF256W', 'MF256E', 'MF256M', 'MS255W', 'MS255E', 'MS255M',
-//                     'MS256W', 'MS256E', 'MS256M', 'BN254', 'BN254CX', 'BLS383'
-//                     ];
+var all_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'C25519', 'BN254', 'BN254CX', 'BLS383'];
+
+// To fix: C41417 NIST384 NIST521 MF254W MF254E MF254M MF256W MF256E MS255W MS255E MS255M MS256W MS256E MS256M
 
 var readPoint = function(string, ctx) {
     

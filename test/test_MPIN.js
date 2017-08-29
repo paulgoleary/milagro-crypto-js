@@ -653,7 +653,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
         it('test Combine Shares in G1 ' + pf_curves[i] + ' with Test Vectors', function(done) {
             this.timeout(0);
             // Load test vectors
-            var vectors = require('../testVectors/MPIN_' + pf_curves[j] + '.json');
+            var vectors = require('../testVectors/mpin/MPIN_' + pf_curves[j] + '.json');
 
             var sha = ctx.MPIN.HASH_TYPE;
             var CS = [];
@@ -685,7 +685,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
         it('test MPin Two Passes ' + pf_curves[i] + ' with Test Vectors', function(done) {
             this.timeout(0);
             // Load test vectors
-            var vectors = require('../testVectors/MPIN_' + pf_curves[j] + '.json');
+            var vectors = require('../testVectors/mpin/MPIN_' + pf_curves[j] + '.json');
 
             var sha = ctx.MPIN.HASH_TYPE;
             var xID = [];
@@ -709,7 +709,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
         it('test MPin One Pass ' + pf_curves[i] + ' with Test Vectors', function(done) {
             this.timeout(0);
             // Load test vectors
-            var vectors = require('../testVectors/MPIN_ONE_PASS_' + pf_curves[j] + '.json');
+            var vectors = require('../testVectors/mpin/MPIN_ONE_PASS_' + pf_curves[j] + '.json');
 
             var sha = ctx.MPIN.HASH_TYPE;
             var xID = [];

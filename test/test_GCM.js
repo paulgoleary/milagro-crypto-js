@@ -72,7 +72,7 @@ describe('TEST GCM', function() {
     it('test GCM encryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/GCM_ENC128.json');
+        var vectors = require('../testVectors/gcm/GCM_ENC128.json');
         
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);
@@ -95,7 +95,7 @@ describe('TEST GCM', function() {
     it('test GCM decryption', function(done) {
         this.timeout(0);
 
-        var vectors = require('../testVectors/GCM_DEC128.json');
+        var vectors = require('../testVectors/gcm/GCM_DEC128.json');
 
         for (var vector in vectors) {
             KEY = hextobytes(vectors[vector].KEY);
