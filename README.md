@@ -42,7 +42,7 @@ npm test
 
 ## Quick Start
 #### Elliptic Curves
-Suppose you want to implement ECDH with NIST254 elliptic curve. First you need to initialize the context:
+Suppose you want to implement ECDH with NIST256 elliptic curve. First you need to initialize the context:
 
 ```
 var CTX = require("milagro-crypto-js");
