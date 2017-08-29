@@ -17,7 +17,7 @@
 	under the License.
 */
 
-module.exports.AES = function(ctx) {
+module.exports.AES = function() {
 
     var AES = function() {
         this.Nk = 0;
