@@ -28,9 +28,9 @@ var CTX = require("../src/ctx");
 
 var expect = chai.expect;
 
-var all_curves = ['ED25519', 'BN254', 'ANSSI', 'BLS383', 'BN254CX', 'BRAINPOOL', 'GOLDILOCKS', 'HIFIVE', 'NIST256'];
+var all_curves = ['ED25519', 'BN254', 'ANSSI', 'BLS383', 'BN254CX', 'BRAINPOOL', 'GOLDILOCKS', 'HIFIVE', 'NIST256', 'NIST521'];
 
-// to fix C41417 NIST384 NIST521
+// to fix C41417 NIST384
 
 var readFP = function(string, ctx) {
 
