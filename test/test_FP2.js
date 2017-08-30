@@ -84,14 +84,14 @@ describe('TEST FP2 ARITHMETIC', function() {
                 a1.reduce();
 	            expect(a1.toString()).to.equal(fp2sub.toString());
 
-                // test negative of a FP
+                // test negative of a FP2
                 var fp2neg = readFP2(vectors[k].FP2neg, ctx);
                 a1.copy(fp21);
                 a1.neg();
                 a1.reduce();
                 expect(a1.toString()).to.equal(fp2neg.toString());
 
-                // test conjugate of a FP
+                // test conjugate of a FP2
                 var fp2conj = readFP2(vectors[k].FP2conj, ctx);
                 a1.copy(fp21);
                 a1.conj();
