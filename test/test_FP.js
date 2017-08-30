@@ -39,9 +39,9 @@ var readFP = function(string, ctx) {
 
     return fp;
 }
-describe('TEST FP ARITHMETICS', function() {
+describe('TEST FP ARITHMETIC', function() {
 
-	var j = all_curves.length - 1;
+	var j = 0;
 
     for (var i = 0; i < all_curves.length; i++) {
 
@@ -50,7 +50,7 @@ describe('TEST FP ARITHMETICS', function() {
             this.timeout(0);
             var ctx = new CTX(all_curves[j]);
             var vectors = require('../testVectors/fp/'+all_curves[j]+'.json');
-            j = j-1;
+            j++;
 
             for (var k = 0; k <= vectors.length - 1; k++) {
 

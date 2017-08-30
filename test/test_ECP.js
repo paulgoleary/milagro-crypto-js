@@ -40,7 +40,7 @@ var readPoint = function(string, ctx) {
     return P;
 }
 
-describe('TEST ECP ARITHMETICS', function() {
+describe('TEST ECP ARITHMETIC', function() {
 
 	var j = all_curves.length - 1;
 

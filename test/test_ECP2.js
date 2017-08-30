@@ -51,7 +51,7 @@ var readPoint2 = function(string, ctx) {
     return P;
 }
 
-describe('TEST ECP2 ARITHMETICS', function() {
+describe('TEST ECP2 ARITHMETIC', function() {
 
 	var j = all_curves.length - 1;
 
