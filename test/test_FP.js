@@ -18,7 +18,7 @@ under the License.
 */
 
 
-/* Test ECP ARITHMETICS - test driver and function exerciser for ECP API Functions */
+/* Test FP ARITHMETICS - test driver and function exerciser for FP API Functions */
 
 // Here we test only some curves, but those tests cover all the fields FP.
 
@@ -28,9 +28,7 @@ var CTX = require("../src/ctx");
 
 var expect = chai.expect;
 
-var all_curves = ['ED25519', 'BN254', 'ANSSI', 'BLS383', 'BN254CX', 'BRAINPOOL', 'GOLDILOCKS', 'HIFIVE', 'NIST256', 'NIST521'];
-
-// to fix C41417 NIST384
+var all_curves = ['ANSSI', 'BN254', 'BN254CX', 'BLS383', 'BRAINPOOL', 'ED25519', 'GOLDILOCKS', 'HIFIVE', 'NIST256', 'NIST521'];
 
 var readFP = function(string, ctx) {
 
@@ -45,7 +43,7 @@ describe('TEST FP ARITHMETICS', function() {
 
 	var j = all_curves.length - 1;
 
-    for (var i = all_curves.length - 1; i >= 0; i--) {
+    for (var i = 0; i < all_curves.length; i++) {
 
 
         it('test '+all_curves[i], function(done) {
@@ -146,8 +144,6 @@ describe('TEST FP ARITHMETICS', function() {
                 a1 = a1.pow(pow);
                 a1.reduce();
                 expect(a1.toString()).to.equal(fppow.toString());
-
-
             }
             done();
         });
