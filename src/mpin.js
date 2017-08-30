@@ -410,33 +410,6 @@ module.exports.MPIN = function(ctx) {
             return 0;
         },
 
-        TEST_PAIR: function(PR) {
-            var G = new ctx.ECP(0);
-            var A = new ctx.BIG(0);
-            var B = new ctx.BIG(0);
-            A.rcopy(ctx.ROM_CURVE.CURVE_Pxa);
-            B.rcopy(ctx.ROM_CURVE.CURVE_Pxb);
-            var QX = new ctx.FP2(0);
-            QX.bset(A, B);
-            A.rcopy(ctx.ROM_CURVE.CURVE_Pya);
-            B.rcopy(ctx.ROM_CURVE.CURVE_Pyb);
-            var QY = new ctx.FP2(0);
-            QY.bset(A, B);
-
-            var Q = new ctx.ECP2();
-            Q.setxy(QX, QY);
-
-            var gx = new ctx.BIG(0);
-            gx.rcopy(ctx.ROM_CURVE.CURVE_Gx);
-            var gy = new ctx.BIG(0);
-            gy.rcopy(ctx.ROM_CURVE.CURVE_Gy);
-            G.setxy(gx, gy);
-
-            var g = ctx.PAIR.ate(Q, G);
-            g = ctx.PAIR.fexp(g);
-            g.toBytes(PR);
-        },
-
         /*
          W=x*H(G);
          if RNG == NULL then X is passed in 
