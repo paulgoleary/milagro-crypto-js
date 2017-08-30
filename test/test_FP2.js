@@ -53,7 +53,7 @@ describe('TEST FP2 ARITHMETIC', function() {
             var vectors = require('../testVectors/fp2/'+all_curves[j]+'.json');
             j++;
 
-            for (var k = 0; k < 10; k++) {
+            for (var k = 0; k < vectors.length; k++) {
 
             	// test commutativity of addition
                 var fp21 = readFP2(vectors[k].FP21,ctx);
@@ -120,11 +120,11 @@ describe('TEST FP2 ARITHMETIC', function() {
                 a1.copy(fp21);
                 a1.sqr();
                 a1.reduce();
-                expect(a1.toString()+" "+k).to.equal(fp2sqr.toString()+" "+k);
+                expect(a1.toString()).to.equal(fp2sqr.toString());
                 a1.sqrt();
                 a1.sqr();
                 a1.reduce();
-                expect(a1.toString()+" "+k).to.equal(fp2sqr.toString()+" "+k);
+                expect(a1.toString()).to.equal(fp2sqr.toString());
 
                 // test multiplication
                 var fp2mul = readFP2(vectors[k].FP2mul, ctx);
@@ -132,7 +132,7 @@ describe('TEST FP2 ARITHMETIC', function() {
                 a2.copy(fp22);
                 a1.mul(a2);
                 a1.reduce();
-                expect(a1.toString()+" "+k).to.equal(fp2mul.toString()+" "+k);
+                expect(a1.toString()).to.equal(fp2mul.toString());
 
                 // test power
                 var fp2pow = readFP2(vectors[k].FP2pow, ctx);
