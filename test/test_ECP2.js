@@ -69,6 +69,8 @@ describe('TEST ECP2 ARITHMETIC', function() {
                 var P1 = readPoint2(vectors[k].ECP21,ctx);
                 var Paux1 = new ctx.ECP2(0);
                 Paux1.copy(P1);
+                // test copy and equals
+                expect(Paux1.equals(P1)).to.equal(true);
 
                 // test that y^2 = RHS
                 var x = Paux1.getx();
@@ -145,6 +147,7 @@ describe('TEST ECP2 ARITHMETIC', function() {
                 var Pinf = readPoint2(vectors[k].ECP2inf,ctx);
                 expect(Pwrong.is_infinity()).to.equal(true);
                 expect(Pinf.is_infinity()).to.equal(true);
+                expect(Pwrong.equals(Pinf)).to.equal(true);
             }
             done();
         });

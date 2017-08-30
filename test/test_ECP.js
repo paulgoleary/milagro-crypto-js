@@ -58,6 +58,8 @@ describe('TEST ECP ARITHMETIC', function() {
                 var P1 = readPoint(vectors[k].ECP1,ctx);
                 var Paux1 = new ctx.ECP(0);
                 Paux1.copy(P1);
+                // test copy and equals
+                expect(Paux1.equals(P1)).to.equal(true);
 
                 if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
                     // test that y^2 = RHS
@@ -142,8 +144,10 @@ describe('TEST ECP ARITHMETIC', function() {
                 // test wrong coordinates and infinity point
                 var Pwrong = readPoint(vectors[k].ECPwrong,ctx);
                 var Pinf = readPoint(vectors[k].ECPinf,ctx);
+                // test copy and equals
                 expect(Pwrong.is_infinity()).to.equal(true);
                 expect(Pinf.is_infinity()).to.equal(true);
+                expect(Pwrong.equals(Pinf)).to.equal(true);
             }
             done();
         });
