@@ -998,5 +998,27 @@ module.exports.ECP = function(ctx) {
         r.reduce();
         return r;
     };
+
+    /* Map a string of bytes into a point */
+    ECP.mapit = function(h)
+    {
+        var q = new ctx.BIG(0); q.rcopy(ctx.ROM_FIELD.Modulus);
+        var x = ctx.BIG.fromBytes(h);
+        x.mod(q);
+        var P = new ECP();
+        while (true)
+        {
+            P.setxi(x,0);
+            if (!P.is_infinity()) break;
+            x.inc(1); x.norm();
+        }
+        if (ECP.CURVE_PAIRING_TYPE!=ECP.BN)
+        {
+            var c=new ctx.BIG(0); c.rcopy(ctx.ROM_CURVE.CURVE_Cof);
+            P=P.mul(c);
+        }
+        return P;
+    };
+
     return ECP;
 };
