@@ -333,7 +333,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             H = ctx.MPIN.HASH_ALL(sha, HSID, pxID, pxCID, SEC, Y, Z, T);
             ctx.MPIN.SERVER_KEY(sha, Z, SST, W, H, pHID, pxID, pxCID, SK);
-            expect(CK).to.be.equal(CK);
+            expect(ctx.MPIN.bytestostring(CK)).to.be.equal(ctx.MPIN.bytestostring(SK));
 
             done();
         });
@@ -644,8 +644,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             H = ctx.MPIN.HASH_ALL(sha, HSID, pxID, pxCID, SEC, Y, Z, T);
             ctx.MPIN.SERVER_KEY(sha, Z, SST, W, H, pHID, pxID, pxCID, SK);
-
-            expect(CK).to.be.equal(CK);
+            expect(ctx.MPIN.bytestostring(CK)).to.be.equal(ctx.MPIN.bytestostring(SK));
 
             done();
         });
