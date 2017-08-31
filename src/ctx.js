@@ -423,8 +423,140 @@ CTX = function(input_parameter) {
         // Set Elliptic Curve parameters
         if (this.config['CURVE'] !== undefined) {
 
-            this.ROM_CURVE = romCurve['ROM_CURVE_' + this.config['CURVE']](this);
-            this.ROM_FIELD = romField['ROM_FIELD_' + this.config['FIELD']](this);
+            switch (this.config['CURVE']) {
+                case "ED25519":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_ED25519(this);
+                    break; 
+                case "C25519":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_C25519(this);
+                    break; 
+                case "NIST256":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST256(this);
+                    break; 
+                case "NIST384":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST384(this);
+                    break; 
+                case "BRAINPOOL":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BRAINPOOL(this);
+                    break; 
+                case "ANSSI":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_ANSSI(this);
+                    break; 
+                case "HIFIVE":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_HIFIVE(this);
+                    break; 
+                case "GOLDILOCKS":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_GOLDILOCKS(this);
+                    break; 
+                case "C41417":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_C41417(this);
+                    break; 
+                case "NIST521":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST521(this);
+                    break; 
+                case "MF254W":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MF254W(this);
+                    break; 
+                case "MF254E":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MF254E(this);
+                    break; 
+                case "MF254M":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MF254M(this);
+                    break; 
+                case "MF256W":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MF256W(this);
+                    break; 
+                case "MF256E":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MF256E(this);
+                    break; 
+                case "MF256M":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MF256M(this);
+                    break; 
+                case "MS255W":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MS255W(this);
+                    break; 
+                case "MS255E":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MS255E(this);
+                    break; 
+                case "MS255M":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MS255M(this);
+                    break; 
+                case "MS256W":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MS256W(this);
+                    break; 
+                case "MS256E":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MS256E(this);
+                    break; 
+                case "MS256M":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_MS256M(this);
+                    break; 
+                case "BN254":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BN254(this);
+                    break; 
+                case "BN254CX":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BN254CX(this);
+                    break; 
+                case "BLS383":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BLS383(this);
+                    break; 
+                default: 
+                    this.ROM_CURVE = undefined;
+            };
+
+
+            switch (this.config['FIELD']) {
+                case "25519":
+                    this.ROM_FIELD = romField.ROM_FIELD_25519(this);
+                    break; 
+                case "NIST256":
+                    this.ROM_FIELD = romField.ROM_FIELD_NIST256(this);
+                    break; 
+                case "NIST384":
+                    this.ROM_FIELD = romField.ROM_FIELD_NIST384(this);
+                    break; 
+                case "BRAINPOOL":
+                    this.ROM_FIELD = romField.ROM_FIELD_BRAINPOOL(this);
+                    break; 
+                case "ANSSI":
+                    this.ROM_FIELD = romField.ROM_FIELD_ANSSI(this);
+                    break; 
+                case "HIFIVE":
+                    this.ROM_FIELD = romField.ROM_FIELD_HIFIVE(this);
+                    break; 
+                case "GOLDILOCKS":
+                    this.ROM_FIELD = romField.ROM_FIELD_GOLDILOCKS(this);
+                    break; 
+                case "C41417":
+                    this.ROM_FIELD = romField.ROM_FIELD_C41417(this);
+                    break; 
+                case "NIST521":
+                    this.ROM_FIELD = romField.ROM_FIELD_NIST521(this);
+                    break; 
+                case "254MF":
+                    this.ROM_FIELD = romField.ROM_FIELD_254MF(this);
+                    break; 
+                case "256MF":
+                    this.ROM_FIELD = romField.ROM_FIELD_256MF(this);
+                    break; 
+                case "255MS":
+                    this.ROM_FIELD = romField.ROM_FIELD_255MS(this);
+                    break; 
+                case "256MS":
+                    this.ROM_FIELD = romField.ROM_FIELD_256MS(this);
+                    break; 
+                case "BN254":
+                    this.ROM_FIELD = romField.ROM_FIELD_BN254(this);
+                    break; 
+                case "BN254CX":
+                    this.ROM_FIELD = romField.ROM_FIELD_BN254CX(this);
+                    break; 
+                case "BLS383":
+                    this.ROM_FIELD = romField.ROM_FIELD_BLS383(this);
+                    break; 
+                default: 
+                    this.ROM_FIELD = undefined;
+            }
+
             this.BIG = big.BIG(this);
             this.DBIG = big.DBIG(this);
             this.FP = fp.FP(this);
