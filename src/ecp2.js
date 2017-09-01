@@ -611,5 +611,65 @@ module.exports.ECP2 = function(ctx) {
         return ((x >> 31) & 1);
     };
 
+    /* hash byte string to a point in G2 */
+    ECP2.mapit= function(h)
+    {
+        var q=new ctx.BIG(0); q.rcopy(ctx.ROM_FIELD.Modulus);
+        var x=ctx.BIG.fromBytes(h);
+        var one=new ctx.BIG(1);
+        x.mod(q);
+        var Q,T,K,X,xQ,x2Q;
+        while (true)
+        {
+            X=new ctx.FP2(one,x);
+            Q=new ECP2(); Q.setx(X);
+            if (!Q.is_infinity()) break;
+            x.inc(1); x.norm();
+        }
+        /* Fast Hashing to G2 - Fuentes-Castaneda, Knapp and Rodriguez-Henriquez */
+
+        var Fa=new ctx.BIG(0); Fa.rcopy(ctx.ROM_FIELD.Fra);
+        var Fb=new ctx.BIG(0); Fb.rcopy(ctx.ROM_FIELD.Frb);
+        X=new ctx.FP2(Fa,Fb);
+        x=new ctx.BIG(0); x.rcopy(ctx.ROM_CURVE.CURVE_Bnx);
+
+        if (ctx.ECP.CURVE_PAIRING_TYPE==ctx.ECP.BN)
+        {
+            T=new ECP2(); T.copy(Q);
+            T=T.mul(x); T.neg();
+            K=new ECP2(); K.copy(T);
+            K.dbl(); K.add(T); //K.affine();
+
+            K.frob(X);
+            Q.frob(X); Q.frob(X); Q.frob(X);
+            Q.add(T); Q.add(K);
+            T.frob(X); T.frob(X);
+            Q.add(T);
+        }
+        if (ctx.ECP.CURVE_PAIRING_TYPE==ctx.ECP.BLS)
+        {
+            xQ=new ECP2();
+            x2Q=new ECP2();
+
+            xQ=Q.mul(x);
+            x2Q=xQ.mul(x);
+
+            x2Q.sub(xQ);
+            x2Q.sub(Q);
+
+            xQ.sub(Q);
+            xQ.frob(X);
+
+            Q.dbl();
+            Q.frob(X);
+            Q.frob(X);
+
+            Q.add(x2Q);
+            Q.add(xQ);
+        }
+        Q.affine();
+        return Q;
+    };
+
     return ECP2;
 };
