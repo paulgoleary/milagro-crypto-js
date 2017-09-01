@@ -25,7 +25,7 @@
 
 * MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384 and SHA512 hash functions and a cryptographically secure random number generator.
 
-* MCJS is [Node.js](https://nodejs.org/en/) compatible. A conversion script is provided to make the library browser compatible(see some examples below)
+* MCJS is [Node.js](https://nodejs.org/en/) compatible. A conversion script is provided to make the library browser compatible (see some examples below).
 
 ## Install and run  tests
 
@@ -101,4 +101,4 @@ node ./examples/node/example_ECC_NIST256.js
 #### Browsers
 
 A script is provided in  `./example/browser` that converts the Node.js code to be compatible with browsers. There is an example conversion in this directory. 
-In order to run the example open the index.html file in a browser and check the console output
+In order to run the example open the index.html file in a browser and check the console output.
