@@ -19,7 +19,7 @@ under the License.
 
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
-var CTX = require("../src/ctx");
+var CTX = require("../../src/ctx");
 
 var ctx = new CTX("BN254CX");
 
@@ -60,21 +60,10 @@ var HCID = [];
 var HID = [];
 var HTID = [];
 
-var G1 = [];
-var G2 = [];
-var R = [];
-var Z = [];
-var W = [];
-var T = [];
-var CK = [];
-var SK = [];
-
 var HSID = [];
 
 /* Set configuration */
 var PINERROR = true;
-var ONE_PASS = false;
-
 
 /* Trusted Authority set-up */
 ctx.MPIN.RANDOM_GENERATE(rng, S);
@@ -103,7 +92,16 @@ if (rtn != 0)
 
 console.log("Client Token TK: 0x" + ctx.MPIN.bytestostring(TOKEN));
 
-var date = 0;
+var date = ctx.MPIN.today();
+/* Client gets "Time Token" permit from DTA */
+ctx.MPIN.GET_CLIENT_PERMIT(sha, date, S, HCID, PERMIT);
+console.log("Time Permit TP: 0x" + ctx.MPIN.bytestostring(PERMIT));
+
+/* This encoding makes Time permit look ctx.RANDom - Elligator squared */
+ctx.MPIN.ENCODING(rng, PERMIT);
+console.log("Encoded Time Permit TP: 0x" + ctx.MPIN.bytestostring(PERMIT));
+ctx.MPIN.DECODING(PERMIT);
+console.log("Decoded Time Permit TP: 0x" + ctx.MPIN.bytestostring(PERMIT));
 
 pin = 1234;
 
@@ -145,61 +143,37 @@ if (!PINERROR) {
     pF = null;
 }
 
-if (ONE_PASS) {
-    console.log("MPIN Single Pass ");
-    timeValue = ctx.MPIN.GET_TIME();
-    console.log("Epoch " + timeValue);
-
-    rtn = ctx.MPIN.CLIENT(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, pxCID, pPERMIT, timeValue, Y);
-
-    if (rtn != 0) {
-        console.error("FAILURE: CLIENT rtn: " + rtn);
-        process.exit(-1);
-    }
-    rtn = ctx.MPIN.SERVER(sha, date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF, CLIENT_ID, timeValue);
-    if (rtn != 0) {
-        console.error("FAILURE: SERVER rtn: " + rtn);
-        process.exit(-1);
-    }
-} else {
-    console.log("MPIN Multi Pass ");
-    rtn = ctx.MPIN.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, pxCID, pPERMIT);
-    if (rtn != 0) {
-        console.error("FAILURE: CLIENT_1 rtn: " + rtn);
-        process.exit(-1);
-    }
-
-    /* Server calculates H(ID) and H(T|H(ID)) (if time permits enabled), and maps them to points on the curve HID and HTID resp. */
-    ctx.MPIN.SERVER_1(sha, date, CLIENT_ID, pHID, pHTID);
-
-    /* Server generates ctx.RANDom number Y and sends it to Client */
-    ctx.MPIN.RANDOM_GENERATE(rng, Y);
-
-    /* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
-    rtn = ctx.MPIN.CLIENT_2(X, Y, SEC);
-    if (rtn != 0) {
-        console.error("FAILURE: CLIENT_2 rtn: " + rtn);
-        process.exit(-1);
-    }
-    /* Server Second pass. Inputs hashed client id, ctx.RANDom Y, -(x+y)*SEC, xID and xCID and Server secret SST. E and F help kangaroos to find error. */
-    /* If PIN error not required, set E and F = NULL */
-    rtn = ctx.MPIN.SERVER_2(date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF);
-
-    if (rtn != 0) {
-        console.log("FAILURE: SERVER_1 rtn: " + rtn);
-        process.exit(-1);
-    }
+console.log("MPIN Multi Pass ");
+rtn = ctx.MPIN.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, pxCID, pPERMIT);
+if (rtn != 0) {
+    console.error("FAILURE: CLIENT_1 rtn: " + rtn);
+    process.exit(-1);
 }
+/* Server calculates H(ID) and H(T|H(ID)) (if time permits enabled), and maps them to points on the curve HID and HTID resp. */
+ctx.MPIN.SERVER_1(sha, date, CLIENT_ID, pHID, pHTID);
 
+/* Server generates ctx.RANDom number Y and sends it to Client */
+ctx.MPIN.RANDOM_GENERATE(rng, Y);
 
+/* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
+rtn = ctx.MPIN.CLIENT_2(X, Y, SEC);
+if (rtn != 0) {
+    console.error("FAILURE: CLIENT_2 rtn: " + rtn);
+    process.exit(-1);
+}
+/* Server Second pass. Inputs hashed client id, ctx.RANDom Y, -(x+y)*SEC, xID and xCID and Server secret SST. E and F help kangaroos to find error. */
+/* If PIN error not required, set E and F = NULL */
+rtn = ctx.MPIN.SERVER_2(date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF);
+
+if (rtn != 0) {
+    console.error("FAILURE: SERVER_1 rtn: " + rtn);
+    process.exit(-1);
+}
 if (rtn == ctx.MPIN.BAD_PIN) {
     console.log("Server says - Bad Pin. I don't know you. Feck off.");
     if (PINERROR) {
         var err = ctx.MPIN.KANGAROO(E, F);
-        if (err != 0) {
-            console.log("(Client PIN is out by " + err + ")");
-            process.exit(-1);
-        }
+        if (err != 0) console.log("(Client PIN is out by " + err + ")");
     }
 } else
     console.log("Server says - PIN is good! You really are " + IDstr);

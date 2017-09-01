@@ -19,7 +19,7 @@ under the License.
 
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
-var CTX = require("../src/ctx");
+var CTX = require("../../src/ctx");
 
 var ctx = new CTX("BN254CX");
 
@@ -72,7 +72,6 @@ var SK = [];
 var HSID = [];
 
 /* Set configuration */
-var PERMITS = true;
 var PINERROR = true;
 var ONE_PASS = false;
 
@@ -104,21 +103,7 @@ if (rtn != 0)
 
 console.log("Client Token TK: 0x" + ctx.MPIN.bytestostring(TOKEN));
 
-ctx.MPIN.PRECOMPUTE(TOKEN, HCID, G1, G2);
-
-var date;
-if (PERMITS) {
-    date = ctx.MPIN.today();
-    /* Client gets "Time Token" permit from DTA */
-    ctx.MPIN.GET_CLIENT_PERMIT(sha, date, S, HCID, PERMIT);
-    console.log("Time Permit TP: 0x" + ctx.MPIN.bytestostring(PERMIT));
-
-    /* This encoding makes Time permit look ctx.RANDom - Elligator squared */
-    ctx.MPIN.ENCODING(rng, PERMIT);
-    console.log("Encoded Time Permit TP: 0x" + ctx.MPIN.bytestostring(PERMIT));
-    ctx.MPIN.DECODING(PERMIT);
-    console.log("Decoded Time Permit TP: 0x" + ctx.MPIN.bytestostring(PERMIT));
-} else date = 0;
+var date = 0;
 
 pin = 1234;
 
@@ -171,16 +156,11 @@ if (ONE_PASS) {
         console.error("FAILURE: CLIENT rtn: " + rtn);
         process.exit(-1);
     }
-    HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
-    ctx.MPIN.GET_G1_MULTIPLE(rng, 1, R, HCID, Z); /* Also Send Z=r.ID to Server, remember ctx.RANDom r */
-
     rtn = ctx.MPIN.SERVER(sha, date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF, CLIENT_ID, timeValue);
     if (rtn != 0) {
         console.error("FAILURE: SERVER rtn: " + rtn);
         process.exit(-1);
     }
-    HSID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
-    ctx.MPIN.GET_G1_MULTIPLE(rng, 0, W, prHID, T); /* Also send T=w.ID to client, remember ctx.RANDom w  */
 } else {
     console.log("MPIN Multi Pass ");
     rtn = ctx.MPIN.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, pxCID, pPERMIT);
@@ -188,17 +168,12 @@ if (ONE_PASS) {
         console.error("FAILURE: CLIENT_1 rtn: " + rtn);
         process.exit(-1);
     }
-    HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
-    ctx.MPIN.GET_G1_MULTIPLE(rng, 1, R, HCID, Z); /* Also Send Z=r.ID to Server, remember ctx.RANDom r */
 
     /* Server calculates H(ID) and H(T|H(ID)) (if time permits enabled), and maps them to points on the curve HID and HTID resp. */
     ctx.MPIN.SERVER_1(sha, date, CLIENT_ID, pHID, pHTID);
 
     /* Server generates ctx.RANDom number Y and sends it to Client */
     ctx.MPIN.RANDOM_GENERATE(rng, Y);
-
-    HSID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
-    ctx.MPIN.GET_G1_MULTIPLE(rng, 0, W, prHID, T); /* Also send T=w.ID to client, remember ctx.RANDom w  */
 
     /* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
     rtn = ctx.MPIN.CLIENT_2(X, Y, SEC);
@@ -211,7 +186,7 @@ if (ONE_PASS) {
     rtn = ctx.MPIN.SERVER_2(date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF);
 
     if (rtn != 0) {
-        console.error("FAILURE: SERVER_1 rtn: " + rtn);
+        console.log("FAILURE: SERVER_1 rtn: " + rtn);
         process.exit(-1);
     }
 }
@@ -222,20 +197,11 @@ if (rtn == ctx.MPIN.BAD_PIN) {
     if (PINERROR) {
         var err = ctx.MPIN.KANGAROO(E, F);
         if (err != 0) {
-            console.error("(Client PIN is out by " + err + ")");
+            console.log("(Client PIN is out by " + err + ")");
             process.exit(-1);
         }
     }
-} else {
+} else
     console.log("Server says - PIN is good! You really are " + IDstr);
-
-    H = ctx.MPIN.HASH_ALL(sha, HCID, pxID, pxCID, SEC, Y, Z, T);
-    ctx.MPIN.CLIENT_KEY(sha, G1, G2, pin, R, X, H, T, CK);
-
-    console.log("Client Key =  0x" + ctx.MPIN.bytestostring(CK));
-    H = ctx.MPIN.HASH_ALL(sha, HSID, pxID, pxCID, SEC, Y, Z, T);
-    ctx.MPIN.SERVER_KEY(sha, Z, SST, W, H, pHID, pxID, pxCID, SK);
-    console.log("Server Key =  0x" + ctx.MPIN.bytestostring(SK));
-}
 
 console.log('SUCCESS')

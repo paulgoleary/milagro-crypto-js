@@ -21,13 +21,11 @@
 
 * MCJS is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source.
 
-* MCJS is a refact of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
+* MCJS is a refactor of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
 * MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384 and SHA512 hash functions and a cryptographically secure random number generator.
 
-* MCJS is [Nodejs](https://nodejs.org/en/) compatible but it can be used for browsers too through the use of the tool [Browserify](http://browserify.org/) (see some examples below)
-
-* NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
+* MCJS is [Node.js](https://nodejs.org/en/) compatible but it can be used for browsers also by a conversion script (see some examples below)
 
 ## Install and run  tests
 
@@ -90,9 +88,14 @@ In the `/example` directory there are many simple script that show how to use th
 
 
 ## Run examples
-We provide also some script examples for [nodejs](https://nodejs.org/en/). In order to try, for example, the script example on ECC functions type the following commands
+
+[Node.js](https://nodejs.org/en/) examples are provided - please see `./examples/node`. Use the following commands to run an example
+
 ```
-node ./examples/example_ECC_NIST256.js
+node ./examples/node/example_ECC_NIST256.js
 ```
+
 #### Browsers
-In the `./example/browser` directory we converted all the example scripts with [Browserify](http://browserify.org/).
+
+A script is provided in  `./example/browser` that converts the Node.js code to be compatible with browsers. There is an example conversion in this directory. 
+In order to run the example open the index.html file in a browser and check the console output
