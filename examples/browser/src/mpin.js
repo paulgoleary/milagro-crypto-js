@@ -155,76 +155,6 @@ MPIN = function(ctx) {
             return W;
         },
 
-        mapit: function(h) {
-            var q = new ctx.BIG(0);
-            q.rcopy(ctx.ROM_FIELD.Modulus);
-            var x = ctx.BIG.fromBytes(h);
-            x.mod(q);
-            var P = new ctx.ECP();
-            while (true) {
-                P.setxi(x, 0);
-                if (!P.is_infinity()) break;
-                x.inc(1);
-                x.norm();
-            }
-            if (ctx.ECP.CURVE_PAIRING_TYPE != ctx.ECP.BN) {
-                var c = new ctx.BIG(0);
-                c.rcopy(ctx.ROM_CURVE.CURVE_Cof);
-                P = P.mul(c);
-            }
-            return P;
-        },
-
-        /* needed for SOK */
-        mapit2: function(h) {
-            var q = new ctx.BIG(0);
-            q.rcopy(ctx.ROM_FIELD.Modulus);
-            var x = ctx.BIG.fromBytes(h);
-            var one = new ctx.BIG(1);
-            x.mod(q);
-            var Q, T, K, X;
-            while (true) {
-                X = new ctx.FP2(one, x);
-                Q = new ctx.ECP2();
-                Q.setx(X);
-                if (!Q.is_infinity()) break;
-                x.inc(1);
-                x.norm();
-            }
-            /* Fast Hashing to G2 - Fuentes-Castaneda, Knapp and Rodriguez-Henriquez */
-
-            var Fa = new ctx.BIG(0);
-            Fa.rcopy(ctx.ROM_FIELD.Fra);
-            var Fb = new ctx.BIG(0);
-            Fb.rcopy(ctx.ROM_FIELD.Frb);
-            X = new ctx.FP2(Fa, Fb);
-            x = new ctx.BIG(0);
-            x.rcopy(ctx.ROM_CURVE.CURVE_Bnx);
-
-            T = new ctx.ECP2();
-            T.copy(Q);
-            T.mul(x);
-            T.neg();
-            K = new ctx.ECP2();
-            K.copy(T);
-            K.dbl();
-            K.add(T);
-            K.affine();
-
-            K.frob(X);
-            Q.frob(X);
-            Q.frob(X);
-            Q.frob(X);
-            Q.add(T);
-            Q.add(K);
-            T.frob(X);
-            T.frob(X);
-            Q.add(T);
-            Q.affine();
-            return Q;
-
-        },
-
         /* these next two functions help to implement elligator squared - http://eprint.iacr.org/2014/043 */
         /* maps a random u to a point on the curve */
         map: function(u, cb) {
@@ -375,7 +305,7 @@ MPIN = function(ctx) {
             var P = ctx.ECP.fromBytes(TOKEN);
             if (P.is_infinity()) return this.INVALID_POINT;
             var h = this.hashit(sha, 0, CID);
-            var R = this.mapit(h);
+            var R = ctx.ECP.mapit(h);
 
             pin %= this.MAXPIN;
 
@@ -436,7 +366,7 @@ MPIN = function(ctx) {
                 P = ctx.ECP.fromBytes(G);
                 if (P.is_infinity()) return INVALID_POINT;
             } else
-                P = this.mapit(G);
+                P = ctx.ECP.mapit(G);
 
             ctx.PAIR.G1mul(P, x).toBytes(W);
             return 0;
@@ -451,7 +381,7 @@ MPIN = function(ctx) {
         /* Time Permit CTT=S*(date|H(CID)) where S is master secret */
         GET_CLIENT_PERMIT: function(sha, date, S, CID, CTT) {
             var h = this.hashit(sha, date, CID);
-            var P = this.mapit(h);
+            var P = ctx.ECP.mapit(h);
 
             var s = ctx.BIG.fromBytes(S);
             P = ctx.PAIR.G1mul(P, s);
@@ -478,7 +408,7 @@ MPIN = function(ctx) {
             var P, T, W;
 
             var h = this.hashit(sha, 0, CLIENT_ID);
-            P = this.mapit(h);
+            P = ctx.ECP.mapit(h);
             T = ctx.ECP.fromBytes(TOKEN);
             if (T.is_infinity()) return this.INVALID_POINT;
 
@@ -491,7 +421,7 @@ MPIN = function(ctx) {
                 if (W.is_infinity()) return this.INVALID_POINT;
                 T.add(W);
                 h = this.hashit(sha, date, h);
-                W = this.mapit(h);
+                W = ctx.ECP.mapit(h);
                 if (xID != null) {
                     P = ctx.PAIR.G1mul(P, x);
                     P.toBytes(xID);
@@ -536,13 +466,13 @@ MPIN = function(ctx) {
         /* Outputs H(CID) and H(T|H(CID)) for time permits. If no time permits set HID=HTID */
         SERVER_1: function(sha, date, CID, HID, HTID) {
             var h = this.hashit(sha, 0, CID);
-            var R, P = this.mapit(h);
+            var R, P = ctx.ECP.mapit(h);
 
             P.toBytes(HID);
             if (date !== 0) {
                 //if (HID!=null) P.toBytes(HID);
                 h = this.hashit(sha, date, h);
-                R = this.mapit(h);
+                R = ctx.ECP.mapit(h);
                 P.add(R);
                 P.toBytes(HTID);
             }
@@ -767,7 +697,7 @@ MPIN = function(ctx) {
             T = ctx.ECP.fromBytes(TOKEN);
             if (T.is_infinity()) return INVALID_POINT;
 
-            P = this.mapit(CID);
+            P = ctx.ECP.mapit(CID);
 
             var A = new ctx.BIG(0);
             var B = new ctx.BIG(0);
