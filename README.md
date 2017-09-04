@@ -104,7 +104,7 @@ The build.sh script will convert the Node.js library source code and an
 example into browser compatible code.
  
 ```
-./build.sh -f ../node/example_RSA2048_ECDSA_NIST256.js
+./build.sh -f ./examples/example_RSA2048_ECDSA_NIST256.js
 ```
 
 There is an example conversion  in this directory `./src/browser` with an example output `./examples.js`.
