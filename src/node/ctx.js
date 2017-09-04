@@ -25,6 +25,7 @@ var uint64 = require('./uint64');
 var hash256 = require('./hash256');
 var hash384 = require('./hash384');
 var hash512 = require('./hash512');
+var sha3 = require('./sha3');
 var rand = require('./rand');
 var big = require('./big');
 var fp = require('./fp');
@@ -40,6 +41,8 @@ var fp12 = require('./fp12');
 var ecp2 = require('./ecp2');
 var pair = require('./pair');
 var mpin = require('./mpin');
+var newhope = require('./newhope');
+var nhs = require('./nhs');
 
 var CTXLIST = {
     "ED25519": {
@@ -172,127 +175,10 @@ var CTXLIST = {
         "@PF": 0
     },
 
-    "MF254W": {
+     "NUMS256W": {
         "BITS": "256",
-        "FIELD": "254MF",
-        "CURVE": "MF254W",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 254,
-        "@M8": 7,
-        "@MT": 3,
-        "@CT": 0,
-        "@PF": 0
-    },
-
-    "MF254E": {
-        "BITS": "256",
-        "FIELD": "254MF",
-        "CURVE": "MF254E",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 254,
-        "@M8": 7,
-        "@MT": 3,
-        "@CT": 1,
-        "@PF": 0
-    },
-
-    "MF254M": {
-        "BITS": "256",
-        "FIELD": "254MF",
-        "CURVE": "MF254M",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 254,
-        "@M8": 7,
-        "@MT": 3,
-        "@CT": 2,
-        "@PF": 0
-    },
-
-    "MF256W": {
-        "BITS": "256",
-        "FIELD": "256MF",
-        "CURVE": "MF256W",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 256,
-        "@M8": 7,
-        "@MT": 3,
-        "@CT": 0,
-        "@PF": 0
-    },
-
-    "MF256E": {
-        "BITS": "256",
-        "FIELD": "256MF",
-        "CURVE": "MF256E",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 256,
-        "@M8": 7,
-        "@MT": 3,
-        "@CT": 1,
-        "@PF": 0
-    },
-
-    "MF256M": {
-        "BITS": "256",
-        "FIELD": "256MF",
-        "CURVE": "MF256M",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 256,
-        "@M8": 7,
-        "@MT": 3,
-        "@CT": 2,
-        "@PF": 0
-    },
-
-    "MS255W": {
-        "BITS": "256",
-        "FIELD": "255MS",
-        "CURVE": "MS255W",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 255,
-        "@M8": 3,
-        "@MT": 1,
-        "@CT": 0,
-        "@PF": 0
-    },
-
-    "MS255E": {
-        "BITS": "256",
-        "FIELD": "255MS",
-        "CURVE": "MS255E",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 255,
-        "@M8": 3,
-        "@MT": 1,
-        "@CT": 1,
-        "@PF": 0
-    },
-
-    "MS255M": {
-        "BITS": "256",
-        "FIELD": "255MS",
-        "CURVE": "MS255M",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 255,
-        "@M8": 3,
-        "@MT": 1,
-        "@CT": 2,
-        "@PF": 0
-    },
-
-    "MS256W": {
-        "BITS": "256",
-        "FIELD": "256MS",
-        "CURVE": "MS256W",
+        "FIELD": "256PM",
+        "CURVE": "NUMS256W",
         "@NB": 32,
         "@BASE": 24,
         "@NBT": 256,
@@ -302,10 +188,10 @@ var CTXLIST = {
         "@PF": 0
     },
 
-    "MS256E": {
+    "NUMS256E": {
         "BITS": "256",
-        "FIELD": "256MS",
-        "CURVE": "MS256E",
+        "FIELD": "256PM",
+        "CURVE": "NUMS256E",
         "@NB": 32,
         "@BASE": 24,
         "@NBT": 256,
@@ -315,16 +201,55 @@ var CTXLIST = {
         "@PF": 0
     },
 
-    "MS256M": {
-        "BITS": "256",
-        "FIELD": "256MS",
-        "CURVE": "MS256M",
-        "@NB": 32,
-        "@BASE": 24,
-        "@NBT": 256,
+    "NUMS384W": {
+        "BITS": "384",
+        "FIELD": "384PM",
+        "CURVE": "NUMS384W",
+        "@NB": 48,
+        "@BASE": 23,
+        "@NBT": 384,
         "@M8": 3,
         "@MT": 1,
-        "@CT": 2,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "NUMS384E": {
+        "BITS": "384",
+        "FIELD": "384PM",
+        "CURVE": "NUMS384E",
+        "@NB": 48,
+        "@BASE": 23,
+        "@NBT": 384,
+        "@M8": 3,
+        "@MT": 1,
+        "@CT": 1,
+        "@PF": 0
+    },
+
+    "NUMS512W": {
+        "BITS": "512",
+        "FIELD": "512PM",
+        "CURVE": "NUMS512W",
+        "@NB": 64,
+        "@BASE": 23,
+        "@NBT": 512,
+        "@M8": 7,
+        "@MT": 1,
+        "@CT": 0,
+        "@PF": 0
+    },
+
+    "NUMS512E": {
+        "BITS": "512",
+        "FIELD": "512PM",
+        "CURVE": "NUMS512E",
+        "@NB": 64,
+        "@BASE": 23,
+        "@NBT": 512,
+        "@M8": 7,
+        "@MT": 1,
+        "@CT": 1,
         "@PF": 0
     },
 
@@ -401,6 +326,7 @@ CTX = function(input_parameter) {
     this.HASH256 = hash256.HASH256(this);
     this.HASH384 = hash384.HASH384(this);
     this.HASH512 = hash512.HASH512(this);
+    this.SHA3 = sha3.SHA3(this);
     this.RAND = rand.RAND(this);
 
     if (input_parameter === undefined)
@@ -454,41 +380,23 @@ CTX = function(input_parameter) {
                 case "NIST521":
                     this.ROM_CURVE = romCurve.ROM_CURVE_NIST521(this);
                     break; 
-                case "MF254W":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MF254W(this);
+                case "NUMS256W":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS256W(this);
                     break; 
-                case "MF254E":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MF254E(this);
+                case "NUMS256E":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS256E(this);
                     break; 
-                case "MF254M":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MF254M(this);
+                case "NUMS384W":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS384W(this);
                     break; 
-                case "MF256W":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MF256W(this);
+                case "NUMS384E":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS384E(this);
                     break; 
-                case "MF256E":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MF256E(this);
+                case "NUMS512W":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS512W(this);
                     break; 
-                case "MF256M":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MF256M(this);
-                    break; 
-                case "MS255W":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MS255W(this);
-                    break; 
-                case "MS255E":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MS255E(this);
-                    break; 
-                case "MS255M":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MS255M(this);
-                    break; 
-                case "MS256W":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MS256W(this);
-                    break; 
-                case "MS256E":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MS256E(this);
-                    break; 
-                case "MS256M":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_MS256M(this);
+                case "NUMS512E":
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS512E(this);
                     break; 
                 case "BN254":
                     this.ROM_CURVE = romCurve.ROM_CURVE_BN254(this);
@@ -532,17 +440,14 @@ CTX = function(input_parameter) {
                 case "NIST521":
                     this.ROM_FIELD = romField.ROM_FIELD_NIST521(this);
                     break; 
-                case "254MF":
-                    this.ROM_FIELD = romField.ROM_FIELD_254MF(this);
+                case "256PM":
+                    this.ROM_FIELD = romField.ROM_FIELD_256PM(this);
                     break; 
-                case "256MF":
-                    this.ROM_FIELD = romField.ROM_FIELD_256MF(this);
+                case "384PM":
+                    this.ROM_FIELD = romField.ROM_FIELD_384PM(this);
                     break; 
-                case "255MS":
-                    this.ROM_FIELD = romField.ROM_FIELD_255MS(this);
-                    break; 
-                case "256MS":
-                    this.ROM_FIELD = romField.ROM_FIELD_256MS(this);
+                case "512PM":
+                    this.ROM_FIELD = romField.ROM_FIELD_512PM(this);
                     break; 
                 case "BN254":
                     this.ROM_FIELD = romField.ROM_FIELD_BN254(this);
@@ -570,6 +475,8 @@ CTX = function(input_parameter) {
                 this.ECP2 = ecp2.ECP2(this);
                 this.PAIR = pair.PAIR(this);
                 this.MPIN = mpin.MPIN(this);
+                //this.NewHope = newhope.NewHope(this);
+                //this.NHS = nhs.NewHope(this);
             };
             return;
         };
