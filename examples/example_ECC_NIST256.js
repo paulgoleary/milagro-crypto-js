@@ -20,7 +20,7 @@ under the License.
 
 /* Test ECC - test driver and function exerciser for ECDH/ECIES/ECDSA API Functions */
 
-var CTX = require("../../src/ctx");
+var CTX = require("../src/node/ctx");
 
 console.log('Start testing ECDH with NIST256');
 

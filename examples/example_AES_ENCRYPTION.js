@@ -20,7 +20,7 @@ under the License.
 
 /* Test HASH function - test driver and function exerciser for SHA256, SHA384, SHA512 API Functions */
 
-var CTX = require("../../src/ctx");
+var CTX = require("../src/node/ctx");
 
 var ctx = new CTX();
 

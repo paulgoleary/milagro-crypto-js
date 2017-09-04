@@ -19,7 +19,7 @@ under the License.
 
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
-var CTX = require("../../src/ctx");
+var CTX = require("../src/node/ctx");
 
 var ctx = new CTX("BN254CX");
 
@@ -73,7 +73,8 @@ var HSID = [];
 
 /* Set configuration */
 var PINERROR = true;
-var FULL = true;
+var ONE_PASS = false;
+
 
 /* Trusted Authority set-up */
 ctx.MPIN.RANDOM_GENERATE(rng, S);
@@ -101,10 +102,6 @@ if (rtn != 0)
     console.log("Failed to extract PIN ");
 
 console.log("Client Token TK: 0x" + ctx.MPIN.bytestostring(TOKEN));
-
-if (FULL) {
-    ctx.MPIN.PRECOMPUTE(TOKEN, HCID, G1, G2);
-}
 
 var date = 0;
 
@@ -148,31 +145,52 @@ if (!PINERROR) {
     pF = null;
 }
 
-console.log("MPIN Single Pass ");
-timeValue = ctx.MPIN.GET_TIME();
-console.log("Epoch " + timeValue);
+if (ONE_PASS) {
+    console.log("MPIN Single Pass ");
+    timeValue = ctx.MPIN.GET_TIME();
+    console.log("Epoch " + timeValue);
 
-rtn = ctx.MPIN.CLIENT(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, pxCID, pPERMIT, timeValue, Y);
+    rtn = ctx.MPIN.CLIENT(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, pxCID, pPERMIT, timeValue, Y);
 
-if (rtn != 0) {
-    console.error("FAILURE: CLIENT rtn: " + rtn);
-    process.exit(-1);
-}
-if (FULL) {
-    HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
-    ctx.MPIN.GET_G1_MULTIPLE(rng, 1, R, HCID, Z); /* Also Send Z=r.ID to Server, remember ctx.RANDom r */
+    if (rtn != 0) {
+        console.error("FAILURE: CLIENT rtn: " + rtn);
+        process.exit(-1);
+    }
+    rtn = ctx.MPIN.SERVER(sha, date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF, CLIENT_ID, timeValue);
+    if (rtn != 0) {
+        console.error("FAILURE: SERVER rtn: " + rtn);
+        process.exit(-1);
+    }
+} else {
+    console.log("MPIN Multi Pass ");
+    rtn = ctx.MPIN.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, pxCID, pPERMIT);
+    if (rtn != 0) {
+        console.error("FAILURE: CLIENT_1 rtn: " + rtn);
+        process.exit(-1);
+    }
+
+    /* Server calculates H(ID) and H(T|H(ID)) (if time permits enabled), and maps them to points on the curve HID and HTID resp. */
+    ctx.MPIN.SERVER_1(sha, date, CLIENT_ID, pHID, pHTID);
+
+    /* Server generates ctx.RANDom number Y and sends it to Client */
+    ctx.MPIN.RANDOM_GENERATE(rng, Y);
+
+    /* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
+    rtn = ctx.MPIN.CLIENT_2(X, Y, SEC);
+    if (rtn != 0) {
+        console.error("FAILURE: CLIENT_2 rtn: " + rtn);
+        process.exit(-1);
+    }
+    /* Server Second pass. Inputs hashed client id, ctx.RANDom Y, -(x+y)*SEC, xID and xCID and Server secret SST. E and F help kangaroos to find error. */
+    /* If PIN error not required, set E and F = NULL */
+    rtn = ctx.MPIN.SERVER_2(date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF);
+
+    if (rtn != 0) {
+        console.log("FAILURE: SERVER_1 rtn: " + rtn);
+        process.exit(-1);
+    }
 }
 
-rtn = ctx.MPIN.SERVER(sha, date, pHID, pHTID, Y, SST, pxID, pxCID, SEC, pE, pF, CLIENT_ID, timeValue);
-if (rtn != 0) {
-    console.error("FAILURE: SERVER rtn: " + rtn);
-    process.exit(-1);
-}
-
-if (FULL) {
-    HSID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
-    ctx.MPIN.GET_G1_MULTIPLE(rng, 0, W, prHID, T); /* Also send T=w.ID to client, remember ctx.RANDom w  */
-}
 
 if (rtn == ctx.MPIN.BAD_PIN) {
     console.log("Server says - Bad Pin. I don't know you. Feck off.");
@@ -183,16 +201,7 @@ if (rtn == ctx.MPIN.BAD_PIN) {
             process.exit(-1);
         }
     }
-} else {
+} else
     console.log("Server says - PIN is good! You really are " + IDstr);
-    if (FULL) {
-        H = ctx.MPIN.HASH_ALL(sha, HCID, pxID, pxCID, SEC, Y, Z, T);
-        ctx.MPIN.CLIENT_KEY(sha, G1, G2, pin, R, X, H, T, CK);
 
-        console.log("Client Key =  0x" + ctx.MPIN.bytestostring(CK));
-        H = ctx.MPIN.HASH_ALL(sha, HSID, pxID, pxCID, SEC, Y, Z, T);
-        ctx.MPIN.SERVER_KEY(sha, Z, SST, W, H, pHID, pxID, pxCID, SK);
-        console.log("Server Key =  0x" + ctx.MPIN.bytestostring(SK));
-    }
-}
 console.log('SUCCESS')

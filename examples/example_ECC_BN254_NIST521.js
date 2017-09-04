@@ -20,7 +20,7 @@ under the License.
 
 /* Test ECC - test driver and function exerciser for ECDH/ECIES/ECDSA API Functions */
 
-var CTX = require("../../src/ctx");
+var CTX = require("../src/node/ctx");
 
 var ctx1 = new CTX("BN254");
 var ctx2 = new CTX("NIST521");

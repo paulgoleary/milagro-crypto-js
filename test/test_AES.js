@@ -20,7 +20,7 @@ under the License.
 
 /* Test AES function - test driver and function exerciser for AES API Functions */
 
-var CTX = require("../src/ctx");
+var CTX = require("../src/node/ctx");
 
 var chai = require('chai');
 
