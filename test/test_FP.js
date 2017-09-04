@@ -24,7 +24,7 @@ under the License.
 
 var chai = require('chai');
 
-var CTX = require("../src/ctx");
+var CTX = require("../src/node/ctx");
 
 var expect = chai.expect;
 

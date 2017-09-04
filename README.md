@@ -21,21 +21,22 @@
 
 * MCJS is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source.
 
-* MCJS is a refact of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
+* MCJS is a refactor of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
 * MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384 and SHA512 hash functions and a cryptographically secure random number generator.
 
-* MCJS is [Nodejs](https://nodejs.org/en/) compatible but it can be used for browsers too through the use of the tool [Browserify](http://browserify.org/) (see some examples below)
-
-* NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
+* MCJS is [Node.js](https://nodejs.org/en/) compatible. A conversion script is provided to make the library browser compatible (see some examples below).
 
 ## Install and run  tests
 
-[Nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to properly build the library and run tests. Install also the node.js modules required with the command
+[Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to build the library and run the tests. Install also the node.js modules required with the command
+
 ```
 npm install
 ```
+
 Run all the tests with the following command
+
 ```
 npm test
 ```
@@ -90,9 +91,21 @@ In the `/example` directory there are many simple script that show how to use th
 
 
 ## Run examples
-We provide also some script examples for [nodejs](https://nodejs.org/en/). In order to try, for example, the script example on ECC functions type the following commands
+
+[Node.js](https://nodejs.org/en/) examples are provided - please see `./examples/`. Use the following commands to run an example
+
 ```
 node ./examples/example_ECC_NIST256.js
 ```
+
 #### Browsers
-In the `./example/browser` directory we converted all the example scripts with [Browserify](http://browserify.org/).
+
+The build.sh script will convert the Node.js library source code and an 
+example into browser compatible code.
+ 
+```
+./build.sh -f ./examples/example_RSA2048_ECDSA_NIST256.js
+```
+
+There is an example conversion  in this directory `./src/browser` with an example output `./examples.js`.
+In order to run the example open the index.html file in a browser and check the console output.

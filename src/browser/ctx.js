@@ -17,29 +17,8 @@
 	under the License.
 */
 
-var romField = require('./rom_field');
-var romCurve = require('./rom_curve');
-var aes = require('./aes');
-var gcm = require('./gcm');
-var uint64 = require('./uint64');
-var hash256 = require('./hash256');
-var hash384 = require('./hash384');
-var hash512 = require('./hash512');
-var rand = require('./rand');
-var big = require('./big');
-var fp = require('./fp');
-var ecp = require('./ecp');
-var ecdh = require('./ecdh');
 
-var ff = require('./ff');
-var rsa = require('./rsa');
 
-var fp2 = require('./fp2');
-var fp4 = require('./fp4');
-var fp12 = require('./fp12');
-var ecp2 = require('./ecp2');
-var pair = require('./pair');
-var mpin = require('./mpin');
 
 var CTXLIST = {
     "ED25519": {
@@ -392,16 +371,16 @@ var CTXLIST = {
     },
 }
 
-module.exports = CTXLIST;
+
 
 CTX = function(input_parameter) {
-    this.AES = aes.AES(this);
-    this.GCM = gcm.GCM(this);
-    this.UInt64 = uint64.UInt64(this);
-    this.HASH256 = hash256.HASH256(this);
-    this.HASH384 = hash384.HASH384(this);
-    this.HASH512 = hash512.HASH512(this);
-    this.RAND = rand.RAND(this);
+    this.AES = AES(this);
+    this.GCM = GCM(this);
+    this.UInt64 = UInt64(this);
+    this.HASH256 = HASH256(this);
+    this.HASH384 = HASH384(this);
+    this.HASH512 = HASH512(this);
+    this.RAND = RAND(this);
 
     if (input_parameter === undefined)
         return;
@@ -411,37 +390,169 @@ CTX = function(input_parameter) {
 
         // Set RSA parameters
         if (this.config['TFF'] !== undefined) {
-            this.BIG = big.BIG(this);
-            this.DBIG = big.DBIG(this);
-            this.FF = ff.FF(this);
-            this.RSA = rsa.RSA(this);
-            this.rsa_public_key = rsa.rsa_public_key(this);
-            this.rsa_private_key = rsa.rsa_private_key(this);
+            this.BIG = BIG(this);
+            this.DBIG = DBIG(this);
+            this.FF = FF(this);
+            this.RSA = RSA(this);
+            this.rsa_public_key = rsa_public_key(this);
+            this.rsa_private_key = rsa_private_key(this);
             return;
         };
 
         // Set Elliptic Curve parameters
         if (this.config['CURVE'] !== undefined) {
 
-            this.ROM_CURVE = romCurve['ROM_CURVE_' + this.config['CURVE']](this);
-            this.ROM_FIELD = romField['ROM_FIELD_' + this.config['FIELD']](this);
-            this.BIG = big.BIG(this);
-            this.DBIG = big.DBIG(this);
-            this.FP = fp.FP(this);
-            this.ECP = ecp.ECP(this);
-            this.ECDH = ecdh.ECDH(this);
+            switch (this.config['CURVE']) {
+                case "ED25519":
+                    this.ROM_CURVE = ROM_CURVE_ED25519(this);
+                    break; 
+                case "C25519":
+                    this.ROM_CURVE = ROM_CURVE_C25519(this);
+                    break; 
+                case "NIST256":
+                    this.ROM_CURVE = ROM_CURVE_NIST256(this);
+                    break; 
+                case "NIST384":
+                    this.ROM_CURVE = ROM_CURVE_NIST384(this);
+                    break; 
+                case "BRAINPOOL":
+                    this.ROM_CURVE = ROM_CURVE_BRAINPOOL(this);
+                    break; 
+                case "ANSSI":
+                    this.ROM_CURVE = ROM_CURVE_ANSSI(this);
+                    break; 
+                case "HIFIVE":
+                    this.ROM_CURVE = ROM_CURVE_HIFIVE(this);
+                    break; 
+                case "GOLDILOCKS":
+                    this.ROM_CURVE = ROM_CURVE_GOLDILOCKS(this);
+                    break; 
+                case "C41417":
+                    this.ROM_CURVE = ROM_CURVE_C41417(this);
+                    break; 
+                case "NIST521":
+                    this.ROM_CURVE = ROM_CURVE_NIST521(this);
+                    break; 
+                case "MF254W":
+                    this.ROM_CURVE = ROM_CURVE_MF254W(this);
+                    break; 
+                case "MF254E":
+                    this.ROM_CURVE = ROM_CURVE_MF254E(this);
+                    break; 
+                case "MF254M":
+                    this.ROM_CURVE = ROM_CURVE_MF254M(this);
+                    break; 
+                case "MF256W":
+                    this.ROM_CURVE = ROM_CURVE_MF256W(this);
+                    break; 
+                case "MF256E":
+                    this.ROM_CURVE = ROM_CURVE_MF256E(this);
+                    break; 
+                case "MF256M":
+                    this.ROM_CURVE = ROM_CURVE_MF256M(this);
+                    break; 
+                case "MS255W":
+                    this.ROM_CURVE = ROM_CURVE_MS255W(this);
+                    break; 
+                case "MS255E":
+                    this.ROM_CURVE = ROM_CURVE_MS255E(this);
+                    break; 
+                case "MS255M":
+                    this.ROM_CURVE = ROM_CURVE_MS255M(this);
+                    break; 
+                case "MS256W":
+                    this.ROM_CURVE = ROM_CURVE_MS256W(this);
+                    break; 
+                case "MS256E":
+                    this.ROM_CURVE = ROM_CURVE_MS256E(this);
+                    break; 
+                case "MS256M":
+                    this.ROM_CURVE = ROM_CURVE_MS256M(this);
+                    break; 
+                case "BN254":
+                    this.ROM_CURVE = ROM_CURVE_BN254(this);
+                    break; 
+                case "BN254CX":
+                    this.ROM_CURVE = ROM_CURVE_BN254CX(this);
+                    break; 
+                case "BLS383":
+                    this.ROM_CURVE = ROM_CURVE_BLS383(this);
+                    break; 
+                default: 
+                    this.ROM_CURVE = undefined;
+            };
+
+
+            switch (this.config['FIELD']) {
+                case "25519":
+                    this.ROM_FIELD = ROM_FIELD_25519(this);
+                    break; 
+                case "NIST256":
+                    this.ROM_FIELD = ROM_FIELD_NIST256(this);
+                    break; 
+                case "NIST384":
+                    this.ROM_FIELD = ROM_FIELD_NIST384(this);
+                    break; 
+                case "BRAINPOOL":
+                    this.ROM_FIELD = ROM_FIELD_BRAINPOOL(this);
+                    break; 
+                case "ANSSI":
+                    this.ROM_FIELD = ROM_FIELD_ANSSI(this);
+                    break; 
+                case "HIFIVE":
+                    this.ROM_FIELD = ROM_FIELD_HIFIVE(this);
+                    break; 
+                case "GOLDILOCKS":
+                    this.ROM_FIELD = ROM_FIELD_GOLDILOCKS(this);
+                    break; 
+                case "C41417":
+                    this.ROM_FIELD = ROM_FIELD_C41417(this);
+                    break; 
+                case "NIST521":
+                    this.ROM_FIELD = ROM_FIELD_NIST521(this);
+                    break; 
+                case "254MF":
+                    this.ROM_FIELD = ROM_FIELD_254MF(this);
+                    break; 
+                case "256MF":
+                    this.ROM_FIELD = ROM_FIELD_256MF(this);
+                    break; 
+                case "255MS":
+                    this.ROM_FIELD = ROM_FIELD_255MS(this);
+                    break; 
+                case "256MS":
+                    this.ROM_FIELD = ROM_FIELD_256MS(this);
+                    break; 
+                case "BN254":
+                    this.ROM_FIELD = ROM_FIELD_BN254(this);
+                    break; 
+                case "BN254CX":
+                    this.ROM_FIELD = ROM_FIELD_BN254CX(this);
+                    break; 
+                case "BLS383":
+                    this.ROM_FIELD = ROM_FIELD_BLS383(this);
+                    break; 
+                default: 
+                    this.ROM_FIELD = undefined;
+            }
+
+            this.BIG = BIG(this);
+            this.DBIG = DBIG(this);
+            this.FP = FP(this);
+            this.ECP = ECP(this);
+            this.ECDH = ECDH(this);
 
             if (this.config['@PF'] != 0) {
-                this.FP2 = fp2.FP2(this);
-                this.FP4 = fp4.FP4(this);
-                this.FP12 = fp12.FP12(this);
-                this.ECP2 = ecp2.ECP2(this);
-                this.PAIR = pair.PAIR(this);
-                this.MPIN = mpin.MPIN(this);
+                this.FP2 = FP2(this);
+                this.FP4 = FP4(this);
+                this.FP12 = FP12(this);
+                this.ECP2 = ECP2(this);
+                this.PAIR = PAIR(this);
+                this.MPIN = MPIN(this);
             };
             return;
         };
     };
 };
 
-module.exports = CTX;
+

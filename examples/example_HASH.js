@@ -19,7 +19,7 @@ under the License.
 
 /* Example Hash functions */
 
-var CTX = require("../src/ctx");
+var CTX = require("../src/node/ctx");
 
 var ctx = new CTX();
 
@@ -76,5 +76,3 @@ var hashed = hashit(ctx.HASH384.len, stringtobytes(to_hash));
 console.log("SHA384: ", bytestostring(hashed));
 var hashed = hashit(ctx.HASH512.len, stringtobytes(to_hash));
 console.log("SHA512: ", bytestostring(hashed));
-
-return 0;
