@@ -66,4 +66,27 @@ describe('TEST NEW HOPE', function() {
         done();
     });
 
+    it('test New Hope bad key', function(done) {
+        this.timeout(0);
+
+        var S1=[];
+        var S2=[];
+        var SB1=[];
+        var SB2=[];
+        var UC=[];
+        var KEYA=[];
+        var KEYB=[];
+
+        ctx.NHS.SERVER_1(srng,SB1,S1);
+        ctx.NHS.SERVER_1(srng,SB2,S2);
+
+        ctx.NHS.CLIENT(crng,SB2,UC,KEYB);
+
+        ctx.NHS.SERVER_2(S1,UC,KEYA);
+
+        expect(ctx.NHS.bytestostring(KEYA)).to.not.equal(ctx.NHS.bytestostring(KEYB));
+
+        done();
+    });
+
 });
