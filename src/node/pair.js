@@ -22,65 +22,72 @@ module.exports.PAIR = function(ctx) {
     var PAIR = {
         /* Line function */
         line: function(A, B, Qx, Qy) {
-            var P = new ctx.ECP2();
             var a, b, c;
-            var r = new ctx.FP12(1);
-            P.copy(A);
-
-            var ZZ = new ctx.FP2(P.getz()); //ZZ.copy(P.getz());
-            ZZ.sqr();
-            var D;
-            if (A == B) D = A.dbl();
-            else D = A.add(B);
-            if (D < 0) return r;
-            var Z3 = new ctx.FP2(A.getz()); //Z3.copy(A.getz());
             c = new ctx.FP4(0);
-            var X, Y, T;
-            if (D === 0) { /* Addition */
-                X = new ctx.FP2(B.getx()); //X.copy(B.getx());
-                Y = new ctx.FP2(B.gety()); //Y.copy(B.gety());
-                T = new ctx.FP2(P.getz()); //T.copy(P.getz());
+            var r = new ctx.FP12(1);
+            if (A == B) { /* Doubling */
+                var XX = new ctx.FP2(A.getx());
+                var YY = new ctx.FP2(A.gety());
+                var ZZ = new ctx.FP2(A.getz());
+                var YZ = new ctx.FP2(YY);
 
-                T.mul(Y);
-                ZZ.mul(T);
+                YZ.mul(ZZ); //YZ
+                XX.sqr(); //X^2
+                YY.sqr(); //Y^2
+                ZZ.sqr(); //Z^2
 
-                var NY = new ctx.FP2(P.gety()); /*NY.copy(P.gety());*/
-                NY.neg();
-                NY.norm();
-                ZZ.add(NY); // ZZ.norm();
-                Z3.pmul(Qy);
-                T.mul(P.getx());
-                X.mul(NY);
-                T.add(X);
-                T.norm();
-                a = new ctx.FP4(Z3, T); //a.set(Z3,T);
-                ZZ.neg();
-                ZZ.norm();
-                ZZ.pmul(Qx);
-                b = new ctx.FP4(ZZ); //b.seta(ZZ);
-            } else { /* Doubling */
-                X = new ctx.FP2(P.getx()); //X.copy(P.getx());
-                Y = new ctx.FP2(P.gety()); //Y.copy(P.gety());
-                T = new ctx.FP2(P.getx()); //T.copy(P.getx());
-                T.sqr();
-                T.imul(3);
+                YZ.imul(4);
+                YZ.neg();
+                YZ.norm(); //-2YZ
+                YZ.pmul(Qy); //-2YZ.Ys
 
-                Y.sqr();
-                Y.add(Y);
-                Z3.mul(ZZ);
-                Z3.pmul(Qy);
+                XX.imul(6); //3X^2
+                XX.pmul(Qx); //3X^2.Xs
 
-                X.mul(T);
-                X.sub(Y);
-                X.norm();
-                a = new ctx.FP4(Z3, X); //a.set(Z3,X);
-                T.neg();
-                T.norm();
-                ZZ.mul(T);
+                var sb = 3 * ctx.ROM_CURVE.CURVE_B_I;
+                ZZ.imul(sb);
+                ZZ.div_ip2();
+                ZZ.norm(); // 3b.Z^2 
 
-                ZZ.pmul(Qx);
+                YY.add(YY);
+                ZZ.sub(YY);
+                ZZ.norm(); // 3b.Z^2-Y^2
 
-                b = new ctx.FP4(ZZ); //b.seta(ZZ);
+                a = new ctx.FP4(YZ, ZZ); // -2YZ.Ys | 3b.Z^2-Y^2 | 3X^2.Xs 
+                b = new ctx.FP4(XX); // L(0,1) | L(0,0) | L(1,0)
+
+                A.dbl();
+            } else { /* Addition */
+
+                var X1 = new ctx.FP2(A.getx()); // X1
+                var Y1 = new ctx.FP2(A.gety()); // Y1
+                var T1 = new ctx.FP2(A.getz()); // Z1
+                var T2 = new ctx.FP2(A.getz()); // Z1
+
+                T1.mul(B.gety()); // T1=Z1.Y2 
+                T2.mul(B.getx()); // T2=Z1.X2
+
+                X1.sub(T2);
+                X1.norm(); // X1=X1-Z1.X2
+                Y1.sub(T1);
+                Y1.norm(); // Y1=Y1-Z1.Y2
+
+                T1.copy(X1); // T1=X1-Z1.X2
+                X1.pmul(Qy); // X1=(X1-Z1.X2).Ys
+                T1.mul(B.gety()); // T1=(X1-Z1.X2).Y2
+
+                T2.copy(Y1); // T2=Y1-Z1.Y2
+                T2.mul(B.getx()); // T2=(Y1-Z1.Y2).X2
+                T2.sub(T1);
+                T2.norm(); // T2=(Y1-Z1.Y2).X2 - (X1-Z1.X2).Y2
+                Y1.pmul(Qx);
+                Y1.neg();
+                Y1.norm(); // Y1=-(Y1-Z1.Y2).Xs
+
+                a = new ctx.FP4(X1, T2); // (X1-Z1.X2).Ys  |  (Y1-Z1.Y2).X2 - (X1-Z1.X2).Y2  | - (Y1-Z1.Y2).Xs
+                b = new ctx.FP4(Y1);
+
+                A.add(B);
             }
             r.set(a, b, c);
             return r;
@@ -357,49 +364,6 @@ module.exports.PAIR = function(ctx) {
                 r.copy(y1);
                 r.reduce();
 
-
-                /*
-                			x0=new ctx.FP12(r);
-                			x1=new ctx.FP12(r);
-                			lv.copy(r); lv.frob(f);
-                			x3=new ctx.FP12(lv); x3.conj(); x1.mul(x3);
-                			lv.frob(f); lv.frob(f);
-                			x1.mul(lv);
-
-                			r.copy(r.pow(x));  //r=r.pow(x);
-                			x3.copy(r); x3.conj(); x1.mul(x3);
-                			lv.copy(r); lv.frob(f);
-                			x0.mul(lv);
-                			lv.frob(f);
-                			x1.mul(lv);
-                			lv.frob(f);
-                			x3.copy(lv); x3.conj(); x0.mul(x3);
-
-                			r.copy(r.pow(x));
-                			x0.mul(r);
-                			lv.copy(r); lv.frob(f); lv.frob(f);
-                			x3.copy(lv); x3.conj(); x0.mul(x3);
-                			lv.frob(f);
-                			x1.mul(lv);
-
-                			r.copy(r.pow(x));
-                			lv.copy(r); lv.frob(f);
-                			x3.copy(lv); x3.conj(); x0.mul(x3);
-                			lv.frob(f);
-                			x1.mul(lv);
-
-                			r.copy(r.pow(x));
-                			x3.copy(r); x3.conj(); x0.mul(x3);
-                			lv.copy(r); lv.frob(f);
-                			x1.mul(lv);
-
-                			r.copy(r.pow(x));
-                			x1.mul(r);
-
-                			x0.usqr();
-                			x0.mul(x1);
-                			r.copy(x0);
-                			r.reduce(); */
             }
             return r;
         }
@@ -481,7 +445,7 @@ module.exports.PAIR = function(ctx) {
                 u[i].mod(x);
                 w.div(x);
             }
-            u[3]=new ctx.BIG(w);
+            u[3] = new ctx.BIG(w);
         }
         return u;
     };

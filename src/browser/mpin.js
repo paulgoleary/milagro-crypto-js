@@ -31,7 +31,7 @@ MPIN = function(ctx) {
         /* max PIN */
         PBLEN: 14,
         /* MAXPIN length in bits */
-        TS: 10,
+        TS: 12,
         /* 10 for 4 digit PIN, 14 for 6-digit PIN - 2^TS/TS approx = sqrt(MAXPIN) */
         TRAP: 2000,
         /* 200 for 4 digit PIN, 2000 for 6-digit PIN  - approx 2*sqrt(MAXPIN) */
@@ -154,6 +154,7 @@ MPIN = function(ctx) {
             }
             return W;
         },
+
 
         /* these next two functions help to implement elligator squared - http://eprint.iacr.org/2014/043 */
         /* maps a random u to a point on the curve */
@@ -481,7 +482,6 @@ MPIN = function(ctx) {
 
         /* Implement step 1 of MPin protocol on server side. Pa is the client public key in case of DVS, otherwise must be set to null */
         SERVER_2: function(date, HID, HTID, Y, SST, xID, xCID, mSEC, E, F, Pa) {
-
             if ((Pa === undefined) || (Pa == null)) {
                 var A = new ctx.BIG(0);
                 var B = new ctx.BIG(0);
@@ -689,7 +689,6 @@ MPIN = function(ctx) {
         },
 
         /* Functions to support M-Pin Full */
-
         PRECOMPUTE: function(TOKEN, CID, G1, G2) {
             var P, T;
             var g;

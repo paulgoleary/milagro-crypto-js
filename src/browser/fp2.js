@@ -143,6 +143,10 @@ FP2 = function(ctx) {
             m.neg();
             this.add(m);
         },
+        rsub: function(x) {
+            this.neg();
+            this.add(x);
+        },
         /* this*=s, where s is FP */
         pmul: function(s) {
             this.a.mul(s);
@@ -187,18 +191,9 @@ FP2 = function(ctx) {
             var pR = new ctx.DBIG(0);
             pR.ucopy(p);
 
-            var exa = ctx.FP.EXCESS(this.a.f);
-            var exb = ctx.FP.EXCESS(this.b.f);
-            var eya = ctx.FP.EXCESS(y.a.f);
-            var eyb = ctx.FP.EXCESS(y.b.f);
-
-            var eC = exa + exb + 1;
-            var eD = eya + eyb + 1;
-
-            if ((eC + 1) * (eD + 1) > ctx.FP.FEXCESS) {
-                if (eC > 0) this.a.reduce();
-                if (eD > 0) this.b.reduce();
-                //	if (eD>1) y.reduce();
+            if ((this.a.XES + this.b.XES) * (y.a.XES + y.b.XES) > ctx.FP.FEXCESS) {
+                if (this.a.XES > 1) this.a.reduce();
+                if (this.b.XES > 1) this.b.reduce();
             }
 
             var A = ctx.BIG.mul(this.a.f, y.a.f);
@@ -224,31 +219,10 @@ FP2 = function(ctx) {
             E.norm();
 
             this.a.f.copy(ctx.FP.mod(A));
+            this.a.XES = 3;
             this.b.f.copy(ctx.FP.mod(E));
+            this.b.XES = 2;
 
-
-            /*
-
-            		var w1=new ctx.FP(this.a); 
-            		var w2=new ctx.FP(this.b); 
-            		var w5=new ctx.FP(this.a); 
-            		var mw=new ctx.FP(0);
-
-            		w1.mul(y.a);  // w1=a*y.a  - this norms w1 and y.a, NOT a
-            		w2.mul(y.b);  // w2=b*y.b  - this norms w2 and y.b, NOT b
-            		w5.add(this.b);    // w5=a+b
-            		this.b.copy(y.a); this.b.add(y.b); // b=y.a+y.b
-
-            		this.b.norm();
-            		w5.norm();
-
-            		this.b.mul(w5);
-            		mw.copy(w1); mw.add(w2); mw.neg();
-
-            		this.b.add(mw); mw.add(w1);
-            		this.a.copy(w1); this.a.add(mw);
-
-            		this.norm(); */
         },
 
         /* sqrt(a+ib) = sqrt(a+sqrt(a*a-n*b*b)/2)+ib/(2*sqrt(a+sqrt(a*a-n*b*b)/2)) */
@@ -331,6 +305,16 @@ FP2 = function(ctx) {
             this.add(t);
             //		this.norm();
         },
+
+        div_ip2: function() {
+            var t = new FP2(0);
+            t.a.copy(this.a);
+            t.a.add(this.b);
+            t.b.copy(this.b);
+            t.b.sub(this.a);
+            this.copy(t);
+        },
+
 
         /* w/=(1+sqrt(-1)) */
         div_ip: function() {

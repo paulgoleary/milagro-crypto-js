@@ -357,9 +357,8 @@ module.exports.RSA = function(ctx) {
 
             g.toBytes(F);
         }
+
     };
-
-
     return RSA;
 };
 

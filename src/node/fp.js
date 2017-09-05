@@ -26,6 +26,7 @@ module.exports.FP = function(ctx) {
     var FP = function(x) {
         if (x instanceof FP) {
             this.f = new ctx.BIG(x.f);
+            this.XES = x.XES;
         } else {
             this.f = new ctx.BIG(x);
             this.nres();
@@ -41,7 +42,7 @@ module.exports.FP = function(ctx) {
     FP.MOD8 = ctx.config["@M8"];
     FP.MODTYPE = ctx.config["@MT"];
 
-    FP.FEXCESS = (1 << (ctx.BIG.BASEBITS * ctx.BIG.NLEN - FP.MODBITS - 1)); // 2^(BASEBITS*NLEN-MODBITS)
+    FP.FEXCESS = (1 << ctx.config["@SH"]); // 2^(BASEBITS*NLEN-MODBITS)
     FP.OMASK = (-1) << FP.TBITS;
     FP.TBITS = FP.MODBITS % ctx.BIG.BASEBITS;
     FP.TMASK = (1 << FP.TBITS) - 1;
@@ -49,7 +50,8 @@ module.exports.FP = function(ctx) {
     FP.prototype = {
         /* set this=0 */
         zero: function() {
-            return this.f.zero();
+            this.XES = 1;
+            this.f.zero();
         },
 
         /* copy from a ctx.BIG in ROM */
@@ -67,31 +69,39 @@ module.exports.FP = function(ctx) {
 
         /* copy from another FP */
         copy: function(y) {
-            return this.f.copy(y.f);
+            this.XES = y.XES;
+            this.f.copy(y.f);
         },
 
         /* conditional swap of a and b depending on d */
         cswap: function(b, d) {
             this.f.cswap(b.f, d);
+            var t, c = d;
+            c = ~(c - 1);
+            t = c & (this.XES ^ b.XES);
+            this.XES ^= t;
+            b.XES ^= t;
         },
 
         /* conditional copy of b to a depending on d */
         cmove: function(b, d) {
+            var c = d;
+            c = ~(c - 1);
+
             this.f.cmove(b.f, d);
+            this.XES ^= (this.XES ^ b.XES) & c;
         },
 
         /* convert to Montgomery n-residue form */
         nres: function() {
             if (FP.MODTYPE != FP.PSEUDO_MERSENNE && FP.MODTYPE != FP.GENERALISED_MERSENNE) {
-                var p = new ctx.BIG();
-                p.rcopy(ctx.ROM_FIELD.Modulus);
-                var d = new ctx.DBIG(0);
+                var r = new ctx.BIG();
+                r.rcopy(ctx.ROM_FIELD.R2modp);
 
-                d.hcopy(this.f);
-                d.norm();
-                d.shl(ctx.BIG.NLEN * ctx.BIG.BASEBITS);
-                this.f.copy(d.mod(p));
-            }
+                var d = ctx.BIG.mul(this.f, r);
+                this.f.copy(FP.mod(d));
+                this.XES = 2;
+            } else this.XES = 1;
             return this;
         },
 
@@ -125,7 +135,8 @@ module.exports.FP = function(ctx) {
         reduce: function() {
             var p = new ctx.BIG(0);
             p.rcopy(ctx.ROM_FIELD.Modulus);
-            return this.f.mod(p);
+            this.f.mod(p);
+            this.XES = 1;
         },
 
         /* set this=1 */
@@ -141,38 +152,52 @@ module.exports.FP = function(ctx) {
 
         /* this*=b mod Modulus */
         mul: function(b) {
-            var ea = FP.EXCESS(this.f);
-            var eb = FP.EXCESS(b.f);
-
-            if ((ea + 1) * (eb + 1) > FP.FEXCESS) this.reduce();
+            if (this.XES * b.XES > FP.FEXCESS) this.reduce();
 
             var d = ctx.BIG.mul(this.f, b.f);
             this.f.copy(FP.mod(d));
+            this.XES = 2;
             return this;
         },
 
         /* this*=c mod Modulus where c is an int */
         imul: function(c) {
             var s = false;
-            this.norm();
+            //this.norm();
             if (c < 0) {
                 c = -c;
                 s = true;
             }
 
-            var afx = (FP.EXCESS(this.f) + 1) * (c + 1) + 1;
-            if (c <= ctx.BIG.NEXCESS && afx < FP.FEXCESS) {
-                this.f.imul(c);
-                this.norm();
+            if (FP.MODTYPE == FP.PSEUDO_MERSENNE || FP.MODTYPE == FP.GENERALISED_MERSENNE) {
+                var d = this.f.pxmul(c);
+                this.f.copy(FP.mod(d));
+                this.XES = 2;
             } else {
-                if (afx < FP.FEXCESS) this.f.pmul(c);
-                else {
-                    var p = new ctx.BIG(0);
-                    p.rcopy(ctx.ROM_FIELD.Modulus);
-                    var d = this.f.pxmul(c);
-                    this.f.copy(d.mod(p));
+                if (this.XES * c <= FP.FEXCESS) {
+                    this.f.pmul(c);
+                    this.XES *= c;
+                } else {
+                    var n = new FP(c);
+                    this.mul(n);
                 }
             }
+
+            /*
+            		if (c<=ctx.BIG.NEXCESS && this.XES*c<=FP.FEXCESS)
+            		{
+            			this.f.imul(c);
+            			this.XES*=c;
+            			this.norm();
+            		}
+            		else
+            		{
+            //			var p=new ctx.BIG(0);
+            //			p.rcopy(ctx.ROM_FIELD.Modulus);
+            			var d=this.f.pxmul(c);
+            			this.f.copy(FP.mod(d));
+            		}
+            */
             if (s) {
                 this.neg();
                 this.norm();
@@ -183,22 +208,21 @@ module.exports.FP = function(ctx) {
         /* this*=this mod Modulus */
         sqr: function() {
             var d;
-            //		this.norm();
-            var ea = FP.EXCESS(this.f);
-
-            if ((ea + 1) * (ea + 1) > FP.FEXCESS) this.reduce();
+            if (this.XES * this.XES > FP.FEXCESS) this.reduce();
             //if ((ea+1)>= Math.floor((FP.FEXCESS-1)/(ea+1))) this.reduce();
 
             d = ctx.BIG.sqr(this.f);
             var t = FP.mod(d);
             this.f.copy(t);
+            this.XES = 2;
             return this;
         },
 
         /* this+=b */
         add: function(b) {
             this.f.add(b.f);
-            if (FP.EXCESS(this.f) + 2 >= FP.FEXCESS) this.reduce();
+            this.XES += b.XES;
+            if (this.XES > FP.FEXCESS) this.reduce();
             return this;
         },
         /* this=-this mod Modulus */
@@ -207,15 +231,12 @@ module.exports.FP = function(ctx) {
             var m = new ctx.BIG(0);
             m.rcopy(ctx.ROM_FIELD.Modulus);
 
-            //		this.norm();
-            sb = FP.logb2(FP.EXCESS(this.f) + 1);
-
-            //		ov=FP.EXCESS(this.f); 
-            //		sb=1; while(ov!==0) {sb++;ov>>=1;} 
+            sb = FP.logb2(this.XES - 1);
 
             m.fshl(sb);
+            this.XES = (1 << sb);
             this.f.rsub(m);
-            if (FP.EXCESS(this.f) >= FP.FEXCESS) this.reduce();
+            if (this.XES > FP.FEXCESS) this.reduce();
             return this;
         },
 
@@ -226,6 +247,14 @@ module.exports.FP = function(ctx) {
             n.neg();
             this.add(n);
             return this;
+        },
+
+        rsub: function(b) {
+            var n = new FP(0);
+            n.copy(this);
+            n.neg();
+            this.copy(b);
+            this.add(n);
         },
 
         /* this/=2 mod Modulus */
@@ -332,14 +361,15 @@ module.exports.FP = function(ctx) {
         v = v - ((v >>> 1) & 0x55555555);
         v = (v & 0x33333333) + ((v >>> 2) & 0x33333333);
         var r = ((v + (v >>> 4) & 0xF0F0F0F) * 0x1010101) >>> 24;
-        return r + 1;
+        return r;
     };
 
-    /* calculate Field Excess */
-    FP.EXCESS = function(a) {
-        return ((a.w[ctx.BIG.NLEN - 1] & FP.OMASK) >> (FP.MODBITS % ctx.BIG.BASEBITS)) + 1;
+    /* calculate Field Excess 
+    FP.EXCESS=function(a)
+    {
+    	return ((a.w[ctx.BIG.NLEN-1]&FP.OMASK)>>(FP.MODBITS%ctx.BIG.BASEBITS))+1;
     };
-
+    */
 
     /* reduce a ctx.DBIG to a ctx.BIG using a "special" modulus */
     FP.mod = function(d) {
@@ -369,6 +399,7 @@ module.exports.FP = function(ctx) {
                 d.w[ctx.BIG.NLEN + i] += d.muladd(d.w[i], ctx.ROM_FIELD.MConst - 1, d.w[i], ctx.BIG.NLEN + i - 1);
             for (i = 0; i < ctx.BIG.NLEN; i++)
                 b.w[i] = d.w[ctx.BIG.NLEN + i];
+            b.norm();
         }
 
         if (FP.MODTYPE == FP.GENERALISED_MERSENNE) { // GoldiLocks Only
@@ -394,6 +425,7 @@ module.exports.FP = function(ctx) {
             b.w[0] += carry;
 
             b.w[Math.floor(224 / ctx.BIG.BASEBITS)] += carry << (224 % ctx.BIG.BASEBITS);
+            b.norm();
         }
 
         if (FP.MODTYPE == FP.NOT_SPECIAL) {
@@ -404,7 +436,6 @@ module.exports.FP = function(ctx) {
             b.copy(ctx.BIG.monty(m, ctx.ROM_FIELD.MConst, d));
 
         }
-        b.norm();
         return b;
     };
     return FP;

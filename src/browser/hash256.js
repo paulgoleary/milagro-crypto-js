@@ -17,8 +17,7 @@
 	under the License.
 */
 
-HASH256 = function(ctx) {
-
+HASH256 = function() {
 
     var HASH256 = function() {
         this.length = [];

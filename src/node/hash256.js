@@ -17,8 +17,7 @@
 	under the License.
 */
 
-module.exports.HASH256 = function(ctx) {
-
+module.exports.HASH256 = function() {
 
     var HASH256 = function() {
         this.length = [];
