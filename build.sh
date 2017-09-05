@@ -74,6 +74,9 @@ function build_src {
   sed -i -e "s/hash256.//g" ./src/browser/ctx.js
   sed -i -e "s/hash384.//g" ./src/browser/ctx.js
   sed -i -e "s/hash512.//g" ./src/browser/ctx.js
+  sed -i -e "s/sha3.//g" ./src/browser/ctx.js
+  sed -i -e "s/newhope.//g" ./src/browser/ctx.js
+  sed -i -e "s/nhs.//g" ./src/browser/ctx.js
   sed -i -e "s/rand.//g" ./src/browser/ctx.js
   sed -i -e "s/big.//g" ./src/browser/ctx.js
   sed -i -e "s/ff.//g" ./src/browser/ctx.js

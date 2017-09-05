@@ -320,14 +320,16 @@ var CTXLIST = {
 module.exports = CTXLIST;
 
 CTX = function(input_parameter) {
-    this.AES = aes.AES(this);
+    this.AES = aes.AES();
     this.GCM = gcm.GCM(this);
-    this.UInt64 = uint64.UInt64(this);
-    this.HASH256 = hash256.HASH256(this);
+    this.UInt64 = uint64.UInt64();
+    this.HASH256 = hash256.HASH256();
     this.HASH384 = hash384.HASH384(this);
     this.HASH512 = hash512.HASH512(this);
     this.SHA3 = sha3.SHA3(this);
     this.RAND = rand.RAND(this);
+    this.NewHope = newhope.NewHope();
+    this.NHS = nhs.NHS(this);
 
     if (input_parameter === undefined)
         return;
@@ -351,61 +353,61 @@ CTX = function(input_parameter) {
 
             switch (this.config['CURVE']) {
                 case "ED25519":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_ED25519(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_ED25519();
                     break; 
                 case "C25519":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_C25519(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_C25519();
                     break; 
                 case "NIST256":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST256(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST256();
                     break; 
                 case "NIST384":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST384(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST384();
                     break; 
                 case "BRAINPOOL":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_BRAINPOOL(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BRAINPOOL();
                     break; 
                 case "ANSSI":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_ANSSI(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_ANSSI();
                     break; 
                 case "HIFIVE":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_HIFIVE(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_HIFIVE();
                     break; 
                 case "GOLDILOCKS":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_GOLDILOCKS(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_GOLDILOCKS();
                     break; 
                 case "C41417":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_C41417(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_C41417();
                     break; 
                 case "NIST521":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST521(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NIST521();
                     break; 
                 case "NUMS256W":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS256W(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS256W();
                     break; 
                 case "NUMS256E":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS256E(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS256E();
                     break; 
                 case "NUMS384W":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS384W(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS384W();
                     break; 
                 case "NUMS384E":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS384E(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS384E();
                     break; 
                 case "NUMS512W":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS512W(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS512W();
                     break; 
                 case "NUMS512E":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS512E(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_NUMS512E();
                     break; 
                 case "BN254":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_BN254(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BN254();
                     break; 
                 case "BN254CX":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_BN254CX(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BN254CX();
                     break; 
                 case "BLS383":
-                    this.ROM_CURVE = romCurve.ROM_CURVE_BLS383(this);
+                    this.ROM_CURVE = romCurve.ROM_CURVE_BLS383();
                     break; 
                 default: 
                     this.ROM_CURVE = undefined;
@@ -414,49 +416,49 @@ CTX = function(input_parameter) {
 
             switch (this.config['FIELD']) {
                 case "25519":
-                    this.ROM_FIELD = romField.ROM_FIELD_25519(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_25519();
                     break; 
                 case "NIST256":
-                    this.ROM_FIELD = romField.ROM_FIELD_NIST256(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_NIST256();
                     break; 
                 case "NIST384":
-                    this.ROM_FIELD = romField.ROM_FIELD_NIST384(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_NIST384();
                     break; 
                 case "BRAINPOOL":
-                    this.ROM_FIELD = romField.ROM_FIELD_BRAINPOOL(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_BRAINPOOL();
                     break; 
                 case "ANSSI":
-                    this.ROM_FIELD = romField.ROM_FIELD_ANSSI(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_ANSSI();
                     break; 
                 case "HIFIVE":
-                    this.ROM_FIELD = romField.ROM_FIELD_HIFIVE(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_HIFIVE();
                     break; 
                 case "GOLDILOCKS":
-                    this.ROM_FIELD = romField.ROM_FIELD_GOLDILOCKS(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_GOLDILOCKS();
                     break; 
                 case "C41417":
-                    this.ROM_FIELD = romField.ROM_FIELD_C41417(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_C41417();
                     break; 
                 case "NIST521":
-                    this.ROM_FIELD = romField.ROM_FIELD_NIST521(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_NIST521();
                     break; 
                 case "256PM":
-                    this.ROM_FIELD = romField.ROM_FIELD_256PM(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_256PM();
                     break; 
                 case "384PM":
-                    this.ROM_FIELD = romField.ROM_FIELD_384PM(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_384PM();
                     break; 
                 case "512PM":
-                    this.ROM_FIELD = romField.ROM_FIELD_512PM(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_512PM();
                     break; 
                 case "BN254":
-                    this.ROM_FIELD = romField.ROM_FIELD_BN254(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_BN254();
                     break; 
                 case "BN254CX":
-                    this.ROM_FIELD = romField.ROM_FIELD_BN254CX(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_BN254CX();
                     break; 
                 case "BLS383":
-                    this.ROM_FIELD = romField.ROM_FIELD_BLS383(this);
+                    this.ROM_FIELD = romField.ROM_FIELD_BLS383();
                     break; 
                 default: 
                     this.ROM_FIELD = undefined;
@@ -475,8 +477,6 @@ CTX = function(input_parameter) {
                 this.ECP2 = ecp2.ECP2(this);
                 this.PAIR = pair.PAIR(this);
                 this.MPIN = mpin.MPIN(this);
-                //this.NewHope = newhope.NewHope(this);
-                //this.NHS = nhs.NewHope(this);
             };
             return;
         };

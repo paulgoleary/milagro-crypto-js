@@ -19,7 +19,7 @@
 
 /* NewHope API high-level functions  */
 
-module.exports.NHS = function(ctx) {
+NHS = function(ctx) {
 
 var NHS =  {
 
