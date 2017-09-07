@@ -23,7 +23,7 @@
 
 * MCJS is a refactor of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
-* MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384 and SHA512 hash functions and a cryptographically secure random number generator.
+* MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384, SHA512 and SHA3 hash functions and a cryptographically secure random number generator. Furthermore we recently added New Hope, a post-quantum key exchange.
 
 * MCJS is [Node.js](https://nodejs.org/en/) compatible. A conversion script is provided to make the library browser compatible (see some examples below).
 
@@ -62,7 +62,7 @@ var ctx2 = new CTX("C25519");
 ```
 The following is the list of all elliptic curves supported by MCJS
 ```
-['ED25519','GOLDILOCKS','NIST256','NIST384','NIST521','BRAINPOOL','ANSSI','HIFIVE','C25519','C41417','MF254W','MF254E','MF254M','MF256W','MF256E','MF256M','MS255W','MS255E','MS255M','MS256W','MS256E','MS256M','BN254','BN254CX','BLS383'];
+['ED25519', 'C25519', 'C41417', 'GOLDILOCKS', 'NIST256', 'NIST384','NIST521', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'NUMS256W', 'NUMS256E', 'NUMS384W', 'NUMS384E', 'NUMS512W', 'NUMS512E', 'BN254', 'BN254CX', 'BLS383'];
 ```
 #### RSA
 This library supports also RSA encryption/decryption and RSA signature. The following is a quick example on how to use RSA. First initialize the context
