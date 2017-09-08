@@ -1,60 +1,111 @@
-# AMCL - *Apache Milagro Crypto JavaScript Library*
+# MCJS - *Milagro Crypto JavaScript*
+
+[![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/miracl/milagro-crypto-js/tree/master)
+[![Master Build Status](https://secure.travis-ci.org/miracl/milagro-crypto-js.png?branch=master)](https://travis-ci.org/miracl/milagro-crypto-js?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/miracl/milagro-crypto-js/badge.svg?branch=master)](https://coveralls.io/github/miracl/milagro-crypto-js?branch=master)
+
+[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/miracl/milagro-crypto-js/tree/develop)
+[![Develop Build Status](https://secure.travis-ci.org/miracl/milagro-crypto-js.png?branch=develop)](https://travis-ci.org/miracl/milagro-crypto-js?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/miracl/milagro-crypto-js/badge.svg?branch=develop)](https://coveralls.io/github/miracl/milagro-crypto-js?branch=develop)
+
 
 * **category**:    Library
-* **copyright**:   2016 MIRACL UK LTD
+* **copyright**:   2017 The Apache Software Foundation
 * **license**:     ASL 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 * **link**:        https://github.com/miracl/milagro-crypto-js
 * **introduction**: [AMCL.pdf](doc/AMCL.pdf)
 
 ## Description
 
-*AMCJL - Apache Milagro Crypto JavaScript Library*
+*MCJS - Milagro Crypto JavaScript*
 
-AMCJL is a standards compliant JavaScript cryptographic library with no external dependencies, specifically designed to support the Internet of Things (IoT).
+* MCJS is a standards compliant JavaScript cryptographic library with no external dependencies except for the random seed source.
 
-For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf)
+* MCJS is a refactor of the *JavaScript* code of [AMCL](https://github.com/miracl/amcl). For a detailed explanation about this library please read: [doc/AMCL.pdf](doc/AMCL.pdf). For info about the refactoring process contact support@miracl.com.
 
-AMCJL is provided in *JavaScript* language
+* MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384, SHA512 and SHA3 hash functions and a cryptographically secure random number generator. Furthermore we recently added New Hope, a post-quantum key exchange.
 
-NOTE: This product includes software developed at *[The Apache Software Foundation](http://www.apache.org/)*.
+* MCJS is [Node.js](https://nodejs.org/en/) compatible. A conversion script is provided to make the library browser compatible (see some examples below).
 
-## Requirement for testing
+## Install and run  tests
 
-Nodejs
+[Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) are required in order to build the library and run the tests. Install also the node.js modules required with the command
 
-## Run tests
-
-```bash
-$ git clone https://github.com/miracl/milagro-crypto-js
-$ cd tests
-$ ./run_test.sh
 ```
-## Information
+npm install
+```
 
-AMCJL is very simple to build for JavaScript.
+Run all the tests with the following command
 
-First - decide the modulus type and curve type you want to use. Edit ROM.js 
-where indicated. You might want to use one of the curves whose details are
-already in there.
+```
+npm test
+```
 
-Three example API files are provided, MPIN.js which 
-supports our M-Pin (tm) protocol, ECDH.js which supports elliptic 
-curve key exchange, digital signature and public key crypto, and RSA.js
-which supports RSA encryption. The first  can be tested using the 
-TestMPIN.html driver programs, the second can be tested using TestECDH.html, 
-and the third using TestRSA.html
+## Quick Start
+#### Elliptic Curves
+Suppose you want to implement ECDH with NIST256 elliptic curve. First you need to initialize the context:
 
-In the ROM.js file you must provide the curve constants. Several examples
-are provided there, if you are willing to use one of these.
+```
+var CTX = require("milagro-crypto-js");
 
-For quick jumpstart:-
+var ctx = new CTX("NIST256");
+```
+then you can call the functions as follows:
+```
+ctx.ECDH.KEY_PAIR_GENERATE(...);
+ctx.ECDH.ECPSVDP_DH(...);
+```
+If you need to use more than one elliptic curve in the same script you only need to initialize two different contexts, for example
+```
+var ctx1 = new CTX("NIST256");
+var ctx2 = new CTX("C25519");
+```
+The following is the list of all elliptic curves supported by MCJS
+```
+['ED25519', 'C25519', 'C41417', 'GOLDILOCKS', 'NIST256', 'NIST384','NIST521', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'NUMS256W', 'NUMS256E', 'NUMS384W', 'NUMS384E', 'NUMS512W', 'NUMS512E', 'BN254', 'BN254CX', 'BLS383'];
+```
+#### RSA
+This library supports also RSA encryption/decryption and RSA signature. The following is a quick example on how to use RSA. First initialize the context
+```
+var CTX = require("milagro-crypto-js");
 
-Run Chrome browser and navigate to TestECDH.html
+var ctx = new CTX("RSA2048");
+```
+then you can call the RSA functions as follows:
+```
+ctx.RSA.ENCRYPT(...);
+ctx.RSA.DECRYPT(...);
+```
+The following is the list of all the RSA security level supported by *MCJS*
+```
+['RSA2048','RSA3072','RSA4096'];
+```
+#### Other functions
+MCJS supports SHA256, SHA384, SHA512, AES-GCM encryption and Marsaglia & Zaman random number generator. Those functions are contained in every context initialized with RSA or with an elliptic curve. If you want to create a context supporting only those general functions then initialize it with no parameter as follows:
+```
+var CTX = require("milagro-crypto-js");
 
-or TestMPIN.html
+var ctx = new CTX();
+```
+In the `/example` directory there are many simple script that show how to use this library.
 
-or BenchtestEC.html
 
-or BenchtestPAIR.html
+## Run examples
 
-You might need to wait a couple of minutes for the output to appear.
+[Node.js](https://nodejs.org/en/) examples are provided - please see `./examples/`. Use the following commands to run an example
+
+```
+node ./examples/example_ECC_NIST256.js
+```
+
+#### Browsers
+
+The build.sh script will convert the Node.js library source code and an 
+example into browser compatible code.
+ 
+```
+./build.sh -f ./examples/example_RSA2048_ECDSA_NIST256.js
+```
+
+There is an example conversion  in this directory `./src/browser` with an example output `./examples.js`.
+In order to run the example open the index.html file in a browser and check the console output.
