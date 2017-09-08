@@ -10,7 +10,7 @@
 # NOTES:
 
 # EXAMPLE USAGE:
-# ./build.sh -f ./src//node/example_RSA2048_ECDSA_NIST256.js
+# ./build.sh -f ./examples/example_RSA2048_ECDSA_NIST256.js
 
 # set -x 
 usage()
