@@ -196,7 +196,7 @@ ECP = function(ctx) {
                 this.INF = false;
             } else this.inf();
         },
-        /* set this=x, y calcuated from curve equation */
+        /* set this=x, y calculated from curve equation */
         setx: function(ix) {
             this.x = new ctx.FP(0);
             this.x.bcopy(ix);
