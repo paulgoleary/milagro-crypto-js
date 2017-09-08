@@ -2,7 +2,7 @@
 #
 # build.sh
 #
-# Convert to browser compatible code 
+# Convert Node.js source and example code to browser compatible code 
 #
 # @author Kealan McCusker <kealan.mccusker@miracl.com>
 # ------------------------------------------------------------------------------
@@ -10,16 +10,16 @@
 # NOTES:
 
 # EXAMPLE USAGE:
-# ./build.sh -f ../node/example_RSA2048_ECDSA_NIST256.js
+# ./build.sh -f ./src//node/example_RSA2048_ECDSA_NIST256.js
 
 # set -x 
 usage()
 {
 cat << EOF
-usage: $0 options
+usage: $0 [-h] [-f infile]
 
 OPTIONS:
-   -f      example file (required)
+   -f      Node.js example file 
    -h      Print usage
 EOF
 }
