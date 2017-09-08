@@ -192,7 +192,7 @@ module.exports.MPIN = function(ctx) {
 
         /* these next two functions implement elligator squared - http://eprint.iacr.org/2014/043 */
         /* Elliptic curve point E in format (0x04,x,y} is converted to form {0x0-,u,v} */
-        /* Note that u and v are indistinguisible from random strings */
+        /* Note that u and v are indistinguishable from random strings */
         ENCODING: function(rng, E) {
             var i, rn, m, su, sv;
             var T = [];

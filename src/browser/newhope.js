@@ -25,7 +25,7 @@ NewHope = function() {
             return Math.floor((a + (b >> 1)) / b);
         },
 
-        /* constant time absolute vaue */
+        /* constant time absolute value */
         nabs: function(ix) {
             var mask = (x >> 31);
             return (x + mask) ^ mask;

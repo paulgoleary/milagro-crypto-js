@@ -10,7 +10,7 @@
 
 
 * **category**:    Library
-* **copyright**:   2016 MIRACL UK LTD
+* **copyright**:   2017 The Apache Software Foundation
 * **license**:     ASL 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 * **link**:        https://github.com/miracl/milagro-crypto-js
 * **introduction**: [AMCL.pdf](doc/AMCL.pdf)

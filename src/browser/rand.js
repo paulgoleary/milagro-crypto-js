@@ -66,7 +66,7 @@ RAND = function(ctx) {
                 if (k == this.NK) k = 0;
                 t = this.ira[k] >>> 0;
                 pdiff = (t - this.ira[i] - this.borrow) | 0;
-                pdiff >>>= 0; /* This is seriously wierd shit. I got to do this to get a proper unsigned comparison... */
+                pdiff >>>= 0; /* This is seriously weird shit. I got to do this to get a proper unsigned comparison... */
                 if (pdiff < t) this.borrow = 0;
                 if (pdiff > t) this.borrow = 1;
                 this.ira[i] = (pdiff | 0);

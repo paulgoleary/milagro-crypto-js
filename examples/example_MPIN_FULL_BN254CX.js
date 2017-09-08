@@ -218,7 +218,7 @@ if (ONE_PASS) {
 
 
 if (rtn == ctx.MPIN.BAD_PIN) {
-    console.log("Server says - Bad Pin. I don't know you. Feck off.");
+    console.log("Server says - Bad Pin.");
     if (PINERROR) {
         var err = ctx.MPIN.KANGAROO(E, F);
         if (err != 0) {
