@@ -41,7 +41,7 @@
   "dependencies": {},
   "nyc": {
     "include": [
-      "src/*.js"
+      "src/**/*.js"
     ],
     "reporter": [
       "lcov",
