@@ -1,18 +1,18 @@
 # MCJS - *Milagro Crypto JavaScript*
 
-[![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/miracl/milagro-crypto-js/tree/master)
-[![Master Build Status](https://secure.travis-ci.org/miracl/milagro-crypto-js.png?branch=master)](https://travis-ci.org/miracl/milagro-crypto-js?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/miracl/milagro-crypto-js/badge.svg?branch=master)](https://coveralls.io/github/miracl/milagro-crypto-js?branch=master)
+[![Master Branch](https://img.shields.io/badge/-master:-gray.svg)](https://github.com/milagro-crypto/milagro-crypto-js/tree/master)
+[![Master Build Status](https://secure.travis-ci.org/milagro-crypto/milagro-crypto-js.png?branch=master)](https://travis-ci.org/milagro-crypto/milagro-crypto-js?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/milagro-crypto/milagro-crypto-js/badge.svg?branch=master)](https://coveralls.io/github/milagro-crypto/milagro-crypto-js?branch=master)
 
-[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/miracl/milagro-crypto-js/tree/develop)
-[![Develop Build Status](https://secure.travis-ci.org/miracl/milagro-crypto-js.png?branch=develop)](https://travis-ci.org/miracl/milagro-crypto-js?branch=develop)
-[![Coverage Status](https://coveralls.io/repos/github/miracl/milagro-crypto-js/badge.svg?branch=develop)](https://coveralls.io/github/miracl/milagro-crypto-js?branch=develop)
+[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/milagro-crypto/milagro-crypto-js/tree/develop)
+[![Develop Build Status](https://secure.travis-ci.org/milagro-crypto/milagro-crypto-js.png?branch=develop)](https://travis-ci.org/milagro-crypto/milagro-crypto-js?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/milagro-crypto/milagro-crypto-js/badge.svg?branch=develop)](https://coveralls.io/github/milagro-crypto/milagro-crypto-js?branch=develop)
 
 
 * **category**:    Library
 * **copyright**:   2017 The Apache Software Foundation
 * **license**:     ASL 2.0 - http://www.apache.org/licenses/LICENSE-2.0
-* **link**:        https://github.com/miracl/milagro-crypto-js
+* **link**:        https://github.com/milagro-crypto/milagro-crypto-js
 * **introduction**: [AMCL.pdf](doc/AMCL.pdf)
 
 ## Description
