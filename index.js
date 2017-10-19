@@ -1,2 +1,1 @@
-var ctx = require("./src/node/ctx");
-exports.ctx = ctx;
+module.exports = require("./src/node/ctx");
