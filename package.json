@@ -1,6 +1,6 @@
 {
   "name": "milagro-crypto-js",
-  "version": "3.0.2",
+  "version": "3.0.1",
   "description": "Crypto Library in Javascript - Refact of Apache Milagro Crypto Library",
   "main": "index.js",
   "directories": {
@@ -30,7 +30,6 @@
   },
   "homepage": "https://github.com/miracl/milagro-crypto-js#readme",
   "devDependencies": {
-    "@miracl/milagro-crypto-js": "^2.1.1",
     "chai": "^3.5.0",
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
