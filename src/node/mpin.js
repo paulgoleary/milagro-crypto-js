@@ -863,30 +863,31 @@ module.exports.MPIN = function(ctx) {
             var r = new ctx.BIG(0);
             r.rcopy(ctx.ROM_CURVE.CURVE_Order);
 
-            if (rng != null)
-                this.RANDOM_GENERATE(rng, Z);
-
-            var z = ctx.BIG.fromBytes(Z);
+            if (rng != null) {
+                z = ctx.BIG.randomnum(r, rng);
+                z.toBytes(Z);
+            } else {
+                z = ctx.BIG.fromBytes(Z);
+            }
             z.invmodp(r);
 
-            var pa = new ctx.BIG(0);
-            pa.rcopy(ctx.ROM_CURVE.CURVE_Pxa);
-            var pb = new ctx.BIG(0);
-            pb.rcopy(ctx.ROM_CURVE.CURVE_Pxb);
+            var A = new ctx.BIG(0);
+            var B = new ctx.BIG(0);
+            A.rcopy(ctx.ROM_CURVE.CURVE_Pxa);
+            B.rcopy(ctx.ROM_CURVE.CURVE_Pxb);
             var QX = new ctx.FP2(0);
-            QX.bset(pa, pb);
-            var pa = new ctx.BIG(0);
-            pa.rcopy(ctx.ROM_CURVE.CURVE_Pya);
-            var pb = new ctx.BIG(0);
-            pb.rcopy(ctx.ROM_CURVE.CURVE_Pyb);
+            QX.bset(A, B);
+            A.rcopy(ctx.ROM_CURVE.CURVE_Pya);
+            B.rcopy(ctx.ROM_CURVE.CURVE_Pyb);
             var QY = new ctx.FP2(0);
-            QY.bset(pa, pb);
+            QY.bset(A, B);
 
+            var Q = new ctx.ECP2();
             Q.setxy(QX, QY);
             if (Q.INF)
                 return MPIN.INVALID_POINT;
 
-            Q = ctx.PAIR.G2mul(Q, z);
+	    Q = ctx.PAIR.G2mul(Q, z);
             Q.toBytes(Pa);
             return 0;
         }
