@@ -365,7 +365,7 @@ MPIN = function(ctx) {
             var P;
             if (type == 0) {
                 P = ctx.ECP.fromBytes(G);
-                if (P.is_infinity()) return INVALID_POINT;
+                if (P.is_infinity()) return this.INVALID_POINT;
             } else
                 P = ctx.ECP.mapit(G);
 

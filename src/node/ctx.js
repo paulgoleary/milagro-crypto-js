@@ -1,48 +1,48 @@
 /*
-	Licensed to the Apache Software Foundation (ASF) under one
-	or more contributor license agreements.  See the NOTICE file
-	distributed with this work for additional information
-	regarding copyright ownership.  The ASF licenses this file
-	to you under the Apache License, Version 2.0 (the
-	"License"); you may not use this file except in compliance
-	with the License.  You may obtain a copy of the License at
-	
-	http://www.apache.org/licenses/LICENSE-2.0
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
 
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the License is distributed on an
-	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	KIND, either express or implied.  See the License for the
-	specific language governing permissions and limitations
-	under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
 */
 
-var romField = require('./rom_field');
-var romCurve = require('./rom_curve');
-var aes = require('./aes');
-var gcm = require('./gcm');
-var uint64 = require('./uint64');
-var hash256 = require('./hash256');
-var hash384 = require('./hash384');
-var hash512 = require('./hash512');
-var sha3 = require('./sha3');
-var rand = require('./rand');
-var big = require('./big');
-var fp = require('./fp');
-var ecp = require('./ecp');
-var ecdh = require('./ecdh');
+var romField = require("./rom_field");
+var romCurve = require("./rom_curve");
+var aes = require("./aes");
+var gcm = require("./gcm");
+var uint64 = require("./uint64");
+var hash256 = require("./hash256");
+var hash384 = require("./hash384");
+var hash512 = require("./hash512");
+var sha3 = require("./sha3");
+var rand = require("./rand");
+var big = require("./big");
+var fp = require("./fp");
+var ecp = require("./ecp");
+var ecdh = require("./ecdh");
 
-var ff = require('./ff');
-var rsa = require('./rsa');
+var ff = require("./ff");
+var rsa = require("./rsa");
 
-var fp2 = require('./fp2');
-var fp4 = require('./fp4');
-var fp12 = require('./fp12');
-var ecp2 = require('./ecp2');
-var pair = require('./pair');
-var mpin = require('./mpin');
-var newhope = require('./newhope');
-var nhs = require('./nhs');
+var fp2 = require("./fp2");
+var fp4 = require("./fp4");
+var fp12 = require("./fp12");
+var ecp2 = require("./ecp2");
+var pair = require("./pair");
+var mpin = require("./mpin");
+var newhope = require("./newhope");
+var nhs = require("./nhs");
 
 var CTXLIST = {
     "ED25519": {
@@ -315,11 +315,11 @@ var CTXLIST = {
         "@BASE": 23,
         "@ML": 8,
     },
-}
+};
 
-module.exports = CTXLIST;
+module.exports = function(input_parameter) {
+    "use strict";
 
-CTX = function(input_parameter) {
     this.AES = aes.AES();
     this.GCM = gcm.GCM(this);
     this.UInt64 = uint64.UInt64();
@@ -331,14 +331,13 @@ CTX = function(input_parameter) {
     this.NewHope = newhope.NewHope();
     this.NHS = nhs.NHS(this);
 
-    if (input_parameter === undefined)
+    if (typeof input_parameter === "undefined") {
         return;
-    else {
-
+    } else {
         this.config = CTXLIST[input_parameter];
 
         // Set RSA parameters
-        if (this.config['TFF'] !== undefined) {
+        if (typeof this.config["TFF"] !== "undefined") {
             this.BIG = big.BIG(this);
             this.DBIG = big.DBIG(this);
             this.FF = ff.FF(this);
@@ -346,12 +345,12 @@ CTX = function(input_parameter) {
             this.rsa_public_key = rsa.rsa_public_key(this);
             this.rsa_private_key = rsa.rsa_private_key(this);
             return;
-        };
+        }
 
         // Set Elliptic Curve parameters
-        if (this.config['CURVE'] !== undefined) {
+        if (typeof this.config["CURVE"] !== "undefined") {
 
-            switch (this.config['CURVE']) {
+            switch (this.config["CURVE"]) {
                 case "ED25519":
                     this.ROM_CURVE = romCurve.ROM_CURVE_ED25519();
                     break;
@@ -411,10 +410,9 @@ CTX = function(input_parameter) {
                     break;
                 default:
                     this.ROM_CURVE = undefined;
-            };
+            }
 
-
-            switch (this.config['FIELD']) {
+            switch (this.config["FIELD"]) {
                 case "25519":
                     this.ROM_FIELD = romField.ROM_FIELD_25519();
                     break;
@@ -470,17 +468,16 @@ CTX = function(input_parameter) {
             this.ECP = ecp.ECP(this);
             this.ECDH = ecdh.ECDH(this);
 
-            if (this.config['@PF'] != 0) {
+            if (this.config["@PF"] != 0) {
                 this.FP2 = fp2.FP2(this);
                 this.FP4 = fp4.FP4(this);
                 this.FP12 = fp12.FP12(this);
                 this.ECP2 = ecp2.ECP2(this);
                 this.PAIR = pair.PAIR(this);
                 this.MPIN = mpin.MPIN(this);
-            };
-            return;
-        };
-    };
-};
+            }
 
-module.exports = CTX;
+            return;
+        }
+    }
+};

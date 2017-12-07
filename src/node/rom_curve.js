@@ -1,20 +1,20 @@
 /*
-	Licensed to the Apache Software Foundation (ASF) under one
-	or more contributor license agreements.  See the NOTICE file
-	distributed with this work for additional information
-	regarding copyright ownership.  The ASF licenses this file
-	to you under the Apache License, Version 2.0 (the
-	"License"); you may not use this file except in compliance
-	with the License.  You may obtain a copy of the License at
-	
-	http://www.apache.org/licenses/LICENSE-2.0
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
 
-	Unless required by applicable law or agreed to in writing,
-	software distributed under the License is distributed on an
-	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	KIND, either express or implied.  See the License for the
-	specific language governing permissions and limitations
-	under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
 */
 
 /* Fixed Data in ROM - Field and Curve parameters */
@@ -37,31 +37,11 @@ module.exports.ROM_CURVE_ANSSI = function() {
 };
 
 module.exports.ROM_CURVE_BLS383 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_BLS383 = {
 
-        // BLS383 Curve 
+        // BLS383 Curve
         // Base Bits= 23
 
         CURVE_A: 0,
@@ -139,94 +119,75 @@ module.exports.ROM_CURVE_BLS383 = function() {
 };
 
 module.exports.ROM_CURVE_FP256BN = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_FP256BN = {
 
-        // FP256BN Curve 
+        // FP256BN Curve
 
         // Base Bits= 24
 
-		CURVE_A: 0,
-		CURVE_B_I: 3,
-		CURVE_B: [0x3,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-		CURVE_Order: [0xB500D,0x536CD1,0x1AF62D,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
-		CURVE_Gx: [0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-		CURVE_Gy: [0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+        CURVE_A: 0,
+        CURVE_B_I: 3,
+        CURVE_B: [0x3,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+        CURVE_Order: [0xB500D,0x536CD1,0x1AF62D,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
+        CURVE_Gx: [0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+        CURVE_Gy: [0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
 
-		CURVE_Bnx: [0xB0A801,0xF5C030,0x6882,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-		CURVE_Cof: [0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-		CURVE_Cru: [0xA1B807,0xA24A3,0x1EDB1C,0xF1932D,0xCDD79D,0x18659B,0x409210,0x3988E1,0x1,0x0,0x0],
-		CURVE_Pxa: [0xC09EFB,0x16B689,0x3CD226,0x12BF84,0x1C539A,0x913ACE,0x577C28,0x28560F,0xC96C20,0x3350B4,0xFE0C],
-		CURVE_Pxb: [0x7E6A2B,0xED34A3,0x89D269,0x87D035,0xDD78E2,0x13B924,0xC637D8,0xDB5AE1,0x8AC054,0x605773,0x4EA6],
-		CURVE_Pya: [0xDC27FF,0xB481BE,0x48E909,0x8D6158,0xCB2475,0x3E51EF,0x75124E,0x76770D,0x42A3B3,0x46E7C5,0x7020],
-		CURVE_Pyb: [0xAD049B,0x81114A,0xB3E012,0x821A98,0x4CBE80,0xB29F8B,0x49297E,0x42EEA6,0x88C290,0xE3BCD3,0x554],
+        CURVE_Bnx: [0xB0A801,0xF5C030,0x6882,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+        CURVE_Cof: [0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+        CURVE_Cru: [0xA1B807,0xA24A3,0x1EDB1C,0xF1932D,0xCDD79D,0x18659B,0x409210,0x3988E1,0x1,0x0,0x0],
+        CURVE_Pxa: [0xC09EFB,0x16B689,0x3CD226,0x12BF84,0x1C539A,0x913ACE,0x577C28,0x28560F,0xC96C20,0x3350B4,0xFE0C],
+        CURVE_Pxb: [0x7E6A2B,0xED34A3,0x89D269,0x87D035,0xDD78E2,0x13B924,0xC637D8,0xDB5AE1,0x8AC054,0x605773,0x4EA6],
+        CURVE_Pya: [0xDC27FF,0xB481BE,0x48E909,0x8D6158,0xCB2475,0x3E51EF,0x75124E,0x76770D,0x42A3B3,0x46E7C5,0x7020],
+        CURVE_Pyb: [0xAD049B,0x81114A,0xB3E012,0x821A98,0x4CBE80,0xB29F8B,0x49297E,0x42EEA6,0x88C290,0xE3BCD3,0x554],
 
-		CURVE_W: [
-					[0x54003,0x36E1B,0x663AF0,0xFFFE78,0xFFFFFF,0xFF,0x0,0x0,0x0,0x0,0x0],
-					[0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
-		],
-		CURVE_SB: [
-				[
-					[0x669004,0xEEEE7C,0x670BF5,0xFFFE78,0xFFFFFF,0xFF,0x0,0x0,0x0,0x0,0x0],
-					[0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
-				],
-				[
-					[0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-					[0x6100A,0x4FFEB6,0xB4BB3D,0x129B19,0xDC65FB,0xA49D0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF]
-				]
-		],
-		CURVE_WB: [
-			[0x30A800,0x678F0D,0xCC1020,0x5554D2,0x555555,0x55,0x0,0x0,0x0,0x0,0x0],
-			[0x7DC805,0x764C0D,0xAD1AD6,0xA10BC3,0xDE8FBE,0x104467,0x806160,0xD105EB,0x0,0x0,0x0],
-			[0x173803,0xB6061F,0xD6C1AC,0x5085E1,0xEF47DF,0x82233,0xC030B0,0x6882F5,0x0,0x0,0x0],
-			[0x91F801,0x530F6E,0xCCE126,0x5554D2,0x555555,0x55,0x0,0x0,0x0,0x0,0x0]
-		],
-		CURVE_BB: [
-			[
-				[0x5AA80D,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
-				[0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
-				[0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
-				[0x615002,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
-			],
-			[
-				[0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-				[0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
-				[0x5AA80D,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
-				[0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF]
-			],
-			[
-				[0x615002,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-				[0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-				[0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-				[0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
-			],
-				[[0xB0A802,0xF5C030,0x6882,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-				[0xC2A002,0xD700C2,0x1A20B,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
-				[0xAA000A,0x67EC6F,0x1A2527,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
-				[0xB0A802,0xF5C030,0x6882,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
-			]
-		],        
+        CURVE_W: [
+            [0x54003,0x36E1B,0x663AF0,0xFFFE78,0xFFFFFF,0xFF,0x0,0x0,0x0,0x0,0x0],
+            [0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
+        ],
+        CURVE_SB: [
+            [
+                [0x669004,0xEEEE7C,0x670BF5,0xFFFE78,0xFFFFFF,0xFF,0x0,0x0,0x0,0x0,0x0],
+                [0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
+            ],
+            [
+                [0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+                [0x6100A,0x4FFEB6,0xB4BB3D,0x129B19,0xDC65FB,0xA49D0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF]
+            ]
+        ],
+        CURVE_WB: [
+            [0x30A800,0x678F0D,0xCC1020,0x5554D2,0x555555,0x55,0x0,0x0,0x0,0x0,0x0],
+            [0x7DC805,0x764C0D,0xAD1AD6,0xA10BC3,0xDE8FBE,0x104467,0x806160,0xD105EB,0x0,0x0,0x0],
+            [0x173803,0xB6061F,0xD6C1AC,0x5085E1,0xEF47DF,0x82233,0xC030B0,0x6882F5,0x0,0x0,0x0],
+            [0x91F801,0x530F6E,0xCCE126,0x5554D2,0x555555,0x55,0x0,0x0,0x0,0x0,0x0]
+        ],
+        CURVE_BB: [
+            [
+                [0x5AA80D,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
+                [0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
+                [0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
+                [0x615002,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
+            ],
+            [
+                [0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+                [0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
+                [0x5AA80D,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
+                [0x5AA80C,0x5DACA0,0x1A8DAA,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF]
+            ],
+            [
+                [0x615002,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+                [0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+                [0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+                [0x615001,0xEB8061,0xD105,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
+            ],
+            [
+                [0xB0A802,0xF5C030,0x6882,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+                [0xC2A002,0xD700C2,0x1A20B,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],
+                [0xAA000A,0x67EC6F,0x1A2527,0x129992,0xDC65FB,0xA49E0C,0x5EEE71,0x46E5F2,0xFCF0CD,0xFFFFFF,0xFFFF],
+                [0xB0A802,0xF5C030,0x6882,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0]
+            ]
+        ],
 
         USE_GLV: true,
         USE_GS_G2: true,
@@ -241,31 +202,11 @@ module.exports.ROM_CURVE_FP256BN = function() {
 };
 
 module.exports.ROM_CURVE_BN254 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_BN254 = {
 
-        // BN254 Curve 
+        // BN254 Curve
 
         // Base Bits= 24
 
@@ -330,47 +271,23 @@ module.exports.ROM_CURVE_BN254 = function() {
             ]
         ],
 
-
-
-
         USE_GLV: true,
         USE_GS_G2: true,
         USE_GS_GT: true,
         GT_STRONG: false,
 
         //debug: false,
-
     };
 
     return ROM_CURVE_BN254;
 };
 
 module.exports.ROM_CURVE_BN254CX = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_BN254CX = {
 
-        // BN254CX Curve 
+        // BN254CX Curve
         // Base Bits= 24
 
         CURVE_A: 0,
@@ -384,10 +301,10 @@ module.exports.ROM_CURVE_BN254CX = function() {
         CURVE_Cof: [0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
         CURVE_Cru: [0x235C97, 0x931794, 0x5631E0, 0x71EF87, 0xBDDF64, 0x3F1440, 0xCA8, 0x480000, 0x0, 0x0, 0x0],
 
-		CURVE_Pxa: [0xD2EC74,0x1CEEE4,0x26C085,0xA03E27,0x7C85BF,0x4BBB90,0xF5C3,0x358B25,0x53B256,0x2D2C70,0x1968],
-		CURVE_Pxb: [0x29CFE1,0x8E8B2E,0xF47A5,0xC209C3,0x1B97B0,0x9743F8,0x37A8E9,0xA011C9,0x19F64A,0xB9EC3E,0x1466],
-		CURVE_Pya: [0xBE09F,0xFCEBCF,0xB30CFB,0x847EC1,0x61B33D,0xE20963,0x157DAE,0xD81E22,0x332B8D,0xEDD972,0xA79],
-		CURVE_Pyb: [0x98EE9D,0x4B2288,0xEBED90,0x69D2ED,0x864EA5,0x3461C2,0x512D8D,0x35C6E4,0xC4C090,0xC39EC,0x616],
+        CURVE_Pxa: [0xD2EC74,0x1CEEE4,0x26C085,0xA03E27,0x7C85BF,0x4BBB90,0xF5C3,0x358B25,0x53B256,0x2D2C70,0x1968],
+        CURVE_Pxb: [0x29CFE1,0x8E8B2E,0xF47A5,0xC209C3,0x1B97B0,0x9743F8,0x37A8E9,0xA011C9,0x19F64A,0xB9EC3E,0x1466],
+        CURVE_Pya: [0xBE09F,0xFCEBCF,0xB30CFB,0x847EC1,0x61B33D,0xE20963,0x157DAE,0xD81E22,0x332B8D,0xEDD972,0xA79],
+        CURVE_Pyb: [0x98EE9D,0x4B2288,0xEBED90,0x69D2ED,0x864EA5,0x3461C2,0x512D8D,0x35C6E4,0xC4C090,0xC39EC,0x616],
 
 
         CURVE_W: [
@@ -437,8 +354,6 @@ module.exports.ROM_CURVE_BN254CX = function() {
             ]
         ],
 
-
-
         USE_GLV: true,
         USE_GS_G2: true,
         USE_GS_GT: true,
@@ -452,26 +367,6 @@ module.exports.ROM_CURVE_BN254CX = function() {
 };
 
 module.exports.ROM_CURVE_BRAINPOOL = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     /* Note that the original curve has been transformed to an isomorphic curve with A=-3 */
@@ -493,31 +388,11 @@ module.exports.ROM_CURVE_BRAINPOOL = function() {
 };
 
 module.exports.ROM_CURVE_C25519 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_C25519 = {
 
-        // C25519 Curve 
+        // C25519 Curve
 
         CURVE_A: 486662,
         CURVE_B_I: 0,
@@ -530,26 +405,6 @@ module.exports.ROM_CURVE_C25519 = function() {
 };
 
 module.exports.ROM_CURVE_C41417 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_C41417 = {
@@ -567,31 +422,11 @@ module.exports.ROM_CURVE_C41417 = function() {
 };
 
 module.exports.ROM_CURVE_ED25519 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_ED25519 = {
 
-        // ED25519 Curve 
+        // ED25519 Curve
 
         CURVE_A: -1,
         CURVE_B_I: 0,
@@ -606,26 +441,6 @@ module.exports.ROM_CURVE_ED25519 = function() {
 };
 
 module.exports.ROM_CURVE_GOLDILOCKS = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_GOLDILOCKS = {
@@ -642,26 +457,6 @@ module.exports.ROM_CURVE_GOLDILOCKS = function() {
 };
 
 module.exports.ROM_CURVE_HIFIVE = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_HIFIVE = {
@@ -680,31 +475,11 @@ module.exports.ROM_CURVE_HIFIVE = function() {
 };
 
 module.exports.ROM_CURVE_NIST256 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NIST256 = {
 
-        // NIST256 Curve 
+        // NIST256 Curve
         CURVE_A: -3,
         CURVE_B_I: 0,
         CURVE_B: [0xD2604B, 0x3C3E27, 0xF63BCE, 0xCC53B0, 0x1D06B0, 0x86BC65, 0x557698, 0xB3EBBD, 0x3A93E7, 0x35D8AA, 0x5AC6],
@@ -717,26 +492,6 @@ module.exports.ROM_CURVE_NIST256 = function() {
 };
 
 module.exports.ROM_CURVE_NIST384 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NIST384 = {
@@ -753,26 +508,6 @@ module.exports.ROM_CURVE_NIST384 = function() {
 };
 
 module.exports.ROM_CURVE_NIST521 = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NIST521 = {
@@ -790,31 +525,11 @@ module.exports.ROM_CURVE_NIST521 = function() {
 };
 
 module.exports.ROM_CURVE_NUMS256E = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS256E = {
 
-        // NUMS256E Curve 
+        // NUMS256E Curve
         CURVE_A: 1,
         CURVE_B_I: -15342,
         CURVE_B: [0xFFC355, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFF],
@@ -828,31 +543,11 @@ module.exports.ROM_CURVE_NUMS256E = function() {
 };
 
 module.exports.ROM_CURVE_NUMS256W = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS256W = {
 
-        // NUMS256W Curve 
+        // NUMS256W Curve
         CURVE_A: -3,
         CURVE_B_I: 152961,
         CURVE_B: [0x25581, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
@@ -866,31 +561,11 @@ module.exports.ROM_CURVE_NUMS256W = function() {
 };
 
 module.exports.ROM_CURVE_NUMS384E = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS384E = {
 
-        // NUMS384E Curve 
+        // NUMS384E Curve
         CURVE_A: 1,
         CURVE_B_I: -11556,
         CURVE_B: [0x7FD19F, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0xFFFF],
@@ -903,31 +578,11 @@ module.exports.ROM_CURVE_NUMS384E = function() {
 };
 
 module.exports.ROM_CURVE_NUMS384W = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS384W = {
 
-        // NUMS384W Curve 
+        // NUMS384W Curve
         CURVE_A: -3,
         CURVE_B_I: -34568,
         CURVE_B: [0x7F77BB, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0xFFFF],
@@ -941,31 +596,11 @@ module.exports.ROM_CURVE_NUMS384W = function() {
 };
 
 module.exports.ROM_CURVE_NUMS512E = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS512E = {
 
-        // NUMS512E Curve 
+        // NUMS512E Curve
         CURVE_A: 1,
         CURVE_B_I: -78296,
         CURVE_B: [0x7ECBEF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x7FFFFF, 0x3F],
@@ -978,31 +613,11 @@ module.exports.ROM_CURVE_NUMS512E = function() {
 };
 
 module.exports.ROM_CURVE_NUMS512W = function() {
-
-    /*
-    	Licensed to the Apache Software Foundation (ASF) under one
-    	or more contributor license agreements.  See the NOTICE file
-    	distributed with this work for additional information
-    	regarding copyright ownership.  The ASF licenses this file
-    	to you under the Apache License, Version 2.0 (the
-    	"License"); you may not use this file except in compliance
-    	with the License.  You may obtain a copy of the License at
-    	
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    	Unless required by applicable law or agreed to in writing,
-    	software distributed under the License is distributed on an
-    	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    	KIND, either express or implied.  See the License for the
-    	specific language governing permissions and limitations
-    	under the License.
-    */
-
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS512W = {
 
-        // NUMS512W Curve 
+        // NUMS512W Curve
         CURVE_A: -3,
         CURVE_B_I: 121243,
         CURVE_B: [0x1D99B, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0],
