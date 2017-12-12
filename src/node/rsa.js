@@ -19,7 +19,11 @@
 
 /* RSA API Functions */
 
-module.exports.RSA = function(ctx) {
+var RSA,
+    rsa_private_key,
+    rsa_public_key;
+
+RSA = function(ctx) {
     "use strict";
 
     var RSA = {
@@ -486,7 +490,7 @@ module.exports.RSA = function(ctx) {
     return RSA;
 };
 
-module.exports.rsa_private_key = function(ctx) {
+rsa_private_key = function(ctx) {
     "use strict";
 
     var rsa_private_key = function(n) {
@@ -500,7 +504,7 @@ module.exports.rsa_private_key = function(ctx) {
     return rsa_private_key;
 };
 
-module.exports.rsa_public_key = function(ctx) {
+rsa_public_key = function(ctx) {
     "use strict";
 
     var rsa_public_key = function(m) {
@@ -510,3 +514,11 @@ module.exports.rsa_public_key = function(ctx) {
 
     return rsa_public_key;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports = {
+        RSA: RSA,
+        rsa_public_key: rsa_public_key,
+        rsa_private_key: rsa_private_key
+    };
+}

@@ -19,7 +19,7 @@
 
 /* AMCL Weierstrass elliptic curve functions over ctx.FP2 */
 
-module.exports.ECP2 = function(ctx) {
+var ECP2 = function(ctx) {
     "use strict";
 
     /* Constructor, set this=O */
@@ -776,3 +776,7 @@ module.exports.ECP2 = function(ctx) {
 
     return ECP2;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.ECP2 = ECP2;
+}

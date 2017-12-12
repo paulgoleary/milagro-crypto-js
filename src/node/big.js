@@ -17,8 +17,11 @@
     under the License.
 */
 
+var BIG,
+    DBIG;
+
 /* AMCL BIG number class */
-module.exports.BIG = function(ctx) {
+BIG = function(ctx) {
     "use strict";
 
     /* General purpose Constructor */
@@ -1179,7 +1182,7 @@ module.exports.BIG = function(ctx) {
 };
 
 /* AMCL double length DBIG number class */
-module.exports.DBIG = function(ctx) {
+DBIG = function(ctx) {
     "use strict";
 
     /* constructor */
@@ -1509,3 +1512,10 @@ module.exports.DBIG = function(ctx) {
 
     return DBIG;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports = {
+        BIG: BIG,
+        DBIG: DBIG
+    };
+}

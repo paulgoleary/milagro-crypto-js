@@ -28,7 +28,7 @@
 
 /* Marsaglia & Zaman Random number generator constants */
 
-module.exports.RAND = function(ctx) {
+var RAND = function(ctx) {
     "use strict";
 
     var RAND = function() {
@@ -182,3 +182,7 @@ module.exports.RAND = function(ctx) {
 
     return RAND;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.RAND = RAND;
+}

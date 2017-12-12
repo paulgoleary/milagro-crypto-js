@@ -19,7 +19,28 @@
 
 /* Fixed Data in ROM - Field and Curve parameters */
 
-module.exports.ROM_CURVE_ANSSI = function() {
+var ROM_CURVE_ANSSI,
+    ROM_CURVE_BLS383,
+    ROM_CURVE_FP256BN,
+    ROM_CURVE_BN254,
+    ROM_CURVE_BN254CX,
+    ROM_CURVE_BRAINPOOL,
+    ROM_CURVE_C25519,
+    ROM_CURVE_C41417,
+    ROM_CURVE_ED25519,
+    ROM_CURVE_GOLDILOCKS,
+    ROM_CURVE_HIFIVE,
+    ROM_CURVE_NIST256,
+    ROM_CURVE_NIST384,
+    ROM_CURVE_NIST521,
+    ROM_CURVE_NUMS256E,
+    ROM_CURVE_NUMS256W,
+    ROM_CURVE_NUMS384E,
+    ROM_CURVE_NUMS384W,
+    ROM_CURVE_NUMS512E,
+    ROM_CURVE_NUMS512W;
+
+ROM_CURVE_ANSSI = function() {
 
     var ROM_CURVE_ANSSI = {
 
@@ -36,7 +57,7 @@ module.exports.ROM_CURVE_ANSSI = function() {
     return ROM_CURVE_ANSSI;
 };
 
-module.exports.ROM_CURVE_BLS383 = function() {
+ROM_CURVE_BLS383 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_BLS383 = {
@@ -118,7 +139,7 @@ module.exports.ROM_CURVE_BLS383 = function() {
     return ROM_CURVE_BLS383;
 };
 
-module.exports.ROM_CURVE_FP256BN = function() {
+ROM_CURVE_FP256BN = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_FP256BN = {
@@ -201,7 +222,7 @@ module.exports.ROM_CURVE_FP256BN = function() {
     return ROM_CURVE_FP256BN;
 };
 
-module.exports.ROM_CURVE_BN254 = function() {
+ROM_CURVE_BN254 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_BN254 = {
@@ -282,7 +303,7 @@ module.exports.ROM_CURVE_BN254 = function() {
     return ROM_CURVE_BN254;
 };
 
-module.exports.ROM_CURVE_BN254CX = function() {
+ROM_CURVE_BN254CX = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_BN254CX = {
@@ -366,7 +387,7 @@ module.exports.ROM_CURVE_BN254CX = function() {
     return ROM_CURVE_BN254CX;
 };
 
-module.exports.ROM_CURVE_BRAINPOOL = function() {
+ROM_CURVE_BRAINPOOL = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     /* Note that the original curve has been transformed to an isomorphic curve with A=-3 */
@@ -387,7 +408,7 @@ module.exports.ROM_CURVE_BRAINPOOL = function() {
     return ROM_CURVE_BRAINPOOL;
 };
 
-module.exports.ROM_CURVE_C25519 = function() {
+ROM_CURVE_C25519 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_C25519 = {
@@ -404,7 +425,7 @@ module.exports.ROM_CURVE_C25519 = function() {
     return ROM_CURVE_C25519;
 };
 
-module.exports.ROM_CURVE_C41417 = function() {
+ROM_CURVE_C41417 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_C41417 = {
@@ -421,7 +442,7 @@ module.exports.ROM_CURVE_C41417 = function() {
     return ROM_CURVE_C41417;
 };
 
-module.exports.ROM_CURVE_ED25519 = function() {
+ROM_CURVE_ED25519 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_ED25519 = {
@@ -440,7 +461,7 @@ module.exports.ROM_CURVE_ED25519 = function() {
     return ROM_CURVE_ED25519;
 };
 
-module.exports.ROM_CURVE_GOLDILOCKS = function() {
+ROM_CURVE_GOLDILOCKS = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_GOLDILOCKS = {
@@ -456,7 +477,7 @@ module.exports.ROM_CURVE_GOLDILOCKS = function() {
     return ROM_CURVE_GOLDILOCKS;
 };
 
-module.exports.ROM_CURVE_HIFIVE = function() {
+ROM_CURVE_HIFIVE = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_HIFIVE = {
@@ -474,7 +495,7 @@ module.exports.ROM_CURVE_HIFIVE = function() {
     return ROM_CURVE_HIFIVE;
 };
 
-module.exports.ROM_CURVE_NIST256 = function() {
+ROM_CURVE_NIST256 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NIST256 = {
@@ -491,7 +512,7 @@ module.exports.ROM_CURVE_NIST256 = function() {
     return ROM_CURVE_NIST256;
 };
 
-module.exports.ROM_CURVE_NIST384 = function() {
+ROM_CURVE_NIST384 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NIST384 = {
@@ -507,7 +528,7 @@ module.exports.ROM_CURVE_NIST384 = function() {
     return ROM_CURVE_NIST384;
 };
 
-module.exports.ROM_CURVE_NIST521 = function() {
+ROM_CURVE_NIST521 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NIST521 = {
@@ -524,7 +545,7 @@ module.exports.ROM_CURVE_NIST521 = function() {
     return ROM_CURVE_NIST521;
 };
 
-module.exports.ROM_CURVE_NUMS256E = function() {
+ROM_CURVE_NUMS256E = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS256E = {
@@ -542,7 +563,7 @@ module.exports.ROM_CURVE_NUMS256E = function() {
     return ROM_CURVE_NUMS256E;
 };
 
-module.exports.ROM_CURVE_NUMS256W = function() {
+ROM_CURVE_NUMS256W = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS256W = {
@@ -560,7 +581,7 @@ module.exports.ROM_CURVE_NUMS256W = function() {
     return ROM_CURVE_NUMS256W;
 };
 
-module.exports.ROM_CURVE_NUMS384E = function() {
+ROM_CURVE_NUMS384E = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS384E = {
@@ -577,7 +598,7 @@ module.exports.ROM_CURVE_NUMS384E = function() {
     return ROM_CURVE_NUMS384E;
 };
 
-module.exports.ROM_CURVE_NUMS384W = function() {
+ROM_CURVE_NUMS384W = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS384W = {
@@ -595,7 +616,7 @@ module.exports.ROM_CURVE_NUMS384W = function() {
     return ROM_CURVE_NUMS384W;
 };
 
-module.exports.ROM_CURVE_NUMS512E = function() {
+ROM_CURVE_NUMS512E = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS512E = {
@@ -612,7 +633,7 @@ module.exports.ROM_CURVE_NUMS512E = function() {
     return ROM_CURVE_NUMS512E;
 };
 
-module.exports.ROM_CURVE_NUMS512W = function() {
+ROM_CURVE_NUMS512W = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_CURVE_NUMS512W = {
@@ -628,3 +649,28 @@ module.exports.ROM_CURVE_NUMS512W = function() {
     };
     return ROM_CURVE_NUMS512W;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports = {
+        ROM_CURVE_ANSSI: ROM_CURVE_ANSSI,
+        ROM_CURVE_BLS383: ROM_CURVE_BLS383,
+        ROM_CURVE_FP256BN: ROM_CURVE_FP256BN,
+        ROM_CURVE_BN254: ROM_CURVE_BN254,
+        ROM_CURVE_BN254CX: ROM_CURVE_BN254CX,
+        ROM_CURVE_BRAINPOOL: ROM_CURVE_BRAINPOOL,
+        ROM_CURVE_C25519: ROM_CURVE_C25519,
+        ROM_CURVE_C41417: ROM_CURVE_C41417,
+        ROM_CURVE_ED25519: ROM_CURVE_ED25519,
+        ROM_CURVE_GOLDILOCKS: ROM_CURVE_GOLDILOCKS,
+        ROM_CURVE_HIFIVE: ROM_CURVE_HIFIVE,
+        ROM_CURVE_NIST256: ROM_CURVE_NIST256,
+        ROM_CURVE_NIST384: ROM_CURVE_NIST384,
+        ROM_CURVE_NIST521: ROM_CURVE_NIST521,
+        ROM_CURVE_NUMS256E: ROM_CURVE_NUMS256E,
+        ROM_CURVE_NUMS256W: ROM_CURVE_NUMS256W,
+        ROM_CURVE_NUMS384E: ROM_CURVE_NUMS384E,
+        ROM_CURVE_NUMS384W: ROM_CURVE_NUMS384W,
+        ROM_CURVE_NUMS512E: ROM_CURVE_NUMS512E,
+        ROM_CURVE_NUMS512W: ROM_CURVE_NUMS512W
+    };
+}

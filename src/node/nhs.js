@@ -19,7 +19,7 @@
 
 /* NewHope API high-level functions  */
 
-module.exports.NHS = function(ctx) {
+var NHS = function(ctx) {
     "use strict";
 
     var NHS = {
@@ -544,3 +544,7 @@ module.exports.NHS = function(ctx) {
 
     return NHS;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.NHS = NHS;
+}

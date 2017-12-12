@@ -19,7 +19,7 @@
 
 /* AMCL FF number class */
 
-module.exports.FF = function(ctx) {
+var FF = function(ctx) {
     "use strict";
 
     /* General purpose Constructor */
@@ -1000,3 +1000,7 @@ module.exports.FF = function(ctx) {
 
     return FF;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.FF = FF;
+}

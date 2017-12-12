@@ -36,7 +36,7 @@
  * See http://www.mindspring.com/~dmcgrew/gcm-nist-6.pdf
  */
 
-module.exports.GCM = function(ctx) {
+var GCM = function(ctx) {
     "use strict";
 
     var GCM = function() {
@@ -426,3 +426,7 @@ module.exports.GCM = function(ctx) {
 
     return GCM;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.GCM = GCM;
+}

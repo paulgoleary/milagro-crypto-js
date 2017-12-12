@@ -26,7 +26,7 @@
  * For use with byte-oriented messages only.
  */
 
-module.exports.SHA3 = function(ctx) {
+var SHA3 = function(ctx) {
     "use strict";
 
     var SHA3 = function(olen) {
@@ -262,3 +262,7 @@ module.exports.SHA3 = function(ctx) {
 
     return SHA3;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.SHA3 = SHA3;
+}

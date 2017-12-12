@@ -17,7 +17,7 @@
     under the License.
 */
 
-module.exports.NewHope = function() {
+var NewHope = function() {
     "use strict";
 
     var NewHope = {
@@ -145,3 +145,7 @@ module.exports.NewHope = function() {
 
     return NewHope;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.NewHope = NewHope;
+}

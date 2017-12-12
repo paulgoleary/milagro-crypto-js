@@ -17,7 +17,7 @@
     under the License.
 */
 
-module.exports.ECDH = function(ctx) {
+var ECDH = function(ctx) {
     "use strict";
 
     var ECDH = {
@@ -799,3 +799,7 @@ module.exports.ECDH = function(ctx) {
 
     return ECDH;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.ECDH = ECDH;
+}

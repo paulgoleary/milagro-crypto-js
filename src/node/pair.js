@@ -17,7 +17,7 @@
     under the License.
 */
 
-module.exports.PAIR = function(ctx) {
+var PAIR = function(ctx) {
     "use strict";
 
     var PAIR = {
@@ -644,3 +644,7 @@ module.exports.PAIR = function(ctx) {
 
     return PAIR;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.PAIR = PAIR;
+}

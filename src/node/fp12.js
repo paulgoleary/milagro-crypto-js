@@ -21,7 +21,7 @@
 
 /* FP12 elements are of the form a+i.b+i^2.c */
 
-module.exports.FP12 = function(ctx) {
+var FP12 = function(ctx) {
     "use strict";
 
     /* general purpose constructor */
@@ -708,3 +708,7 @@ module.exports.FP12 = function(ctx) {
 
     return FP12;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.FP12 = FP12;
+}

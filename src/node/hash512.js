@@ -17,7 +17,7 @@
     under the License.
 */
 
-module.exports.HASH512 = function(ctx) {
+var HASH512 = function(ctx) {
     "use strict";
 
     var HASH512 = function() {
@@ -275,3 +275,7 @@ module.exports.HASH512 = function(ctx) {
 
     return HASH512;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.HASH512 = HASH512;
+}

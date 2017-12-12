@@ -19,7 +19,7 @@
 
 /* MPIN API Functions */
 
-module.exports.MPIN = function(ctx) {
+var MPIN = function(ctx) {
     "use strict";
 
     var MPIN = {
@@ -1083,3 +1083,7 @@ module.exports.MPIN = function(ctx) {
 
     return MPIN;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.MPIN = MPIN;
+}

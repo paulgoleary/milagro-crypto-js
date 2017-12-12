@@ -17,7 +17,7 @@
     under the License.
 */
 
-module.exports.AES = function() {
+var AES = function() {
     "use strict";
 
     var AES = function() {
@@ -701,6 +701,9 @@ module.exports.AES = function() {
         0x6184cb7b, 0x70b632d5, 0x745c6c48, 0x4257b8d0
     ];
 
-
     return AES;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.AES = AES;
+}

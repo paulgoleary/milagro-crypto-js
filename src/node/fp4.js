@@ -21,7 +21,7 @@
 
 /* FP4 elements are of the form a+ib, where i is sqrt(-1+sqrt(-1))  */
 
-module.exports.FP4 = function(ctx) {
+var FP4 = function(ctx) {
     "use strict";
 
     /* general purpose constructor */
@@ -546,3 +546,7 @@ module.exports.FP4 = function(ctx) {
 
     return FP4;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.FP4 = FP4;
+}

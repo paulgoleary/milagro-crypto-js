@@ -19,7 +19,23 @@
 
 /* Fixed Data in ROM - Field and Curve parameters */
 
-module.exports.ROM_FIELD_25519 = function() {
+var ROM_FIELD_25519,
+    ROM_FIELD_256PM,
+    ROM_FIELD_384PM,
+    ROM_FIELD_512PM,
+    ROM_FIELD_ANSSI,
+    ROM_FIELD_BLS383,
+    ROM_FIELD_BN254,
+    ROM_FIELD_BN254CX,
+    ROM_FIELD_BRAINPOOL,
+    ROM_FIELD_C41417,
+    ROM_FIELD_GOLDILOCKS,
+    ROM_FIELD_HIFIVE,
+    ROM_FIELD_NIST256,
+    ROM_FIELD_NIST384,
+    ROM_FIELD_NIST521;
+
+ROM_FIELD_25519 = function() {
 
     var ROM_FIELD_25519 = {
 
@@ -33,7 +49,7 @@ module.exports.ROM_FIELD_25519 = function() {
     return ROM_FIELD_25519;
 };
 
-module.exports.ROM_FIELD_256PM = function() {
+ROM_FIELD_256PM = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_256PM = {
@@ -48,7 +64,7 @@ module.exports.ROM_FIELD_256PM = function() {
     return ROM_FIELD_256PM;
 };
 
-module.exports.ROM_FIELD_384PM = function() {
+ROM_FIELD_384PM = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_384PM = {
@@ -63,7 +79,7 @@ module.exports.ROM_FIELD_384PM = function() {
     return ROM_FIELD_384PM;
 };
 
-module.exports.ROM_FIELD_512PM = function() {
+ROM_FIELD_512PM = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_512PM = {
@@ -78,7 +94,7 @@ module.exports.ROM_FIELD_512PM = function() {
     return ROM_FIELD_512PM;
 };
 
-module.exports.ROM_FIELD_ANSSI = function() {
+ROM_FIELD_ANSSI = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_ANSSI = {
@@ -93,7 +109,7 @@ module.exports.ROM_FIELD_ANSSI = function() {
     return ROM_FIELD_ANSSI;
 };
 
-module.exports.ROM_FIELD_BLS383 = function() {
+ROM_FIELD_BLS383 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_BLS383 = {
@@ -111,7 +127,7 @@ module.exports.ROM_FIELD_BLS383 = function() {
     return ROM_FIELD_BLS383;
 };
 
-module.exports.ROM_FIELD_BN254 = function() {
+ROM_FIELD_BN254 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_BN254 = {
@@ -130,7 +146,7 @@ module.exports.ROM_FIELD_BN254 = function() {
     return ROM_FIELD_BN254;
 };
 
-module.exports.ROM_FIELD_BN254CX = function() {
+ROM_FIELD_BN254CX = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_BN254CX = {
@@ -147,7 +163,7 @@ module.exports.ROM_FIELD_BN254CX = function() {
     return ROM_FIELD_BN254CX;
 };
 
-module.exports.ROM_FIELD_BRAINPOOL = function() {
+ROM_FIELD_BRAINPOOL = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_BRAINPOOL = {
@@ -162,7 +178,7 @@ module.exports.ROM_FIELD_BRAINPOOL = function() {
     return ROM_FIELD_BRAINPOOL;
 };
 
-module.exports.ROM_FIELD_C41417 = function() {
+ROM_FIELD_C41417 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
 
@@ -177,7 +193,7 @@ module.exports.ROM_FIELD_C41417 = function() {
     return ROM_FIELD_C41417;
 };
 
-module.exports.ROM_FIELD_GOLDILOCKS = function() {
+ROM_FIELD_GOLDILOCKS = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_GOLDILOCKS = {
@@ -191,7 +207,7 @@ module.exports.ROM_FIELD_GOLDILOCKS = function() {
     return ROM_FIELD_GOLDILOCKS;
 };
 
-module.exports.ROM_FIELD_HIFIVE = function() {
+ROM_FIELD_HIFIVE = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_HIFIVE = {
@@ -205,7 +221,7 @@ module.exports.ROM_FIELD_HIFIVE = function() {
     return ROM_FIELD_HIFIVE;
 };
 
-module.exports.ROM_FIELD_NIST256 = function() {
+ROM_FIELD_NIST256 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_NIST256 = {
@@ -220,7 +236,7 @@ module.exports.ROM_FIELD_NIST256 = function() {
     return ROM_FIELD_NIST256;
 };
 
-module.exports.ROM_FIELD_NIST384 = function() {
+ROM_FIELD_NIST384 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_NIST384 = {
@@ -235,7 +251,7 @@ module.exports.ROM_FIELD_NIST384 = function() {
     return ROM_FIELD_NIST384;
 };
 
-module.exports.ROM_FIELD_NIST521 = function() {
+ROM_FIELD_NIST521 = function() {
     /* Fixed Data in ROM - Field and Curve parameters */
 
     var ROM_FIELD_NIST521 = {
@@ -248,3 +264,23 @@ module.exports.ROM_FIELD_NIST521 = function() {
     };
     return ROM_FIELD_NIST521;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports = {
+        ROM_FIELD_25519: ROM_FIELD_25519,
+        ROM_FIELD_256PM: ROM_FIELD_256PM,
+        ROM_FIELD_384PM: ROM_FIELD_384PM,
+        ROM_FIELD_512PM: ROM_FIELD_512PM,
+        ROM_FIELD_ANSSI: ROM_FIELD_ANSSI,
+        ROM_FIELD_BLS383: ROM_FIELD_BLS383,
+        ROM_FIELD_BN254: ROM_FIELD_BN254,
+        ROM_FIELD_BN254CX: ROM_FIELD_BN254CX,
+        ROM_FIELD_BRAINPOOL: ROM_FIELD_BRAINPOOL,
+        ROM_FIELD_C41417: ROM_FIELD_C41417,
+        ROM_FIELD_GOLDILOCKS: ROM_FIELD_GOLDILOCKS,
+        ROM_FIELD_HIFIVE: ROM_FIELD_HIFIVE,
+        ROM_FIELD_NIST256: ROM_FIELD_NIST256,
+        ROM_FIELD_NIST384: ROM_FIELD_NIST384,
+        ROM_FIELD_NIST521: ROM_FIELD_NIST521,
+    };
+}

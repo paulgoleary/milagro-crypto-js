@@ -21,7 +21,7 @@
 
 /* FP2 elements are of the form a+ib, where i is sqrt(-1) */
 
-module.exports.FP2 = function(ctx) {
+var FP2 = function(ctx) {
     "use strict";
 
     /* general purpose constructor */
@@ -401,3 +401,7 @@ module.exports.FP2 = function(ctx) {
 
     return FP2;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.FP2 = FP2;
+}

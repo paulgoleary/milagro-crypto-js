@@ -19,7 +19,7 @@
 
 /* rudimentary unsigned 64-bit type for SHA384 and SHA512 */
 
-module.exports.UInt64 = function() {
+var UInt64 = function() {
     "use strict";
 
     var UInt64 = function(top, bot) {
@@ -59,3 +59,7 @@ module.exports.UInt64 = function() {
 
     return UInt64;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.UInt64 = UInt64;
+}

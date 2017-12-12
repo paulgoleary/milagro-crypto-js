@@ -19,7 +19,7 @@
 
 /* Elliptic Curve Point class */
 
-module.exports.ECP = function(ctx) {
+var ECP = function(ctx) {
     "use strict";
 
     /* Constructor */
@@ -1313,3 +1313,7 @@ module.exports.ECP = function(ctx) {
 
     return ECP;
 };
+
+if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
+    module.exports.ECP = ECP;
+}
