@@ -19,7 +19,7 @@ under the License.
 
 /* Test DVS - test driver and function exerciser for Designated Verifier Signature API Functions */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var ctx = new CTX("BN254CX");
 

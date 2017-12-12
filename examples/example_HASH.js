@@ -19,7 +19,7 @@ under the License.
 
 /* Example Hash functions */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var ctx = new CTX();
 

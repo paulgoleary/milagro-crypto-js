@@ -19,7 +19,7 @@ under the License.
 
 /* Test RSA - test driver and function exerciser for RSA_2048 and ECDSA with NIST256 */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var ctx1 = new CTX('RSA2048');
 

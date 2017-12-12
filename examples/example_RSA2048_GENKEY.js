@@ -19,7 +19,7 @@ under the License.
 
 /* Test RSA - test driver and function exerciser for RSA_2048 API Functions */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var ctx = new CTX('RSA2048');
 
