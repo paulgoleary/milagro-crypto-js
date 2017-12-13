@@ -148,7 +148,7 @@ var PAIR = function(ctx) {
             lv = PAIR.line(A, A, Qx, Qy);
             r.smul(lv);
             if (n.parity() == 1) {
-                lv = line(A, P, Qx, Qy);
+                lv = PAIR.line(A, P, Qx, Qy);
                 r.smul(lv);
             }
 
@@ -234,9 +234,9 @@ var PAIR = function(ctx) {
             lv = PAIR.line(B, B, Sx, Sy);
             r.smul(lv);
             if (n.parity() == 1) {
-                lv = line(A, P, Qx, Qy);
+                lv = PAIR.line(A, P, Qx, Qy);
                 r.smul(lv);
-                lv = line(B, R, Sx, Sy);
+                lv = PAIR.line(B, R, Sx, Sy);
                 r.smul(lv);
             }
 
