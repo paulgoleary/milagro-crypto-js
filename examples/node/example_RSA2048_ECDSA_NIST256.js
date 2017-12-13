@@ -19,6 +19,7 @@ under the License.
 
 /* Test RSA - test driver and function exerciser for RSA_2048 and ECDSA with NIST256 */
 
+var CTX = require("../../index");
 
 var ctx1 = new CTX("RSA2048");
 
@@ -93,7 +94,6 @@ if (E.length != ML.length) {
         }
     }
 }
-
 if (cmp) {
     console.log("Decryption is OK");
 } else {
@@ -141,10 +141,9 @@ var ctx2 = new CTX("NIST256");
 
 console.log("\n\nStart test ECDSA NIST256");
 
-// set Salt
 for (i = 0; i < 8; i++) {
     SALT[i] = (i + 1);
-}
+} // set Salt
 
 console.log("Alice's Passphrase= " + pp);
 
@@ -158,6 +157,7 @@ for (i = 0; i <= 16; i++) {
 
 if (ctx2.ECDH.ECPSP_DSA(sha, rng, S0, M, CS, DS) != 0) {
     console.error("ECDSA Signature Failed");
+    return (-1);
 }
 
 console.log("Signature= ");
@@ -166,6 +166,7 @@ console.log("D= 0x" + ctx2.ECDH.bytestostring(DS));
 
 if (ctx2.ECDH.ECPVP_DSA(sha, W0, M, CS, DS) != 0) {
     console.error("ECDSA Verification Failed");
+    return (-1);
 } else {
     console.log("ECDSA Signature/Verification succeeded");
 }

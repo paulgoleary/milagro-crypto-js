@@ -19,17 +19,18 @@ under the License.
 
 /* Test DVS - test driver and function exerciser for Designated Verifier Signature API Functions */
 
-var CTX = require("../index");
+var CTX = require("../../index");
 
 var ctx = new CTX("BN254CX");
 
 var RAW = [];
 var rng = new ctx.RAND();
 rng.clean();
-for (i = 0; i < 100; i++) RAW[i] = i;
+for (i = 0; i < 100; i++) {
+    RAW[i] = i;
+}
 
 rng.seed(100, RAW);
-
 
 var res;
 
@@ -73,7 +74,7 @@ for (var i = 0; i < Pa.length; i++) {
 }
 console.log("ID|Pa: 0x" + ctx.MPIN.bytestostring(CLIENT_ID));
 /* Hash Client ID */
-HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
+var HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
 
 /* Client and Server are issued secrets by DTA */
 ctx.MPIN.GET_SERVER_SECRET(S, SST);
@@ -94,12 +95,12 @@ console.log("z.CS: 0x" + ctx.MPIN.bytestostring(TOKEN));
 var pin = 1234;
 console.log("Client extracts PIN= " + pin);
 res = ctx.MPIN.EXTRACT_PIN(sha, CLIENT_ID, pin, TOKEN);
-if (res != 0)
+if (res != 0) {
     console.log("Failed to extract PIN, Error: ", res);
+}
 
 console.log("Client Token TK: 0x" + ctx.MPIN.bytestostring(TOKEN));
 
-var date = 0;
 var timeValue = ctx.MPIN.GET_TIME();
 
 var message = "Message to sign";
