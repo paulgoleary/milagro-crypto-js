@@ -357,7 +357,7 @@ RSA = function(ctx) {
 
             if (f.length < RSA.RFS) {
                 d = RSA.RFS - f.length;
-                for (i = RFS - 1; i >= d; i--) {
+                for (i = RSA.RFS - 1; i >= d; i--) {
                     f[i] = f[i - d];
                 }
                 for (i = d - 1; i >= 0; i--) {
