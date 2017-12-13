@@ -45,8 +45,8 @@ var NewHope = function() {
 
         /* constant time absolute value */
         nabs: function(ix) {
-            var mask = (x >> 31);
-            return (x + mask) ^ mask;
+            var mask = (ix >> 31);
+            return (ix + mask) ^ mask;
         },
 
         /* Montgomery stuff */
