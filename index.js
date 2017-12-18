@@ -1,1 +1,1 @@
-module.exports = require("./src/node/ctx");
+module.exports = require("./src/ctx");

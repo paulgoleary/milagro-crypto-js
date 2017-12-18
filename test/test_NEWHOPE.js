@@ -20,7 +20,7 @@ under the License.
 
 /* Test New Hope function - See https://eprint.iacr.org/2016/1157 (Alkim, Ducas, Popplemann and Schwabe) */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var chai = require('chai');
 

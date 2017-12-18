@@ -92,20 +92,12 @@ In the `/example` directory there are many simple script that show how to use th
 
 ## Run examples
 
-[Node.js](https://nodejs.org/en/) examples are provided - please see `./examples/`. Use the following commands to run an example
+[Node.js](https://nodejs.org/en/) examples are provided - please see `./examples/node`. Use the following command to run an example
 
 ```
-node ./examples/example_ECC_NIST256.js
+node ./examples/node/example_ECC_NIST256.js
 ```
 
 #### Browsers
 
-The build.sh script will convert the Node.js library source code and an 
-example into browser compatible code.
- 
-```
-./build.sh -f ./examples/example_RSA2048_ECDSA_NIST256.js
-```
-
-There is an example conversion  in this directory `./src/browser` with an example output `./examples.js`.
-In order to run the example open the index.html file in a browser and check the console output.
+The library source code is browser compatible. The browser examples are locates in `./examples/browser`.

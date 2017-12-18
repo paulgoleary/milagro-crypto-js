@@ -19,7 +19,7 @@ under the License.
 
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var chai = require('chai');
 
