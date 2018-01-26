@@ -26,13 +26,27 @@ var CTX = require("../index");
 
 var expect = chai.expect;
 
-var all_curves = ['BN254', 'BN254CX', 'BLS383'];
+var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
+
+var padToMODBYTES = function(string, ctx) {
+
+    while (string.length != ctx.BIG.MODBYTES*2) {
+         string = "00"+string;
+    }
+
+    return string;
+
+}
 
 var readFP2 = function(string, ctx) {
 
     string = string.split(",");
     var cox = string[0];
     var coy = string[1];
+
+    cox = padToMODBYTES(cox, ctx);
+    coy = padToMODBYTES(coy, ctx);
+
     var fp2 = new ctx.FP2(0);
     var bigx = ctx.BIG.fromBytes(new Buffer(cox, "hex"));
     var bigy = ctx.BIG.fromBytes(new Buffer(coy, "hex"));
@@ -41,7 +55,7 @@ var readFP2 = function(string, ctx) {
     return fp2;
 }
 
-var readFP4 = function(string, ctx) {
+var readFP4 = function(string, ctx, curve) {
 
     var X = new ctx.FP2(0);
     var Y = new ctx.FP2(0);
@@ -49,6 +63,11 @@ var readFP4 = function(string, ctx) {
 	string = string.split(":");
 	var cox = string[0].split(",");
 	var coy = string[1].split(",");
+
+    cox[0] = padToMODBYTES(cox[0], ctx);
+    cox[1] = padToMODBYTES(cox[1], ctx);
+    coy[0] = padToMODBYTES(coy[0], ctx);
+    coy[1] = padToMODBYTES(coy[1], ctx);
 
     var Xx = ctx.BIG.fromBytes(new Buffer(cox[0], "hex"));
     var Xy = ctx.BIG.fromBytes(new Buffer(cox[1], "hex"));
@@ -67,21 +86,22 @@ describe('TEST FP4 ARITHMETIC', function() {
 
 	var j =0;
 
-    for (var i = 0; i < all_curves.length; i++) {
+    for (var i = 0; i < pf_curves.length; i++) {
 
 
-        it('test '+all_curves[i], function(done) {
+        it('test '+pf_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(all_curves[j]);
-            var vectors = require('../testVectors/fp4/'+all_curves[j]+'.json');
+            var ctx = new CTX(pf_curves[j]);
+            var vectors = require('../testVectors/fp4/'+pf_curves[j]+'.json');
             j++;
 
             for (var k = 0; k < vectors.length; k++) {
 
             	// test commutativity of addition
-                var fp41 = readFP4(vectors[k].FP41,ctx);
-                var fp42 = readFP4(vectors[k].FP42,ctx);
-                var fp4add = readFP4(vectors[k].FP4add,ctx);
+                var fp41 = readFP4(vectors[k].FP41,ctx,pf_curves[j]);
+                var fp42 = readFP4(vectors[k].FP42,ctx,pf_curves[j]);
+                var fp4add = readFP4(vectors[k].FP4add,ctx,pf_curves[j]);
+
                 var a1 = new ctx.FP4(0);
                 var a2 = new ctx.FP4(0);
                 a1.copy(fp41);
@@ -189,7 +209,7 @@ describe('TEST FP4 ARITHMETIC', function() {
                 // expect(a1.toString()+" "+k).to.equal(fp4xtrA.toString()+" "+k);
 
                 // test the XTR addition function r=w*x-conj(x)*y+z
-                var fp4xtrD = readFP4(vectors[k].FP4_xtrD, ctx);
+                var fp4xtrD = readFP4(vectors[k].FP4xtrD, ctx);
                 a1.copy(fp41);
                 a1.xtr_D();
                 a1.reduce();

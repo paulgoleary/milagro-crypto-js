@@ -28,7 +28,9 @@ var CTX = require("../index");
 
 var expect = chai.expect;
 
-var all_curves = ['ANSSI', 'BN254', 'BN254CX', 'BLS383', 'BRAINPOOL', 'ED25519', 'GOLDILOCKS', 'HIFIVE', 'NIST256', 'NIST521'];
+var fp_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'NIST384',/* 'C41417',*/ 'NIST521', 'NUMS256W',
+    'NUMS256E', 'NUMS384W', 'NUMS512W', 'BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'
+];
 
 var readFP = function(string, ctx) {
 
@@ -43,13 +45,23 @@ describe('TEST FP ARITHMETIC', function() {
 
 	var j = 0;
 
-    for (var i = 0; i < all_curves.length; i++) {
+    for (var i = 0; i < fp_curves.length; i++) {
 
 
-        it('test '+all_curves[i], function(done) {
+        it('test '+fp_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(all_curves[j]);
-            var vectors = require('../testVectors/fp/'+all_curves[j]+'.json');
+            var ctx = new CTX(fp_curves[j]);
+
+            // Select appropriate field for the curve
+            var  field = ctx.config["FIELD"];
+            if (fp_curves[j] == 'NUMS256E') {
+                field = field+"E";
+            }
+            if (fp_curves[j] == 'NUMS256W') {
+                field = field+"W";
+            }
+
+            var vectors = require('../testVectors/fp/'+field+'.json');
             j++;
 
             for (var k = 0; k <= vectors.length - 1; k++) {

@@ -25,7 +25,7 @@ var chai = require('chai');
 
 var expect = chai.expect;
 
-pf_curves = ["BN254", "BN254CX", "BLS383"];
+var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
 
 hextobytes = function(value_hex) {
     // "use strict";
@@ -114,7 +114,8 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
             /* Client extracts PIN from secret to create Token */
             var pin = 1234;
             var rtn = ctx.MPIN.EXTRACT_PIN(sha, CLIENT_ID, pin, TOKEN);
-            expect(rtn).to.be.equal(0);
+            rtn=rtn+3
+            expect(rtn).to.be.equal(3);
 
             var date = 0;
             pin = 1234;
@@ -126,7 +127,8 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
             prHID = pHID;
 
             rtn = ctx.MPIN.CLIENT_1(sha, date, CLIENT_ID, rng, X, pin, TOKEN, SEC, pxID, null, null);
-            expect(rtn).to.be.equal(0);
+            rtn = rtn+1
+            expect(rtn).to.be.equal(1);
 
             /* Server calculates H(ID) and H(T|H(ID)) (if time permits enabled), and maps them to points on the curve HID and HTID resp. */
             ctx.MPIN.SERVER_1(sha, date, CLIENT_ID, pHID, null);
@@ -136,13 +138,15 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Client Second Pass: Inputs Client secret SEC, x and y. Outputs -(x+y)*SEC */
             rtn = ctx.MPIN.CLIENT_2(X, Y, SEC);
-            expect(rtn).to.be.equal(0);
+            rtn = rtn+2
+            expect(rtn).to.be.equal(2);
 
             /* Server Second pass. Inputs hashed client id, random Y, -(x+y)*SEC, xID and xCID and Server secret SST. E and F help kangaroos to find error. */
             /* If PIN error not required, set E and F = NULL */
             rtn = ctx.MPIN.SERVER_2(date, pHID, null, Y, SST, pxID, null, SEC, null, null);
 
-            expect(rtn).to.be.equal(0);
+            rtn = rtn+4
+            expect(rtn).to.be.equal(4);
             done();
         });
 
@@ -666,17 +670,17 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             for (var vector in vectors) {
 
-            	CS1bytes = hextobytes(vectors[vector].CS1);
-            	CS2bytes = hextobytes(vectors[vector].CS2);
-            	CSbytes = hextobytes(vectors[vector].CLIENT_SECRET);
-                ctx.MPIN.RECOMBINE_G1(CS1bytes, CS2bytes, CS);
-                expect(ctx.MPIN.comparebytes(CS,CSbytes)).to.be.equal(true);
+                  CS1bytes = hextobytes(vectors[vector].CS1);
+                  CS2bytes = hextobytes(vectors[vector].CS2);
+                  CSbytes = hextobytes(vectors[vector].CLIENT_SECRET);
+                  ctx.MPIN.RECOMBINE_G1(CS1bytes, CS2bytes, CS);
+                  expect(ctx.MPIN.comparebytes(CS,CSbytes)).to.be.equal(true);
 
-                TP1bytes = hextobytes(vectors[vector].TP1);
-            	TP2bytes = hextobytes(vectors[vector].TP2);
-            	TPbytes = hextobytes(vectors[vector].TIME_PERMIT);
-                ctx.MPIN.RECOMBINE_G1(TP1bytes, TP2bytes, TP);
-                expect(ctx.MPIN.comparebytes(TP,TPbytes)).to.be.equal(true);
+                  TP1bytes = hextobytes(vectors[vector].TP1);
+                  TP2bytes = hextobytes(vectors[vector].TP2);
+                  TPbytes = hextobytes(vectors[vector].TIME_PERMIT);
+                  ctx.MPIN.RECOMBINE_G1(TP1bytes, TP2bytes, TP);
+                  expect(ctx.MPIN.comparebytes(TP,TPbytes)).to.be.equal(true);
             }
             done();
         });

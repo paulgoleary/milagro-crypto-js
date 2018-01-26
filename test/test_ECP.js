@@ -26,12 +26,17 @@ var CTX = require("../index");
 
 var expect = chai.expect;
 
-var all_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'C25519', 'BN254', 'BN254CX', 'BLS383'];
+var ecp_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'C25519', 'NIST384',// 'C41417',
+     'NIST521', 'NUMS256W', 'NUMS384W', 'NUMS512W', 'BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'
+];
 
 var readPoint = function(string, ctx) {
     
     var P = new ctx.ECP(0);
-	var cos = string.split(":")
+	var cos = string.split(":");
+
+    while (cos[0].length != ctx.BIG.MODBYTES*2) cos[0] = "00"+cos[0];
+    while (cos[1].length != ctx.BIG.MODBYTES*2) cos[1] = "00"+cos[1];
 
     var x = ctx.BIG.fromBytes(new Buffer(cos[0], "hex"));
     var y = ctx.BIG.fromBytes(new Buffer(cos[1], "hex"));
@@ -42,15 +47,15 @@ var readPoint = function(string, ctx) {
 
 describe('TEST ECP ARITHMETIC', function() {
 
-	var j = all_curves.length - 1;
+	var j = ecp_curves.length - 1;
 
-    for (var i = all_curves.length - 1; i >= 0; i--) {
+    for (var i = ecp_curves.length - 1; i >= 0; i--) {
 
 
-        it('test '+all_curves[i], function(done) {
+        it('test '+ecp_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(all_curves[j]);
-            var vectors = require('../testVectors/ecp/'+all_curves[j]+'.json');
+            var ctx = new CTX(ecp_curves[j]);
+            var vectors = require('../testVectors/ecp/'+ecp_curves[j]+'.json');
             j = j-1;
 
             for (var k = 0; k <= vectors.length - 1; k++) {
