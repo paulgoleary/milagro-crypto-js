@@ -28,6 +28,14 @@ var expect = chai.expect;
 
 var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
 
+var readScalar = function(string, ctx) {
+
+    while (string.length != ctx.BIG.MODBYTES*2) string = "00"+string;
+
+    return ctx.BIG.fromBytes(new Buffer(string, "hex"));
+
+}
+
 var readFP2 = function(string, ctx) {
 
 	string = string.split(",");
@@ -105,7 +113,7 @@ describe('TEST FP2 ARITHMETIC', function() {
 
                 // test scalar multiplication
                 var fp2pmul = readFP2(vectors[k].FP2pmul, ctx);
-                var scalar = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGsc, "hex"));
+                var scalar = readScalar(vectors[k].BIGsc, ctx);
                 var fpsc = new ctx.FP(0);
                 fpsc.bcopy(scalar);
                 a1.copy(fp21);
