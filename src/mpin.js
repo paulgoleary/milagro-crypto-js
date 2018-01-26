@@ -381,8 +381,14 @@ var MPIN = function(ctx) {
 
         /* Extract PIN from TOKEN for identity CID */
         EXTRACT_PIN: function(sha, CID, pin, TOKEN) {
-            var P = ctx.ECP.fromBytes(TOKEN),
-                h, R;
+            return this.EXTRACT_FACTOR(sha,CID,pin%this.MAXPIN,this.PBLEN,TOKEN);
+        },
+
+        /* Extract factor from TOKEN for identity CID */
+        EXTRACT_FACTOR: function(sha, CID, factor, facbits, TOKEN) {
+            var P, R, h;
+
+            P = ctx.ECP.fromBytes(TOKEN);
 
             if (P.is_infinity()) {
                 return this.INVALID_POINT;
@@ -391,10 +397,29 @@ var MPIN = function(ctx) {
             h = this.hashit(sha, 0, CID);
             R = ctx.ECP.mapit(h);
 
-            pin %= this.MAXPIN;
-
-            R = R.pinmul(pin, this.PBLEN);
+            R = R.pinmul(factor, facbits);
             P.sub(R);
+
+            P.toBytes(TOKEN);
+
+            return 0;
+        },
+
+        /* Restore factor to TOKEN for identity CID */
+        RESTORE_FACTOR: function(sha, CID, factor, facbits, TOKEN) {
+            var P, R, h;
+
+            P = ctx.ECP.fromBytes(TOKEN);
+
+            if (P.is_infinity()) {
+                return this.INVALID_POINT;
+            }
+
+            h = this.hashit(sha, 0, CID),
+            R = ctx.ECP.mapit(h);
+
+            R = R.pinmul(factor, facbits);
+            P.add(R);
 
             P.toBytes(TOKEN);
 
