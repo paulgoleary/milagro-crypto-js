@@ -30,13 +30,21 @@ var ecp_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIF
      'NIST521', 'NUMS256W', 'NUMS384W', 'NUMS512W', 'BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'
 ];
 
+var readScalar = function(string, ctx) {
+
+    while (string.length != ctx.BIG.MODBYTES*2) string = "00"+string;
+
+    return ctx.BIG.fromBytes(new Buffer(string, "hex"));
+
+}
+
 var readPoint = function(string, ctx) {
     
     var P = new ctx.ECP(0);
 	var cos = string.split(":");
 
-    while (cos[0].length != ctx.BIG.MODBYTES*2) cos[0] = "00"+cos[0];
-    while (cos[1].length != ctx.BIG.MODBYTES*2) cos[1] = "00"+cos[1];
+    while (cos[0].length < ctx.BIG.MODBYTES*2) cos[0] = "0"+cos[0];
+    while (cos[1].length < ctx.BIG.MODBYTES*2) cos[1] = "0"+cos[1];
 
     var x = ctx.BIG.fromBytes(new Buffer(cos[0], "hex"));
     var y = ctx.BIG.fromBytes(new Buffer(cos[1], "hex"));
@@ -121,7 +129,7 @@ describe('TEST ECP ARITHMETIC', function() {
 
                 // test scalar multiplication
                 var Pmul = readPoint(vectors[k].ECPmul,ctx);
-                var Scalar1 = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGscalar1, "hex"));
+                var Scalar1 = readScalar(vectors[k].BIGscalar1, ctx);
                 Paux1.copy(P1);
                 Paux1 = Paux1.mul(Scalar1);
                 Paux1.affine();
@@ -130,7 +138,7 @@ describe('TEST ECP ARITHMETIC', function() {
                 if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
 	                // test multiplication by small integer
 	                var Ppinmul = readPoint(vectors[k].ECPpinmul,ctx);
-	                var Scalar1 = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGscalar1, "hex"));
+	                var Scalar1 = readScalar(vectors[k].BIGscalar1, ctx);
 	                Paux1.copy(P1);
 	                Paux1 = Paux1.pinmul(1234,14);
 	                Paux1.affine();
@@ -138,7 +146,7 @@ describe('TEST ECP ARITHMETIC', function() {
 
 	                // test mul2
 	                var Pmul2 = readPoint(vectors[k].ECPmul2,ctx);
-	                var Scalar2 = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGscalar2, "hex"));
+	                var Scalar2 = readScalar(vectors[k].BIGscalar2, ctx);
 	                Paux1.copy(P1);
 	                Paux2.copy(P2);
 	                Paux1.affine();
