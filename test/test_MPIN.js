@@ -29,9 +29,7 @@ var expect = chai.expect;
 var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
 
 // Curves for test with test vectors
-// Test vectors for BLS383 disabled after padding change in hashit.
-// var tv_curves = ['BN254', 'BN254CX', 'BLS383'];
-var tv_curves = ['BN254', 'BN254CX'];
+var tv_curves = ['BN254CX'];
 
 hextobytes = function(value_hex) {
     // "use strict";
