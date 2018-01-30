@@ -28,7 +28,7 @@ var CTX = require("../index");
 
 var expect = chai.expect;
 
-var fp_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'NIST384',/* 'C41417',*/ 'NIST521', 'NUMS256W',
+var fp_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'NIST384', 'C41417', 'NIST521', 'NUMS256W',
     'NUMS256E', 'NUMS384W', 'NUMS512W', 'BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'
 ];
 
