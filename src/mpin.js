@@ -150,7 +150,7 @@ var MPIN = function(ctx) {
         /* Hash number (optional) and string to point on curve */
         hashit: function(sha, n, B) {
             var R = [],
-                H, W, i;
+                H, W, i, len;
 
             if (sha == this.SHA256) {
                 H = new ctx.HASH256();
@@ -172,16 +172,18 @@ var MPIN = function(ctx) {
 
             W = [];
 
-            if (sha >= ctx.BIG.MODBYTES) {
-                for (i = 0; i < ctx.BIG.MODBYTES; i++) {
+            len = ctx.BIG.MODBYTES;
+
+            if (sha >= len) {
+                for (i = 0; i < len; i++) {
                     W[i] = R[i];
                 }
             } else {
                 for (i = 0; i < sha; i++) {
-                    W[i] = R[i];
+                    W[i + len - sha] = R[i];
                 }
 
-                for (i = sha; i < ctx.BIG.MODBYTES; i++) {
+                for (i = 0; i < len - sha; i++) {
                     W[i] = 0;
                 }
             }

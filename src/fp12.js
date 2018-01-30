@@ -268,11 +268,11 @@ var FP12 = function(ctx) {
         /* Special case this*=y that arises from special form of ATE pairing line function */
         smul: function(y, twist) {
             if (twist == ctx.ECP.D_TYPE) {
-                var z0 = new ctx.FP4(this.a); //z0.copy(this.a);
-                var z2 = new ctx.FP4(this.b); //z2.copy(this.b);
-                var z3 = new ctx.FP4(this.b); //z3.copy(this.b);
-                var t0 = new ctx.FP4(0);
-                var t1 = new ctx.FP4(y.a); //t1.copy(y.a);
+                var z0 = new ctx.FP4(this.a), //z0.copy(this.a);
+                    z2 = new ctx.FP4(this.b), //z2.copy(this.b);
+                    z3 = new ctx.FP4(this.b), //z3.copy(this.b);
+                    t0 = new ctx.FP4(0),
+                    t1 = new ctx.FP4(y.a); //t1.copy(y.a);
 
                 z0.mul(y.a);
                 z2.pmul(y.b.real());
