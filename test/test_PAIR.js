@@ -34,8 +34,6 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
         var ctx = new CTX(pf_curves[i]);
         var rng = new ctx.RAND();
 
-        console.log("ctx.ROM_FIELD.Modulus")
-
         var j = i;
 
         var r = new ctx.BIG(0);
