@@ -23,7 +23,7 @@ var chai = require('chai');
 
 var CTX = require("../index");
 
-pf_curves = ["BN254", "BN254CX", "BLS383"];
+pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
 
 var expect = chai.expect;
 

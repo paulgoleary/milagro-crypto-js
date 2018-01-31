@@ -26,7 +26,15 @@ var CTX = require("../index");
 
 var expect = chai.expect;
 
-var all_curves = ['BN254', 'BN254CX', 'BLS383'];
+var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
+
+var readScalar = function(string, ctx) {
+
+    while (string.length != ctx.BIG.MODBYTES*2) string = "00"+string;
+
+    return ctx.BIG.fromBytes(new Buffer(string, "hex"));
+
+}
 
 var readFP2 = function(string, ctx) {
 
@@ -34,23 +42,28 @@ var readFP2 = function(string, ctx) {
 	var cox = string[0];
 	var coy = string[1];
     var fp2 = new ctx.FP2(0);
+
+    while (cox.length != ctx.BIG.MODBYTES*2) cox = "00"+cox;
+    while (coy.length != ctx.BIG.MODBYTES*2) coy = "00"+coy;
+
     var bigx = ctx.BIG.fromBytes(new Buffer(cox, "hex"));
     var bigy = ctx.BIG.fromBytes(new Buffer(coy, "hex"));
     fp2.bset(bigx,bigy);
 
     return fp2;
 }
+
 describe('TEST FP2 ARITHMETIC', function() {
 
 	var j =0;
 
-    for (var i = 0; i < all_curves.length; i++) {
+    for (var i = 0; i < pf_curves.length; i++) {
 
 
-        it('test '+all_curves[i], function(done) {
+        it('test '+pf_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(all_curves[j]);
-            var vectors = require('../testVectors/fp2/'+all_curves[j]+'.json');
+            var ctx = new CTX(pf_curves[j]);
+            var vectors = require('../testVectors/fp2/'+pf_curves[j]+'.json');
             j++;
 
             for (var k = 0; k < vectors.length; k++) {
@@ -100,7 +113,7 @@ describe('TEST FP2 ARITHMETIC', function() {
 
                 // test scalar multiplication
                 var fp2pmul = readFP2(vectors[k].FP2pmul, ctx);
-                var scalar = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGsc, "hex"));
+                var scalar = readScalar(vectors[k].BIGsc, ctx);
                 var fpsc = new ctx.FP(0);
                 fpsc.bcopy(scalar);
                 a1.copy(fp21);
@@ -157,14 +170,14 @@ describe('TEST FP2 ARITHMETIC', function() {
                 expect(a1.toString()).to.equal(fp2div2.toString());
 
                 // test multiplication by (1+sqrt(-1))
-                var fp2mulip = readFP2(vectors[k].FP2_mul_ip, ctx);
+                var fp2mulip = readFP2(vectors[k].FP2mulip, ctx);
                 a1.copy(fp21);
                 a1.mul_ip();
                 a1.reduce();
                 expect(a1.toString()).to.equal(fp2mulip.toString());
 
                 // test division by (1+sqrt(-1))
-                var fp2divip = readFP2(vectors[k].FP2_div_ip, ctx);
+                var fp2divip = readFP2(vectors[k].FP2divip, ctx);
                 a1.copy(fp21);
                 a1.div_ip();
                 a1.reduce();

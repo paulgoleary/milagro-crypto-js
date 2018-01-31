@@ -266,47 +266,100 @@ var FP12 = function(ctx) {
         },
 
         /* Special case this*=y that arises from special form of ATE pairing line function */
-        smul: function(y) {
-            var z0 = new ctx.FP4(this.a), //z0.copy(this.a)
-                z2 = new ctx.FP4(this.b), //z2.copy(this.b)
-                z3 = new ctx.FP4(this.b), //z3.copy(this.b)
-                t0 = new ctx.FP4(0),
-                t1 = new ctx.FP4(y.a); //t1.copy(y.a)
+        smul: function(y, twist) {
+            if (twist == ctx.ECP.D_TYPE) {
+                var z0 = new ctx.FP4(this.a), //z0.copy(this.a);
+                    z2 = new ctx.FP4(this.b), //z2.copy(this.b);
+                    z3 = new ctx.FP4(this.b), //z3.copy(this.b);
+                    t0 = new ctx.FP4(0),
+                    t1 = new ctx.FP4(y.a); //t1.copy(y.a);
 
-            z0.mul(y.a);
-            z2.pmul(y.b.real());
-            this.b.add(this.a);
-            t1.real().add(y.b.real());
+                z0.mul(y.a);
+                z2.pmul(y.b.real());
+                this.b.add(this.a);
+                t1.real().add(y.b.real());
 
-            this.b.norm();
-            t1.norm();
+                this.b.norm();
+                t1.norm();
 
-            this.b.mul(t1);
-            z3.add(this.c);
-            z3.norm();
-            z3.pmul(y.b.real());
+                this.b.mul(t1);
+                z3.add(this.c);
+                z3.norm();
+                z3.pmul(y.b.real());
 
-            t0.copy(z0);
-            t0.neg();
-            t1.copy(z2);
-            t1.neg();
+                t0.copy(z0);
+                t0.neg();
+                t1.copy(z2);
+                t1.neg();
 
-            this.b.add(t0);
+                this.b.add(t0);
 
-            this.b.add(t1);
-            z3.add(t1);
-            z2.add(t0);
+                this.b.add(t1);
+                z3.add(t1);
+                z2.add(t0);
 
-            t0.copy(this.a);
-            t0.add(this.c);
-            t0.norm();
-            t0.mul(y.a);
-            this.c.copy(z2);
-            this.c.add(t0);
-            //z3.norm();
-            z3.times_i();
-            this.a.copy(z0);
-            this.a.add(z3);
+                t0.copy(this.a);
+                t0.add(this.c);
+                t0.norm();
+                t0.mul(y.a);
+                this.c.copy(z2);
+                this.c.add(t0);
+
+                z3.times_i();
+                this.a.copy(z0);
+                this.a.add(z3);
+            }
+
+            if (twist == ctx.ECP.M_TYPE) {
+                var z0=new ctx.FP4(this.a);
+                var z1=new ctx.FP4(0);
+                var z2=new ctx.FP4(0);
+                var z3=new ctx.FP4(0);
+                var t0=new ctx.FP4(this.a);
+                var t1=new ctx.FP4(0);
+
+                z0.mul(y.a);
+                t0.add(this.b);
+                t0.norm();
+
+                z1.copy(t0); z1.mul(y.a);
+                t0.copy(this.b); t0.add(this.c);
+                t0.norm();
+
+                z3.copy(t0); //z3.mul(y.c);
+                z3.pmul(y.c.getb());
+                z3.times_i();
+
+                t0.copy(z0); t0.neg();
+
+                z1.add(t0);
+                this.b.copy(z1);
+                z2.copy(t0);
+
+                t0.copy(this.a); t0.add(this.c);
+                t1.copy(y.a); t1.add(y.c);
+
+                t0.norm();
+                t1.norm();
+
+                t0.mul(t1);
+                z2.add(t0);
+
+                t0.copy(this.c);
+
+                t0.pmul(y.c.getb());
+                t0.times_i();
+
+                t1.copy(t0); t1.neg();
+
+                this.c.copy(z2); this.c.add(t1);
+                z3.add(t1);
+                t0.times_i();
+                this.b.add(t0);
+                z3.norm();
+                z3.times_i();
+                this.a.copy(z0); this.a.add(z3);
+            }
 
             this.norm();
         },
@@ -448,32 +501,35 @@ var FP12 = function(ctx) {
 
         /* set this=this^e */
         pow: function(e) {
-            var w, z, r, bt;
+            var e3, w, nb, i, bt;
 
             this.norm();
             e.norm();
 
-            w = new FP12(this); //w.copy(this);
-            z = new ctx.BIG(e); //z.copy(e);
-            r = new FP12(1);
+            e3 = new ctx.BIG(e);
+            e3.pmul(3);
+            e3.norm();
 
-            for (;;) {
-                bt = z.parity();
-                z.fshr(1);
+            w = new FP12(this); //w.copy(this);
+            nb = e3.nbits();
+
+            for (i = nb - 2; i >= 1; i--)
+            {
+                w.usqr();
+                bt = e3.bit(i) - e.bit(i);
 
                 if (bt == 1) {
-                    r.mul(w);
+                    w.mul(this);
                 }
-
-                if (z.iszilch()) {
-                    break;
+                if (bt == -1) {
+                    this.conj();
+                    w.mul(this);
+                    this.conj();
                 }
-
-                w.usqr();
             }
-            r.reduce();
+            w.reduce();
 
-            return r;
+            return w;
         },
 
         /* constant time powering by small integer of max length bts */
@@ -520,6 +576,12 @@ var FP12 = function(ctx) {
             g1.copy(this);
 
             c = g1.trace();
+
+            if (b.iszilch()) {
+                c=c.xtr_pow(e);
+                return c;
+            }
+
             g2.copy(g1);
             g2.frob(f);
             cp = g2.trace();

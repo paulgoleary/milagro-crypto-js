@@ -26,7 +26,25 @@ var CTX = require("../index");
 
 var expect = chai.expect;
 
-var all_curves = ['BN254', 'BN254CX', 'BLS383'];
+var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
+
+var padToMODBYTES = function(string, ctx) {
+
+    while (string.length != ctx.BIG.MODBYTES*2) {
+        string = "00"+string;
+    }
+
+    return string;
+
+}
+
+var readScalar = function(string, ctx) {
+
+    string = padToMODBYTES(string, ctx);
+
+    return ctx.BIG.fromBytes(new Buffer(string, "hex"));
+
+}
 
 var readPoint2 = function(string, ctx) {
     
@@ -37,6 +55,11 @@ var readPoint2 = function(string, ctx) {
 	var coxy = string.split("&");
 	var cox = coxy[0].split(":");
 	var coy = coxy[1].split(":");
+
+    cox[0] = padToMODBYTES(cox[0], ctx);
+    cox[1] = padToMODBYTES(cox[1], ctx);
+    coy[0] = padToMODBYTES(coy[0], ctx);
+    coy[1] = padToMODBYTES(coy[1], ctx);
 
     var x1 = ctx.BIG.fromBytes(new Buffer(cox[0], "hex"));
     var x2 = ctx.BIG.fromBytes(new Buffer(cox[1], "hex"));
@@ -53,15 +76,15 @@ var readPoint2 = function(string, ctx) {
 
 describe('TEST ECP2 ARITHMETIC', function() {
 
-	var j = all_curves.length - 1;
+	var j = pf_curves.length - 1;
 
-    for (var i = all_curves.length - 1; i >= 0; i--) {
+    for (var i = pf_curves.length - 1; i >= 0; i--) {
 
 
-        it('test '+all_curves[i], function(done) {
+        it('test '+pf_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(all_curves[j]);
-            var vectors = require('../testVectors/ecp2/'+all_curves[j]+'.json');
+            var ctx = new CTX(pf_curves[j]);
+            var vectors = require('../testVectors/ecp2/'+pf_curves[j]+'.json');
             j = j-1;
 
             for (var k = 0; k <= vectors.length - 1; k++) {
@@ -125,18 +148,19 @@ describe('TEST ECP2 ARITHMETIC', function() {
 
                 // test scalar multiplication
                 var Pmul = readPoint2(vectors[k].ECP2mul,ctx);
-                var Scalar1 = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGscalar1, "hex"));
+                var Scalar1 = readScalar(vectors[k].BIGscalar1, ctx);
                 Paux1.copy(P1);
                 Paux1 = Paux1.mul(Scalar1);
                 Paux1.affine();
+
                 expect(Paux1.toString()).to.equal(Pmul.toString());
 
                 // test linear mul4, linear combination of 4 points
                 var P3 = readPoint2(vectors[k].ECP23,ctx);
                 var P4 = readPoint2(vectors[k].ECP24,ctx);
-                var Scalar2 = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGscalar2, "hex"));
-                var Scalar3 = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGscalar3, "hex"));
-                var Scalar4 = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGscalar4, "hex"));
+                var Scalar2 = readScalar(vectors[k].BIGscalar2, ctx);
+                var Scalar3 = readScalar(vectors[k].BIGscalar3, ctx);
+                var Scalar4 = readScalar(vectors[k].BIGscalar4, ctx);
                 var Pmul4 = readPoint2(vectors[k].ECP2mul4,ctx);
                 Paux1 = ctx.ECP2.mul4([P1,P2,P3,P4],[Scalar1,Scalar2,Scalar3,Scalar4]);
                 Paux1.affine();
