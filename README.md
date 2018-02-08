@@ -25,7 +25,7 @@
 
 * MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384, SHA512 and SHA3 hash functions and a cryptographically secure random number generator. Furthermore we recently added New Hope, a post-quantum key exchange.
 
-* MCJS is [Node.js](https://nodejs.org/en/) compatible. A conversion script is provided to make the library browser compatible (see some examples below).
+* MCJS is [Node.js](https://nodejs.org/en/) compatible and browser compatible (see some examples below).
 
 ## Install and run  tests
 
