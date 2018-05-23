@@ -397,6 +397,7 @@ var CTX = function(input_parameter) {
         }
     };
 
+    prepareModule("Utils");
     prepareModule("AES");
     prepareModule("GCM");
     prepareModule("UInt64");

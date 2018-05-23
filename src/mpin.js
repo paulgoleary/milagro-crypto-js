@@ -52,32 +52,6 @@ var MPIN = function(ctx) {
             return Math.floor(now.getTime() / (60000 * 1440)); // for daily tokens
         },
 
-        bytestostring: function(b) {
-            var s = "",
-                len = b.length,
-                ch, i;
-
-            for (i = 0; i < len; i++) {
-                ch = b[i];
-                s += ((ch >>> 4) & 15).toString(16);
-                s += (ch & 15).toString(16);
-
-            }
-
-            return s;
-        },
-
-        stringtobytes: function(s) {
-            var b = [],
-                i;
-
-            for (i = 0; i < s.length; i++) {
-                b.push(s.charCodeAt(i));
-            }
-
-            return b;
-        },
-
         comparebytes: function(a, b) {
             if (a.length != b.length) {
                 return false;

@@ -344,19 +344,6 @@ var NHS = function(ctx) {
             }
         },
 
-        bytestostring: function(b) {
-            var s = "",
-                len = b.length,
-                ch, i;
-
-            for (i = 0; i < len; i++) {
-                ch = b[i];
-                s += ((ch >>> 4) & 15).toString(16);
-                s += (ch & 15).toString(16);
-            }
-
-            return s;
-        },
         /* API files */
 
         SERVER_1: function(RNG, SB, S) {
