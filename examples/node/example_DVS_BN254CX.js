@@ -23,6 +23,7 @@ var CTX = require("../../index");
 
 var ctx = new CTX("BN254CX");
 
+
 var RAW = [];
 var rng = new ctx.RAND();
 rng.clean();
@@ -50,13 +51,13 @@ var sha = ctx.MPIN.HASH_TYPE;
 
 /* Trusted Authority set-up */
 ctx.MPIN.RANDOM_GENERATE(rng, S);
-console.log("M-Pin Master Secret s: 0x" + ctx.MPIN.bytestostring(S));
+console.log("M-Pin Master Secret s: 0x" + ctx.Utils.bytestohex(S));
 
 /* Create Client Identity */
 var IDstr = "testuser@miracl.com";
-var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+var CLIENT_ID = ctx.Utils.stringtobytes(IDstr);
 
-console.log("Client ID= " + ctx.MPIN.bytestostring(CLIENT_ID));
+console.log("Client ID= " + ctx.Utils.bytestostring(CLIENT_ID));
 
 /* Generate random public key and z */
 res = ctx.MPIN.GET_DVS_KEYPAIR(rng, Z, Pa);
@@ -65,23 +66,23 @@ if (res != 0) {
     return (-1);
 }
 
-console.log("Z: 0x" + ctx.MPIN.bytestostring(Z));
-console.log("Pa: 0x" + ctx.MPIN.bytestostring(Pa));
+console.log("Z: 0x" + ctx.Utils.bytestohex(Z));
+console.log("Pa: 0x" + ctx.Utils.bytestohex(Pa));
 
 /* Append Pa to ID */
 for (var i = 0; i < Pa.length; i++) {
     CLIENT_ID.push(Pa[i]);
 }
-console.log("ID|Pa: 0x" + ctx.MPIN.bytestostring(CLIENT_ID));
+console.log("ID|Pa: 0x" + ctx.Utils.bytestohex(CLIENT_ID));
 /* Hash Client ID */
 var HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID);
 
 /* Client and Server are issued secrets by DTA */
 ctx.MPIN.GET_SERVER_SECRET(S, SST);
-console.log("Server Secret SS: 0x" + ctx.MPIN.bytestostring(SST));
+console.log("Server Secret SS: 0x" + ctx.Utils.bytestohex(SST));
 
 ctx.MPIN.GET_CLIENT_SECRET(S, HCID, TOKEN);
-console.log("Client Secret CS: 0x" + ctx.MPIN.bytestostring(TOKEN));
+console.log("Client Secret CS: 0x" + ctx.Utils.bytestohex(TOKEN));
 
 /* Compute client secret for key escrow less scheme z.CS */
 res = ctx.MPIN.GET_G1_MULTIPLE(null, 0, Z, TOKEN, TOKEN);
@@ -89,7 +90,7 @@ if (res != 0) {
     console.log("Failed to compute z.CS, error ", res);
     return (-1);
 }
-console.log("z.CS: 0x" + ctx.MPIN.bytestostring(TOKEN));
+console.log("z.CS: 0x" + ctx.Utils.bytestohex(TOKEN));
 
 /* Client extracts PIN from secret to create Token */
 var pin = 1234;
@@ -99,7 +100,7 @@ if (res != 0) {
     console.log("Failed to extract PIN, Error: ", res);
 }
 
-console.log("Client Token TK: 0x" + ctx.MPIN.bytestostring(TOKEN));
+console.log("Client Token TK: 0x" + ctx.Utils.bytestohex(TOKEN));
 
 var timeValue = ctx.MPIN.GET_TIME();
 
@@ -111,14 +112,14 @@ if (res != 0) {
     return (-1);
 }
 
-console.log("U: 0x" + ctx.MPIN.bytestostring(U));
+console.log("U: 0x" + ctx.Utils.bytestohex(U));
 
-console.log("Y1: 0x" + ctx.MPIN.bytestostring(Y1));
-console.log("V: 0x" + ctx.MPIN.bytestostring(SEC));
+console.log("Y1: 0x" + ctx.Utils.bytestohex(Y1));
+console.log("V: 0x" + ctx.Utils.bytestohex(SEC));
 
 /* Server  */
 res = ctx.MPIN.SERVER(sha, 0, xID, null, Y2, SST, U, null, SEC, null, null, CLIENT_ID, timeValue, message, Pa);
-console.log("Y2: 0x" + ctx.MPIN.bytestostring(Y2));
+console.log("Y2: 0x" + ctx.Utils.bytestohex(Y2));
 
 if (res != 0) {
     console.log("FAILURE Signature Verification, error", res);

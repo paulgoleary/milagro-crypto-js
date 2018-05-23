@@ -98,15 +98,15 @@ for (i = 0; i < 8; i++) {
 
 console.log("Alice's Passphrase= " + pp);
 
-var PW = ctx.ECDH.stringtobytes(pp);
+var PW = ctx.Utils.stringtobytes(pp);
 // private key S0 of size EGS bytes derived from Password and Salt 
 var S0 = ctx.ECDH.PBKDF2(sha, PW, SALT, 1000, EGS);
 
-console.log("Alice's private key= 0x" + ctx.ECDH.bytestostring(S0));
+console.log("Alice's private key= 0x" + ctx.Utils.bytestohex(S0));
 // Generate Key pair S/W 
 ctx.ECDH.KEY_PAIR_GENERATE(null, S0, W0);
 
-console.log("Alice's public key= 0x" + ctx.ECDH.bytestostring(W0));
+console.log("Alice's public key= 0x" + ctx.Utils.bytestohex(W0));
 
 res = ctx.ECDH.PUBLIC_KEY_VALIDATE(W0);
 if (res != 0) {
@@ -115,8 +115,8 @@ if (res != 0) {
 // Random private key for other party 
 ctx.ECDH.KEY_PAIR_GENERATE(rng, S1, W1);
 
-console.log("Servers private key= 0x" + ctx.ECDH.bytestostring(S1));
-console.log("Servers public key= 0x" + ctx.ECDH.bytestostring(W1));
+console.log("Servers private key= 0x" + ctx.Utils.bytestohex(S1));
+console.log("Servers public key= 0x" + ctx.Utils.bytestohex(W1));
 
 res = ctx.ECDH.PUBLIC_KEY_VALIDATE(W1);
 if (res != 0) {
@@ -141,8 +141,8 @@ if (!same) {
 
 var KEY = ctx.ECDH.KDF2(sha, Z0, null, ctx.ECDH.EAS);
 
-console.log("Alice's ECDH Key= 0x" + ctx.ECDH.bytestostring(KEY));
-console.log("Servers ECDH Key= 0x" + ctx.ECDH.bytestostring(KEY));
+console.log("Alice's ECDH Key= 0x" + ctx.Utils.bytestohex(KEY));
+console.log("Servers ECDH Key= 0x" + ctx.Utils.bytestohex(KEY));
 
 if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
     console.log("Testing ECIES");
@@ -162,9 +162,9 @@ if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
     var C = ctx.ECDH.ECIES_ENCRYPT(sha, P1, P2, rng, W1, M, V, T);
 
     console.log("Ciphertext= ");
-    console.log("V= 0x" + ctx.ECDH.bytestostring(V));
-    console.log("C= 0x" + ctx.ECDH.bytestostring(C));
-    console.log("T= 0x" + ctx.ECDH.bytestostring(T));
+    console.log("V= 0x" + ctx.Utils.bytestohex(V));
+    console.log("C= 0x" + ctx.Utils.bytestohex(C));
+    console.log("T= 0x" + ctx.Utils.bytestohex(T));
 
 
     M = ctx.ECDH.ECIES_DECRYPT(sha, P1, P2, V, C, T, S1);
@@ -174,7 +174,7 @@ if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
         console.log("Decryption succeeded");
     }
 
-    console.log("Message is 0x" + ctx.ECDH.bytestostring(M));
+    console.log("Message is 0x" + ctx.Utils.bytestohex(M));
 
     console.log("Testing ECDSA");
 
@@ -183,8 +183,8 @@ if (ctx.ECP.CURVETYPE != ctx.ECP.MONTGOMERY) {
     }
 
     console.log("Signature= ");
-    console.log("C= 0x" + ctx.ECDH.bytestostring(CS));
-    console.log("D= 0x" + ctx.ECDH.bytestostring(DS));
+    console.log("C= 0x" + ctx.Utils.bytestohex(CS));
+    console.log("D= 0x" + ctx.Utils.bytestohex(DS));
 
     if (ctx.ECDH.ECPVP_DSA(sha, W0, M, CS, DS) != 0) {
         console.error("ECDSA Verification Failed");

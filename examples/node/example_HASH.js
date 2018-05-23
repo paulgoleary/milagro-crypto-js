@@ -23,27 +23,6 @@ var CTX = require("../../index");
 
 var ctx = new CTX();
 
-var bytestostring = function(b) {
-    var s = "";
-    var len = b.length;
-    var ch;
-
-    for (var i = 0; i < len; i++) {
-        ch = b[i];
-        s += ((ch >>> 4) & 15).toString(16);
-        s += (ch & 15).toString(16);
-    }
-    return s;
-};
-
-var stringtobytes = function(s) {
-    var b = [];
-    for (var i = 0; i < s.length; i++) {
-        b.push(s.charCodeAt(i));
-    }
-    return b;
-};
-
 var hashit = function(sha, B) {
     var R = [],
         H;
@@ -70,9 +49,9 @@ var to_hash = "test hash";
 
 console.log("String to hash: ", to_hash);
 
-var hashed = hashit(ctx.HASH256.len, stringtobytes(to_hash));
-console.log("SHA256: ", bytestostring(hashed));
-hashed = hashit(ctx.HASH384.len, stringtobytes(to_hash));
-console.log("SHA384: ", bytestostring(hashed));
-hashed = hashit(ctx.HASH512.len, stringtobytes(to_hash));
-console.log("SHA512: ", bytestostring(hashed));
+var hashed = hashit(ctx.HASH256.len, ctx.Utils.hextobytes(to_hash));
+console.log("SHA256: ", ctx.Utils.bytestohex(hashed));
+hashed = hashit(ctx.HASH384.len, ctx.Utils.hextobytes(to_hash));
+console.log("SHA384: ", ctx.Utils.bytestohex(hashed));
+hashed = hashit(ctx.HASH512.len, ctx.Utils.hextobytes(to_hash));
+console.log("SHA512: ", ctx.Utils.bytestohex(hashed));
