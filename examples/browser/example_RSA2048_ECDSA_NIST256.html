@@ -95,11 +95,11 @@ end = new Date().getTime();
 time = end - start;
 console.log("Time in ms= " + time);
 
-var M = ctx1.RSA.stringtobytes(message);
+var M = ctx1.Utils.stringtobytes(message);
 console.log("Encrypting test string");
 
 var E = ctx1.RSA.OAEP_ENCODE(sha, M, rng, null); /* OAEP encode message m to e  */
-console.log("Encoding= 0x" + ctx1.RSA.bytestohex(E));
+console.log("Encoding= 0x" + ctx1.Utils.bytestohex(E));
 
 console.log("Public key= 0x" + pub.n.toString());
 
@@ -109,7 +109,7 @@ end = new Date().getTime();
 time = end - start;
 console.log("Time in ms= " + time);
 
-console.log("Ciphertext= 0x" + ctx1.RSA.bytestohex(C));
+console.log("Ciphertext= 0x" + ctx1.Utils.bytestohex(C));
 
 console.log("Decrypting test string");
 start = new Date().getTime();
@@ -136,9 +136,9 @@ if (cmp) {
 }
 
 var MS = ctx1.RSA.OAEP_DECODE(sha, null, ML); /* OAEP decode message  */
-console.log("Decoding= 0x" + ctx1.RSA.bytestohex(MS));
+console.log("Decoding= 0x" + ctx1.Utils.bytestohex(MS));
 
-console.log("message= " + ctx1.RSA.bytestostring(MS));
+console.log("message= " + ctx1.Utils.bytestostring(MS));
 
 console.log("Start test RSA signature");
 
@@ -146,7 +146,7 @@ ctx1.RSA.PKCS15(sha, M, C);
 
 ctx1.RSA.DECRYPT(priv, C, S); /* create signature in S */
 
-console.log("Signature= 0x" + ctx1.RSA.bytestohex(S));
+console.log("Signature= 0x" + ctx1.Utils.bytestohex(S));
 
 ctx1.RSA.ENCRYPT(pub, S, ML);
 
@@ -194,8 +194,8 @@ if (ctx2.ECDH.ECPSP_DSA(sha, rng, S0, M, CS, DS) != 0) {
 }
 
 console.log("Signature= ");
-console.log("C= 0x" + ctx2.ECDH.bytestostring(CS));
-console.log("D= 0x" + ctx2.ECDH.bytestostring(DS));
+console.log("C= 0x" + ctx2.Utils.bytestohex(CS));
+console.log("D= 0x" + ctx2.Utils.bytestohex(DS));
 
 if (ctx2.ECDH.ECPVP_DSA(sha, W0, M, CS, DS) != 0) {
     console.error("ECDSA Verification Failed");

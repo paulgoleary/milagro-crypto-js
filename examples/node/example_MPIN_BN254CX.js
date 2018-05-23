@@ -58,21 +58,21 @@ var ONE_PASS = false;
 
 /* Trusted Authority set-up */
 ctx.MPIN.RANDOM_GENERATE(rng, S);
-console.log("M-Pin Master Secret s: 0x" + ctx.MPIN.bytestostring(S));
+console.log("M-Pin Master Secret s: 0x" + ctx.Utils.bytestohex(S));
 
 /* Create Client Identity */
 var IDstr = "testUser@miracl.com";
-var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+var CLIENT_ID = ctx.Utils.stringtobytes(IDstr);
 HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID); /* Either Client or TA calculates Hash(ID) - you decide! */
 
-console.log("Client ID= " + ctx.MPIN.bytestostring(CLIENT_ID));
+console.log("Client ID= " + ctx.Utils.bytestostring(CLIENT_ID));
 
 /* Client and Server are issued secrets by DTA */
 ctx.MPIN.GET_SERVER_SECRET(S, SST);
-console.log("Server Secret SS: 0x" + ctx.MPIN.bytestostring(SST));
+console.log("Server Secret SS: 0x" + ctx.Utils.bytestohex(SST));
 
 ctx.MPIN.GET_CLIENT_SECRET(S, HCID, TOKEN);
-console.log("Client Secret CS: 0x" + ctx.MPIN.bytestostring(TOKEN));
+console.log("Client Secret CS: 0x" + ctx.Utils.bytestohex(TOKEN));
 
 /* Client extracts PIN from secret to create Token */
 var pin = 1234;
@@ -82,7 +82,7 @@ if (rtn != 0) {
     console.log("Failed to extract PIN ");
 }
 
-console.log("Client Token TK: 0x" + ctx.MPIN.bytestostring(TOKEN));
+console.log("Client Token TK: 0x" + ctx.Utils.bytestohex(TOKEN));
 
 var date = 0;
 

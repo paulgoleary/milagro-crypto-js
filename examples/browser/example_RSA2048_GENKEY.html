@@ -95,11 +95,11 @@ end = new Date().getTime();
 time = end - start;
 console.log("Time in ms= " + time);
 
-var M = ctx.RSA.stringtobytes(message);
+var M = ctx.Utils.stringtobytes(message);
 console.log("Encrypting test string");
 
 var E = ctx.RSA.OAEP_ENCODE(sha, M, rng, null); /* OAEP encode message m to e  */
-console.log("Encoding= 0x" + ctx.RSA.bytestohex(E));
+console.log("Encoding= 0x" + ctx.Utils.bytestohex(E));
 
 console.log("Public key= 0x" + pub.n.toString());
 
@@ -109,7 +109,7 @@ end = new Date().getTime();
 time = end - start;
 console.log("Time in ms= " + time);
 
-console.log("Ciphertext= 0x" + ctx.RSA.bytestohex(C));
+console.log("Ciphertext= 0x" + ctx.Utils.bytestohex(C));
 
 console.log("Decrypting test string");
 start = new Date().getTime();
@@ -137,9 +137,9 @@ if (cmp) {
 }
 
 var MS = ctx.RSA.OAEP_DECODE(sha, null, ML); /* OAEP decode message  */
-console.log("Decoding= 0x" + ctx.RSA.bytestohex(MS));
+console.log("Decoding= 0x" + ctx.Utils.bytestohex(MS));
 
-console.log("message= " + ctx.RSA.bytestostring(MS));
+console.log("message= " + ctx.Utils.bytestostring(MS));
 
 console.log("Start test RSA signature");
 
@@ -147,7 +147,7 @@ ctx.RSA.PKCS15(sha, M, C);
 
 ctx.RSA.DECRYPT(priv, C, S); /* create signature in S */
 
-console.log("Signature= 0x" + ctx.RSA.bytestohex(S));
+console.log("Signature= 0x" + ctx.Utils.bytestohex(S));
 
 ctx.RSA.ENCRYPT(pub, S, ML);
 
