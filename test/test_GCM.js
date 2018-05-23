@@ -28,39 +28,9 @@ var expect = chai.expect;
 
 var ctx = new CTX();
 
+var bytestohex = ctx.Utils.bytestohex;
+var hextobytes = ctx.Utils.hextobytes;
 
-var bytestostring = function(b) {
-    var s = "";
-    var len = b.length;
-    var ch;
-
-    for (var i = 0; i < len; i++) {
-        ch = b[i];
-        s += ((ch >>> 4) & 15).toString(16);
-        s += (ch & 15).toString(16);
-    }
-    return s;
-}
-
-var stringtobytes = function(s) {
-    var b = [];
-    for (var i = 0; i < s.length; i++)
-        b.push(s.charCodeAt(i));
-    return b;
-}
-
-var hextobytes = function(value_hex) {
-    // "use strict";
-    var len, byte_value, i;
-
-    len = value_hex.length;
-    byte_value = [];
-
-    for (i = 0; i < len; i += 2) {
-        byte_value[(i / 2)] = parseInt(value_hex.substr(i, 2), 16);
-    }
-    return byte_value;
-};
 
 describe('TEST GCM', function() {
 
@@ -86,8 +56,8 @@ describe('TEST GCM', function() {
             CTout = gcm.add_plain(PT, PT.length);
             TAGout = gcm.finish(true);
             
-            expect(bytestostring(CTout)).to.be.equal(vectors[vector].CT);
-            expect(bytestostring(TAGout).substring(0,(vectors[vector].TAG.length))).to.be.equal(vectors[vector].TAG);
+            expect(bytestohex(CTout)).to.be.equal(vectors[vector].CT);
+            expect(bytestohex(TAGout).substring(0,(vectors[vector].TAG.length))).to.be.equal(vectors[vector].TAG);
         }
         done();
     });
@@ -109,8 +79,8 @@ describe('TEST GCM', function() {
             PTout = gcm.add_cipher(CT, CT.length);
             TAGout = gcm.finish(true);
             
-            expect(bytestostring(PTout)).to.be.equal(vectors[vector].PT);
-            expect(bytestostring(TAGout).substring(0,(vectors[vector].TAG.length))).to.be.equal(vectors[vector].TAG);
+            expect(bytestohex(PTout)).to.be.equal(vectors[vector].PT);
+            expect(bytestohex(TAGout).substring(0,(vectors[vector].TAG.length))).to.be.equal(vectors[vector].TAG);
         }
         done();
     });

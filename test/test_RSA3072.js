@@ -74,7 +74,7 @@ describe('TEST RSA RSA3072', function() {
             ctx.FF.fromBytes(priv.c, new Buffer(vectors[vector].PrivC, "hex"));
             ctx.FF.fromBytes(pub.n, new Buffer(vectors[vector].PubN, "hex"));
             pub.e = vectors[vector].PubE;
-            M = ctx.RSA.stringtobytes(message);
+            M = ctx.Utils.stringtobytes(message);
             E = ctx.RSA.OAEP_ENCODE(sha, M, rng, null); /* OAEP encode message m to e  */
             ctx.RSA.ENCRYPT(pub, E, C); /* encrypt encoded message */
             ctx.RSA.DECRYPT(priv, C, ML);
