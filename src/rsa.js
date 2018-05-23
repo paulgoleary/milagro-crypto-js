@@ -39,42 +39,6 @@ RSA = function(ctx) {
         SHA384ID: [0x30, 0x41, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, 0x05, 0x00, 0x04, 0x30],
         SHA512ID: [0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05, 0x00, 0x04, 0x40],
 
-        bytestohex: function(b) {
-            var s = "",
-                len = b.length,
-                ch, i;
-
-            for (i = 0; i < len; i++) {
-                ch = b[i];
-                s += ((ch >>> 4) & 15).toString(16);
-                s += (ch & 15).toString(16);
-
-            }
-            return s;
-        },
-
-        bytestostring: function(b) {
-            var s = "",
-                i;
-
-            for (i = 0; i < b.length; i++) {
-                s += String.fromCharCode(b[i]);
-            }
-
-            return s;
-        },
-
-        stringtobytes: function(s) {
-            var b = [],
-                i;
-
-            for (i = 0; i < s.length; i++) {
-                b.push(s.charCodeAt(i));
-            }
-
-            return b;
-        },
-
         hashit: function(sha, A, n) {
             var R = [],
                 H;

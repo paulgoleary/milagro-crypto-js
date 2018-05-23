@@ -54,30 +54,6 @@ var ECDH = function(ctx) {
             return b;
         },
 
-        bytestostring: function(b) {
-            var s = "",
-                len = b.length,
-                ch, i;
-
-            for (i = 0; i < len; i++) {
-                ch = b[i];
-                s += String.fromCharCode(ch);
-            }
-
-            return s;
-        },
-
-        stringtobytes: function(s) {
-            var b = [],
-                i;
-
-            for (i = 0; i < s.length; i++) {
-                b.push(s.charCodeAt(i));
-            }
-
-            return b;
-        },
-
         hashit: function(sha, A, n, B, pad) {
             var R = [],
                 H, W, i, len;
