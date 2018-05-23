@@ -28,39 +28,9 @@ var expect = chai.expect;
 
 var ctx = new CTX();
 
+var hextobytes = ctx.Utils.hextobytes;
+var bytestohex = ctx.Utils.bytestohex;
 
-var bytestostring = function(b) {
-    var s = "";
-    var len = b.length;
-    var ch;
-
-    for (var i = 0; i < len; i++) {
-        ch = b[i];
-        s += ((ch >>> 4) & 15).toString(16);
-        s += (ch & 15).toString(16);
-    }
-    return s;
-}
-
-var stringtobytes = function(s) {
-    var b = [];
-    for (var i = 0; i < s.length; i++)
-        b.push(s.charCodeAt(i));
-    return b;
-}
-
-hextobytes = function(value_hex) {
-    // "use strict";
-    var len, byte_value, i;
-
-    len = value_hex.length;
-    byte_value = [];
-
-    for (i = 0; i < len; i += 2) {
-        byte_value[(i / 2)] = parseInt(value_hex.substr(i, 2), 16);
-    }
-    return byte_value;
-};
 
 var hashit = function(sha, B) {
     var R = [];
@@ -94,7 +64,7 @@ describe('TEST HASH', function() {
 
         for (var vector in vectors) {
             dig = hashit(ctx.HASH256.len, hextobytes(vectors[vector].IN));
-            expect(bytestostring(dig)).to.be.equal(vectors[vector].OUT);
+            expect(bytestohex(dig)).to.be.equal(vectors[vector].OUT);
         }
         done();
     });
@@ -107,7 +77,7 @@ describe('TEST HASH', function() {
 
         for (var vector in vectors) {
             dig = hashit(ctx.HASH384.len, hextobytes(vectors[vector].IN));
-            expect(bytestostring(dig)).to.be.equal(vectors[vector].OUT);
+            expect(bytestohex(dig)).to.be.equal(vectors[vector].OUT);
         }
         done();
     });
@@ -120,7 +90,7 @@ describe('TEST HASH', function() {
 
         for (var vector in vectors) {
             dig = hashit(ctx.HASH512.len, hextobytes(vectors[vector].IN));
-            expect(bytestostring(dig)).to.be.equal(vectors[vector].OUT);
+            expect(bytestohex(dig)).to.be.equal(vectors[vector].OUT);
         }
         done();
     });

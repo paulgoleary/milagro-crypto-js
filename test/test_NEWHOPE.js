@@ -61,7 +61,7 @@ describe('TEST NEW HOPE', function() {
 
         ctx.NHS.SERVER_2(S,UC,KEYA);
 
-        expect(ctx.NHS.bytestostring(KEYA)).to.equal(ctx.NHS.bytestostring(KEYB));
+        expect(ctx.Utils.bytestostring(KEYA)).to.equal(ctx.Utils.bytestostring(KEYB));
 
         done();
     });
@@ -84,7 +84,7 @@ describe('TEST NEW HOPE', function() {
 
         ctx.NHS.SERVER_2(S1,UC,KEYA);
 
-        expect(ctx.NHS.bytestostring(KEYA)).to.not.equal(ctx.NHS.bytestostring(KEYB));
+        expect(ctx.Utils.bytestostring(KEYA)).to.not.equal(ctx.Utils.bytestostring(KEYB));
 
         done();
     });

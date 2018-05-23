@@ -34,6 +34,8 @@ for (var i = all_curves.length - 1; i >= 0; i--) {
 
     var ctx = new CTX(all_curves[i]);
 
+    var stringtobytes = ctx.Utils.stringtobytes
+
     describe('TEST ECC ' + all_curves[i], function() {
 
         var i = 0,
@@ -71,7 +73,7 @@ for (var i = all_curves.length - 1; i >= 0; i--) {
             for (i = 0; i < 100; i++) RAW[i] = i;
             rng.seed(100, RAW);
             for (i = 0; i < 8; i++) SALT[i] = (i + 1); // set Salt
-            PW = ctx.ECDH.stringtobytes(pp);
+            PW = stringtobytes(pp);
             // private key S0 of size EGS bytes derived from Password and Salt 
             S0 = ctx.ECDH.PBKDF2(sha, PW, SALT, 1000, EGS);
             done();

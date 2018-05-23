@@ -31,6 +31,8 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
     var ctx = new CTX(pf_curves[i]);
 
+    var stringtobytes = ctx.Utils.stringtobytes
+
     describe('TEST DVS ' + pf_curves[i], function() {
 
         var rng = new ctx.RAND();
@@ -66,7 +68,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testuser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
 
             /* Generate ctx.RANDom public key and z */
             res = ctx.MPIN.GET_DVS_KEYPAIR(rng, Z, Pa);
@@ -130,7 +132,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testuser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
 
             /* Generate ctx.RANDom public key and z */
             res = ctx.MPIN.GET_DVS_KEYPAIR(rng, Z1, Pa1);

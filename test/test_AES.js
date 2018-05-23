@@ -28,39 +28,9 @@ var expect = chai.expect;
 
 var ctx = new CTX();
 
+var bytestohex = ctx.Utils.bytestohex;
+var hextobytes = ctx.Utils.hextobytes;
 
-var bytestostring = function(b) {
-    var s = "";
-    var len = b.length;
-    var ch;
-
-    for (var i = 0; i < len; i++) {
-        ch = b[i];
-        s += ((ch >>> 4) & 15).toString(16);
-        s += (ch & 15).toString(16);
-    }
-    return s;
-}
-
-var stringtobytes = function(s) {
-    var b = [];
-    for (var i = 0; i < s.length; i++)
-        b.push(s.charCodeAt(i));
-    return b;
-}
-
-var hextobytes = function(value_hex) {
-    // "use strict";
-    var len, byte_value, i;
-
-    len = value_hex.length;
-    byte_value = [];
-
-    for (i = 0; i < len; i += 2) {
-        byte_value[(i / 2)] = parseInt(value_hex.substr(i, 2), 16);
-    }
-    return byte_value;
-};
 
 var AES_ENCRYPT = function(mode, K, M, IV) {
     /* Input is from an octet string M, output is to an octet string C */
@@ -167,7 +137,7 @@ describe('TEST AES', function() {
 
             Cout = AES_ENCRYPT(ctx.AES.ECB,KEY,PLAINTEXT,null);
             
-            expect(bytestostring(Cout)).to.be.equal(vectors[vector].CIPHERTEXT);
+            expect(bytestohex(Cout)).to.be.equal(vectors[vector].CIPHERTEXT);
         }
         done();
     });
@@ -183,7 +153,7 @@ describe('TEST AES', function() {
 
             Pout = AES_DECRYPT(ctx.AES.ECB,KEY,CIPHERTEXT,null);
             
-            expect(bytestostring(Pout)).to.be.equal(vectors[vector].PLAINTEXT);
+            expect(bytestohex(Pout)).to.be.equal(vectors[vector].PLAINTEXT);
         }
         done();
     });
@@ -200,7 +170,7 @@ describe('TEST AES', function() {
 
             Cout = AES_ENCRYPT(ctx.AES.CTR16,KEY,PLAINTEXT,IV);
             
-            expect(bytestostring(Cout)).to.be.equal(vectors[vector].CIPHERTEXT);
+            expect(bytestohex(Cout)).to.be.equal(vectors[vector].CIPHERTEXT);
         }
         done();
     });
@@ -217,7 +187,7 @@ describe('TEST AES', function() {
 
             Pout = AES_DECRYPT(ctx.AES.CTR16,KEY,CIPHERTEXT,IV);
             
-            expect(bytestostring(Pout)).to.be.equal(vectors[vector].PLAINTEXT);
+            expect(bytestohex(Pout)).to.be.equal(vectors[vector].PLAINTEXT);
         }
         done();
     });
@@ -234,7 +204,7 @@ describe('TEST AES', function() {
 
             Cout = AES_ENCRYPT(ctx.AES.CBC,KEY,PLAINTEXT,IV);
             
-            expect(bytestostring(Cout)).to.be.equal(vectors[vector].CIPHERTEXT);
+            expect(bytestohex(Cout)).to.be.equal(vectors[vector].CIPHERTEXT);
         }
         done();
     });
@@ -251,7 +221,7 @@ describe('TEST AES', function() {
 
             Pout = AES_DECRYPT(ctx.AES.CBC,KEY,CIPHERTEXT,IV);
             
-            expect(bytestostring(Pout)).to.be.equal(vectors[vector].PLAINTEXT);
+            expect(bytestohex(Pout)).to.be.equal(vectors[vector].PLAINTEXT);
         }
         done();
     });

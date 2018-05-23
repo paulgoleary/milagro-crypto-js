@@ -31,24 +31,16 @@ var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
 // Curves for test with test vectors
 var tv_curves = ['BN254CX'];
 
-hextobytes = function(value_hex) {
-    // "use strict";
-    var len, byte_value, i;
-
-    len = value_hex.length;
-    byte_value = [];
-
-    for (i = 0; i < len; i += 2) {
-        byte_value[(i / 2)] = parseInt(value_hex.substr(i, 2), 16);
-    }
-    return byte_value;
-};
 
 for (var i = pf_curves.length - 1; i >= 0; i--) {
 
     describe('TEST MPIN ' + pf_curves[i], function() {
 
         var ctx = new CTX(pf_curves[i]);
+
+        var stringtobytes = ctx.Utils.stringtobytes;
+        var hextobytes = ctx.Utils.hextobytes;
+        var bytestohex = ctx.Utils.bytestohex;
 
         var rng = new ctx.RAND();
 
@@ -107,7 +99,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testUser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
             HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID); /* Either Client or TA calculates Hash(ID) - you decide! */
 
             /* Client and Server are issued secrets by DTA */
@@ -188,7 +180,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testUser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
             HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID); /* Either Client or TA calculates Hash(ID) - you decide! */
 
             /* Client and Server are issued secrets by DTA */
@@ -286,7 +278,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testUser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
             HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID); /* Either Client or TA calculates Hash(ID) - you decide! */
 
             /* Client and Server are issued secrets by DTA */
@@ -341,7 +333,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             H = ctx.MPIN.HASH_ALL(sha, HSID, pxID, pxCID, SEC, Y, Z, T);
             ctx.MPIN.SERVER_KEY(sha, Z, SST, W, H, pHID, pxID, pxCID, SK);
-            expect(ctx.MPIN.bytestostring(CK)).to.be.equal(ctx.MPIN.bytestostring(SK));
+            expect(bytestohex(CK)).to.be.equal(bytestohex(SK));
 
             done();
         });
@@ -390,7 +382,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testUser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
             HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID); /* Either Client or TA calculates Hash(ID) - you decide! */
 
             /* Client and Server are issued secrets by DTA */
@@ -479,7 +471,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testUser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
             HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID); /* Either Client or TA calculates Hash(ID) - you decide! */
 
             /* Client and Server are issued secrets by DTA */
@@ -575,7 +567,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             /* Create Client Identity */
             var IDstr = "testUser@miracl.com";
-            var CLIENT_ID = ctx.MPIN.stringtobytes(IDstr);
+            var CLIENT_ID = stringtobytes(IDstr);
             HCID = ctx.MPIN.HASH_ID(sha, CLIENT_ID); /* Either Client or TA calculates Hash(ID) - you decide! */
 
             /* Client and Server are issued secrets by DTA */
@@ -652,7 +644,7 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
 
             H = ctx.MPIN.HASH_ALL(sha, HSID, pxID, pxCID, SEC, Y, Z, T);
             ctx.MPIN.SERVER_KEY(sha, Z, SST, W, H, pHID, pxID, pxCID, SK);
-            expect(ctx.MPIN.bytestostring(CK)).to.be.equal(ctx.MPIN.bytestostring(SK));
+            expect(bytestohex(CK)).to.be.equal(bytestohex(SK));
 
             done();
         });
@@ -704,12 +696,12 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
             for (var vector in vectors) {
                 var rtn = ctx.MPIN.CLIENT_1(sha, vectors[vector].DATE, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, xID, xCID, hextobytes(vectors[vector].TIME_PERMIT));
                 expect(rtn).to.be.equal(0);
-                expect(ctx.MPIN.bytestostring(xID)).to.be.equal(vectors[vector].U);
-                expect(ctx.MPIN.bytestostring(xCID)).to.be.equal(vectors[vector].UT);
+                expect(bytestohex(xID)).to.be.equal(vectors[vector].U);
+                expect(bytestohex(xCID)).to.be.equal(vectors[vector].UT);
 
                 var rtn = ctx.MPIN.CLIENT_2(hextobytes(vectors[vector].X), hextobytes(vectors[vector].Y), SEC);
                 expect(rtn).to.be.equal(0);
-                expect(ctx.MPIN.bytestostring(SEC)).to.be.equal(vectors[vector].V);
+                expect(bytestohex(SEC)).to.be.equal(vectors[vector].V);
             }
             done();
         });
@@ -727,8 +719,8 @@ for (var i = pf_curves.length - 1; i >= 0; i--) {
             for (var vector in vectors) {
                 var rtn = ctx.MPIN.CLIENT(sha, 0, hextobytes(vectors[vector].MPIN_ID_HEX), null, hextobytes(vectors[vector].X), vectors[vector].PIN2, hextobytes(vectors[vector].TOKEN), SEC, xID, null, null, vectors[vector].TimeValue, Y);
                 expect(rtn).to.be.equal(0);
-                expect(ctx.MPIN.bytestostring(xID)).to.be.equal(vectors[vector].U);
-                expect(ctx.MPIN.bytestostring(SEC)).to.be.equal(vectors[vector].SEC);
+                expect(bytestohex(xID)).to.be.equal(vectors[vector].U);
+                expect(bytestohex(SEC)).to.be.equal(vectors[vector].SEC);
             }
             done();
         });
