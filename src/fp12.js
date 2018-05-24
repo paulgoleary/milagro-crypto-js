@@ -267,12 +267,14 @@ var FP12 = function(ctx) {
 
         /* Special case this*=y that arises from special form of ATE pairing line function */
         smul: function(y, twist) {
+            var z0, z1, z2, z3, t0, t1;
+
             if (twist == ctx.ECP.D_TYPE) {
-                var z0 = new ctx.FP4(this.a), //z0.copy(this.a);
-                    z2 = new ctx.FP4(this.b), //z2.copy(this.b);
-                    z3 = new ctx.FP4(this.b), //z3.copy(this.b);
-                    t0 = new ctx.FP4(0),
-                    t1 = new ctx.FP4(y.a); //t1.copy(y.a);
+                z0 = new ctx.FP4(this.a), //z0.copy(this.a);
+                z2 = new ctx.FP4(this.b), //z2.copy(this.b);
+                z3 = new ctx.FP4(this.b), //z3.copy(this.b);
+                t0 = new ctx.FP4(0),
+                t1 = new ctx.FP4(y.a); //t1.copy(y.a);
 
                 z0.mul(y.a);
                 z2.pmul(y.b.real());
@@ -311,12 +313,12 @@ var FP12 = function(ctx) {
             }
 
             if (twist == ctx.ECP.M_TYPE) {
-                var z0=new ctx.FP4(this.a);
-                var z1=new ctx.FP4(0);
-                var z2=new ctx.FP4(0);
-                var z3=new ctx.FP4(0);
-                var t0=new ctx.FP4(this.a);
-                var t1=new ctx.FP4(0);
+                z0=new ctx.FP4(this.a),
+                z1=new ctx.FP4(0),
+                z2=new ctx.FP4(0),
+                z3=new ctx.FP4(0),
+                t0=new ctx.FP4(this.a),
+                t1=new ctx.FP4(0);
 
                 z0.mul(y.a);
                 t0.add(this.b);
@@ -513,8 +515,7 @@ var FP12 = function(ctx) {
             w = new FP12(this); //w.copy(this);
             nb = e3.nbits();
 
-            for (i = nb - 2; i >= 1; i--)
-            {
+            for (i = nb - 2; i >= 1; i--) {
                 w.usqr();
                 bt = e3.bit(i) - e.bit(i);
 
