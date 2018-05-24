@@ -267,7 +267,7 @@ var FP12 = function(ctx) {
 
         /* Special case this*=y that arises from special form of ATE pairing line function */
         smul: function(y, twist) {
-            var z0,z1,z2,z3,t0,t1;
+            var z0, z1, z2, z3, t0, t1;
 
             if (twist == ctx.ECP.D_TYPE) {
                 z0 = new ctx.FP4(this.a), //z0.copy(this.a);
