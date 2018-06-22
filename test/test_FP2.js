@@ -38,9 +38,9 @@ var readScalar = function(string, ctx) {
 
 var readFP2 = function(string, ctx) {
 
-	string = string.split(",");
-	var cox = string[0];
-	var coy = string[1];
+    string = string.split(",");
+    var cox = string[0].slice(1);
+    var coy = string[1].slice(0,-1);
     var fp2 = new ctx.FP2(0);
 
     while (cox.length != ctx.BIG.MODBYTES*2) cox = "00"+cox;
@@ -55,20 +55,22 @@ var readFP2 = function(string, ctx) {
 
 describe('TEST FP2 ARITHMETIC', function() {
 
-	var j =0;
+    var j =0;
 
     for (var i = 0; i < pf_curves.length; i++) {
 
 
         it('test '+pf_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(pf_curves[j]);
-            var vectors = require('../testVectors/fp2/'+pf_curves[j]+'.json');
+            var curve = pf_curves[j];
             j++;
+            var ctx = new CTX(curve);
+
+            var vectors = require('../testVectors/fp2/'+curve+'.json');
 
             for (var k = 0; k < vectors.length; k++) {
 
-            	// test commutativity of addition
+                // test commutativity of addition
                 var fp21 = readFP2(vectors[k].FP21,ctx);
                 var fp22 = readFP2(vectors[k].FP22,ctx);
                 var fp2add = readFP2(vectors[k].FP2add,ctx);
@@ -80,22 +82,22 @@ describe('TEST FP2 ARITHMETIC', function() {
                 expect(a1.toString()).to.equal(fp2add.toString());
                 a1.copy(fp21);
                 a2.add(a1);
-				expect(a2.toString()).to.equal(fp2add.toString());
+                expect(a2.toString()).to.equal(fp2add.toString());
 
-				// test associativity of addition
-	            a2.add(fp2add);
-	            a1.copy(fp21);
+                // test associativity of addition
+                a2.add(fp2add);
+                a1.copy(fp21);
                 a1.add(fp2add);
                 a1.add(fp22);
-	            expect(a1.toString()).to.equal(a2.toString());
+                expect(a1.toString()).to.equal(a2.toString());
 
-	            // test subtraction
-	            var fp2sub = readFP2(vectors[k].FP2sub, ctx);
-	            a1.copy(fp21);
-	            a2.copy(fp22);
-	            a1.sub(a2);
+                // test subtraction
+                var fp2sub = readFP2(vectors[k].FP2sub, ctx);
+                a1.copy(fp21);
+                a2.copy(fp22);
+                a1.sub(a2);
                 a1.reduce();
-	            expect(a1.toString()).to.equal(fp2sub.toString());
+                expect(a1.toString()).to.equal(fp2sub.toString());
 
                 // test negative of a FP2
                 var fp2neg = readFP2(vectors[k].FP2neg, ctx);
