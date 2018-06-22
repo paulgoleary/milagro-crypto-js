@@ -337,7 +337,7 @@ var CTX = function(input_parameter) {
             "@MT": 0,
             "@CT": 0,
             "@PF": 2,
-            "@ST": 0,
+            "@ST": 1,
             "@SX": 0
         },
 
