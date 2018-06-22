@@ -51,9 +51,9 @@ var readFP4 = function(string, ctx) {
 
     var X, Y;
 
-	string = string.split("],[");
-	var cox = string[0].slice(1) + "]";
-	var coy = "[" + string[1].slice(0,-1);
+    string = string.split("],[");
+    var cox = string[0].slice(1) + "]";
+    var coy = "[" + string[1].slice(0,-1);
 
     X = readFP2(cox,ctx);
     Y = readFP2(coy,ctx);
@@ -65,7 +65,7 @@ var readFP4 = function(string, ctx) {
 
 describe('TEST FP4 ARITHMETIC', function() {
 
-	var j =0;
+    var j =0;
 
     for (var i = 0; i < pf_curves.length; i++) {
 
@@ -79,7 +79,7 @@ describe('TEST FP4 ARITHMETIC', function() {
 
             for (var k = 0; k < vectors.length; k++) {
 
-            	// test commutativity of addition
+                // test commutativity of addition
                 var fp41 = readFP4(vectors[k].FP41,ctx);
                 var fp42 = readFP4(vectors[k].FP42,ctx);
                 var fp4add = readFP4(vectors[k].FP4add,ctx);
@@ -92,22 +92,22 @@ describe('TEST FP4 ARITHMETIC', function() {
                 expect(a1.toString()).to.equal(fp4add.toString());
                 a1.copy(fp41);
                 a2.add(a1);
-				expect(a2.toString()).to.equal(fp4add.toString());
+                expect(a2.toString()).to.equal(fp4add.toString());
 
-				// test associativity of addition
-	            a2.add(fp4add);
-	            a1.copy(fp41);
+                // test associativity of addition
+                a2.add(fp4add);
+                a1.copy(fp41);
                 a1.add(fp4add);
                 a1.add(fp42);
-	            expect(a1.toString()).to.equal(a2.toString());
+                expect(a1.toString()).to.equal(a2.toString());
 
-	            // test subtraction
-	            var fp4sub = readFP4(vectors[k].FP4sub, ctx);
-	            a1.copy(fp41);
-	            a2.copy(fp42);
-	            a1.sub(a2);
+                // test subtraction
+                var fp4sub = readFP4(vectors[k].FP4sub, ctx);
+                a1.copy(fp41);
+                a2.copy(fp42);
+                a1.sub(a2);
                 a1.reduce();
-	            expect(a1.toString()).to.equal(fp4sub.toString());
+                expect(a1.toString()).to.equal(fp4sub.toString());
 
                 // test negative of a FP4
                 var fp4neg = readFP4(vectors[k].FP4neg, ctx);
