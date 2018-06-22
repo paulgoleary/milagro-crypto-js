@@ -32,11 +32,14 @@ var fp_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFI
     'NUMS256E', 'NUMS384W', 'NUMS512W', 'BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'
 ];
 
-var readFP = function(string, ctx) {
-
+var readBIG = function(string, ctx) {
     while (string.length != ctx.BIG.MODBYTES*2) string = "00"+string;
+    return ctx.BIG.fromBytes(new Buffer(string, "hex"));
+}
+
+var readFP = function(string, ctx) {
     var fp = new ctx.FP(0);
-    var big = ctx.BIG.fromBytes(new Buffer(string, "hex"));
+    var big = readBIG(string, ctx);
     fp.bcopy(big);
 
     return fp;
@@ -60,9 +63,9 @@ describe('TEST FP ARITHMETIC', function() {
             if (fp_curves[j] == 'NUMS256W') {
                 field = field+"W";
             }
+            j++;
 
             var vectors = require('../testVectors/fp/'+field+'.json');
-            j++;
 
             for (var k = 0; k <= vectors.length - 1; k++) {
 
@@ -148,12 +151,10 @@ describe('TEST FP ARITHMETIC', function() {
                 expect(a1.toString()).to.equal(fpinv.toString());
 
                 // test power
-                var fppow = readFP(vectors[k].FPpow, ctx);
+                var fppow = readFP(vectors[k].FPexp, ctx);
                 a1.copy(fp1);
-                a2.copy(fp2);
-                var pow = a2.redc();
-                pow.norm();
-                a1 = a1.pow(pow);
+                a2 = readBIG(vectors[k].FP2, ctx);
+                a1 = a1.pow(a2);
                 a1.reduce();
                 expect(a1.toString()).to.equal(fppow.toString());
             }
