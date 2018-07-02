@@ -4,10 +4,6 @@
 [![Master Build Status](https://secure.travis-ci.org/milagro-crypto/milagro-crypto-js.png?branch=master)](https://travis-ci.org/milagro-crypto/milagro-crypto-js?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/milagro-crypto/milagro-crypto-js/badge.svg?branch=master)](https://coveralls.io/github/milagro-crypto/milagro-crypto-js?branch=master)
 
-[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/milagro-crypto/milagro-crypto-js/tree/develop)
-[![Develop Build Status](https://secure.travis-ci.org/milagro-crypto/milagro-crypto-js.png?branch=develop)](https://travis-ci.org/milagro-crypto/milagro-crypto-js?branch=develop)
-[![Coverage Status](https://coveralls.io/repos/github/milagro-crypto/milagro-crypto-js/badge.svg?branch=develop)](https://coveralls.io/github/milagro-crypto/milagro-crypto-js?branch=develop)
-
 
 * **category**:    Library
 * **copyright**:   2017 The Apache Software Foundation
