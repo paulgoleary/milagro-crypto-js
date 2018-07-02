@@ -20,7 +20,7 @@ under the License.
 
 /* Test GCM function - test driver and function exerciser for GCM API Functions */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var chai = require('chai');
 

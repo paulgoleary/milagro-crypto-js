@@ -4,10 +4,6 @@
 [![Master Build Status](https://secure.travis-ci.org/milagro-crypto/milagro-crypto-js.png?branch=master)](https://travis-ci.org/milagro-crypto/milagro-crypto-js?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/milagro-crypto/milagro-crypto-js/badge.svg?branch=master)](https://coveralls.io/github/milagro-crypto/milagro-crypto-js?branch=master)
 
-[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/milagro-crypto/milagro-crypto-js/tree/develop)
-[![Develop Build Status](https://secure.travis-ci.org/milagro-crypto/milagro-crypto-js.png?branch=develop)](https://travis-ci.org/milagro-crypto/milagro-crypto-js?branch=develop)
-[![Coverage Status](https://coveralls.io/repos/github/milagro-crypto/milagro-crypto-js/badge.svg?branch=develop)](https://coveralls.io/github/milagro-crypto/milagro-crypto-js?branch=develop)
-
 
 * **category**:    Library
 * **copyright**:   2017 The Apache Software Foundation
@@ -25,7 +21,7 @@
 
 * MCJS supports the standards for RSA, ECDH, ECIES, ECDSA and M-PIN, AES-GCM encryption/decryption, SHA256, SHA384, SHA512 and SHA3 hash functions and a cryptographically secure random number generator. Furthermore we recently added New Hope, a post-quantum key exchange.
 
-* MCJS is [Node.js](https://nodejs.org/en/) compatible. A conversion script is provided to make the library browser compatible (see some examples below).
+* MCJS is [Node.js](https://nodejs.org/en/) compatible and browser compatible (see some examples below).
 
 ## Install and run  tests
 
@@ -92,20 +88,12 @@ In the `/example` directory there are many simple script that show how to use th
 
 ## Run examples
 
-[Node.js](https://nodejs.org/en/) examples are provided - please see `./examples/`. Use the following commands to run an example
+[Node.js](https://nodejs.org/en/) examples are provided - please see `./examples/node`. Use the following command to run an example
 
 ```
-node ./examples/example_ECC_NIST256.js
+node ./examples/node/example_ECC_NIST256.js
 ```
 
 #### Browsers
 
-The build.sh script will convert the Node.js library source code and an 
-example into browser compatible code.
- 
-```
-./build.sh -f ./examples/example_RSA2048_ECDSA_NIST256.js
-```
-
-There is an example conversion  in this directory `./src/browser` with an example output `./examples.js`.
-In order to run the example open the index.html file in a browser and check the console output.
+The library source code is browser compatible. The browser examples are locates in `./examples/browser`.

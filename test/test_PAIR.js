@@ -19,13 +19,13 @@ under the License.
 
 /* Test MPIN - test driver and function exerciser for MPIN API Functions */
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var chai = require('chai');
 
 var expect = chai.expect;
 
-pf_curves = ["BN254", "BN254CX", "BLS383"];
+var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
 
 for (var i = pf_curves.length - 1; i >= 0; i--) {
 

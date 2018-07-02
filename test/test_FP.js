@@ -24,17 +24,22 @@ under the License.
 
 var chai = require('chai');
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var expect = chai.expect;
 
-var all_curves = ['ANSSI', 'BN254', 'BN254CX', 'BLS383', 'BRAINPOOL', 'ED25519', 'GOLDILOCKS', 'HIFIVE', 'NIST256', 'NIST521'];
+var fp_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'NIST384', 'C41417', 'NIST521', 'NUMS256W',
+    'NUMS256E', 'NUMS384W', 'NUMS512W', 'BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'
+];
+
+var readBIG = function(string, ctx) {
+    while (string.length != ctx.BIG.MODBYTES*2) string = "00"+string;
+    return ctx.BIG.fromBytes(new Buffer(string, "hex"));
+}
 
 var readFP = function(string, ctx) {
-
-    while (string.length != ctx.BIG.MODBYTES*2) string = "00"+string;
     var fp = new ctx.FP(0);
-    var big = ctx.BIG.fromBytes(new Buffer(string, "hex"));
+    var big = readBIG(string, ctx);
     fp.bcopy(big);
 
     return fp;
@@ -43,14 +48,24 @@ describe('TEST FP ARITHMETIC', function() {
 
 	var j = 0;
 
-    for (var i = 0; i < all_curves.length; i++) {
+    for (var i = 0; i < fp_curves.length; i++) {
 
 
-        it('test '+all_curves[i], function(done) {
+        it('test '+fp_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(all_curves[j]);
-            var vectors = require('../testVectors/fp/'+all_curves[j]+'.json');
+            var ctx = new CTX(fp_curves[j]);
+
+            // Select appropriate field for the curve
+            var  field = ctx.config["FIELD"];
+            if (fp_curves[j] == 'NUMS256E') {
+                field = field+"E";
+            }
+            if (fp_curves[j] == 'NUMS256W') {
+                field = field+"W";
+            }
             j++;
+
+            var vectors = require('../testVectors/fp/'+field+'.json');
 
             for (var k = 0; k <= vectors.length - 1; k++) {
 
@@ -136,12 +151,10 @@ describe('TEST FP ARITHMETIC', function() {
                 expect(a1.toString()).to.equal(fpinv.toString());
 
                 // test power
-                var fppow = readFP(vectors[k].FPpow, ctx);
+                var fppow = readFP(vectors[k].FPexp, ctx);
                 a1.copy(fp1);
-                a2.copy(fp2);
-                var pow = a2.redc();
-                pow.norm();
-                a1 = a1.pow(pow);
+                a2 = readBIG(vectors[k].FP2, ctx);
+                a1 = a1.pow(a2);
                 a1.reduce();
                 expect(a1.toString()).to.equal(fppow.toString());
             }

@@ -22,12 +22,12 @@ under the License.
 
 var chai = require('chai');
 
-var CTX = require("../src/node/ctx");
+var CTX = require("../index");
 
 var expect = chai.expect;
 
-var all_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'C25519', 'NIST384', 'C41417',
-    'NIST521', 'NUMS256W', 'NUMS256E', 'NUMS384W', 'NUMS384E', 'NUMS512W', 'NUMS512E', 'BN254', 'BN254CX', 'BLS383'
+var all_curves = ['ED25519', 'GOLDILOCKS', 'NIST256', 'BRAINPOOL', 'ANSSI', 'HIFIVE', 'C25519', 'NIST384', 'C41417', 'NIST521', 'NUMS256W',
+    'NUMS256E', 'NUMS384W', 'NUMS384E', 'NUMS512W', 'NUMS512E', 'BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'
 ];
 
 for (var i = all_curves.length - 1; i >= 0; i--) {
