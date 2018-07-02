@@ -28,54 +28,35 @@ var expect = chai.expect;
 
 var pf_curves = ['BN254', 'BN254CX', 'BLS383', 'BLS461', 'FP256BN', 'FP512BN'];
 
-var padToMODBYTES = function(string, ctx) {
-
-    while (string.length != ctx.BIG.MODBYTES*2) {
-         string = "00"+string;
-    }
-
-    return string;
-
+var readBIG = function(string, ctx) {
+    while (string.length != ctx.BIG.MODBYTES*2){string = "00"+string;}
+    return ctx.BIG.fromBytes(new Buffer(string, "hex"));
 }
 
 var readFP2 = function(string, ctx) {
 
     string = string.split(",");
-    var cox = string[0];
-    var coy = string[1];
+    var cox = string[0].slice(1);
+    var coy = string[1].slice(0,-1);
 
-    cox = padToMODBYTES(cox, ctx);
-    coy = padToMODBYTES(coy, ctx);
-
+    var bigx = readBIG(cox,ctx);
+    var bigy = readBIG(coy,ctx);
     var fp2 = new ctx.FP2(0);
-    var bigx = ctx.BIG.fromBytes(new Buffer(cox, "hex"));
-    var bigy = ctx.BIG.fromBytes(new Buffer(coy, "hex"));
     fp2.bset(bigx,bigy);
 
     return fp2;
 }
 
-var readFP4 = function(string, ctx, curve) {
+var readFP4 = function(string, ctx) {
 
-    var X = new ctx.FP2(0);
-    var Y = new ctx.FP2(0);
+    var X, Y;
 
-	string = string.split(":");
-	var cox = string[0].split(",");
-	var coy = string[1].split(",");
+    string = string.split("],[");
+    var cox = string[0].slice(1) + "]";
+    var coy = "[" + string[1].slice(0,-1);
 
-    cox[0] = padToMODBYTES(cox[0], ctx);
-    cox[1] = padToMODBYTES(cox[1], ctx);
-    coy[0] = padToMODBYTES(coy[0], ctx);
-    coy[1] = padToMODBYTES(coy[1], ctx);
-
-    var Xx = ctx.BIG.fromBytes(new Buffer(cox[0], "hex"));
-    var Xy = ctx.BIG.fromBytes(new Buffer(cox[1], "hex"));
-    var Yx = ctx.BIG.fromBytes(new Buffer(coy[0], "hex"));
-    var Yy = ctx.BIG.fromBytes(new Buffer(coy[1], "hex"));
-
-    X.bset(Xx,Xy);
-    Y.bset(Yx,Yy);
+    X = readFP2(cox,ctx);
+    Y = readFP2(coy,ctx);
     var fp4 = new ctx.FP4(0);
     fp4.set(X,Y);
 
@@ -84,23 +65,24 @@ var readFP4 = function(string, ctx, curve) {
 
 describe('TEST FP4 ARITHMETIC', function() {
 
-	var j =0;
+    var j =0;
 
     for (var i = 0; i < pf_curves.length; i++) {
 
 
         it('test '+pf_curves[i], function(done) {
             this.timeout(0);
-            var ctx = new CTX(pf_curves[j]);
-            var vectors = require('../testVectors/fp4/'+pf_curves[j]+'.json');
+            curve = pf_curves[j];
             j++;
+            var ctx = new CTX(curve);
+            var vectors = require('../testVectors/fp4/'+curve+'.json');
 
             for (var k = 0; k < vectors.length; k++) {
 
-            	// test commutativity of addition
-                var fp41 = readFP4(vectors[k].FP41,ctx,pf_curves[j]);
-                var fp42 = readFP4(vectors[k].FP42,ctx,pf_curves[j]);
-                var fp4add = readFP4(vectors[k].FP4add,ctx,pf_curves[j]);
+                // test commutativity of addition
+                var fp41 = readFP4(vectors[k].FP41,ctx);
+                var fp42 = readFP4(vectors[k].FP42,ctx);
+                var fp4add = readFP4(vectors[k].FP4add,ctx);
 
                 var a1 = new ctx.FP4(0);
                 var a2 = new ctx.FP4(0);
@@ -110,22 +92,22 @@ describe('TEST FP4 ARITHMETIC', function() {
                 expect(a1.toString()).to.equal(fp4add.toString());
                 a1.copy(fp41);
                 a2.add(a1);
-				expect(a2.toString()).to.equal(fp4add.toString());
+                expect(a2.toString()).to.equal(fp4add.toString());
 
-				// test associativity of addition
-	            a2.add(fp4add);
-	            a1.copy(fp41);
+                // test associativity of addition
+                a2.add(fp4add);
+                a1.copy(fp41);
                 a1.add(fp4add);
                 a1.add(fp42);
-	            expect(a1.toString()).to.equal(a2.toString());
+                expect(a1.toString()).to.equal(a2.toString());
 
-	            // test subtraction
-	            var fp4sub = readFP4(vectors[k].FP4sub, ctx);
-	            a1.copy(fp41);
-	            a2.copy(fp42);
-	            a1.sub(a2);
+                // test subtraction
+                var fp4sub = readFP4(vectors[k].FP4sub, ctx);
+                a1.copy(fp41);
+                a2.copy(fp42);
+                a1.sub(a2);
                 a1.reduce();
-	            expect(a1.toString()).to.equal(fp4sub.toString());
+                expect(a1.toString()).to.equal(fp4sub.toString());
 
                 // test negative of a FP4
                 var fp4neg = readFP4(vectors[k].FP4neg, ctx);
@@ -180,10 +162,10 @@ describe('TEST FP4 ARITHMETIC', function() {
 
                 // test power
                 var fp4pow = readFP4(vectors[k].FP4pow, ctx);
-                var scalar = ctx.BIG.fromBytes(new Buffer(vectors[k].BIGsc, "hex"));
-                scalar.norm();
+                var BIGsc1 = readBIG(vectors[k].BIGsc1, ctx);
+                BIGsc1.norm();
                 a1.copy(fp41);
-                a1 = a1.pow(scalar);
+                a1 = a1.pow(BIGsc1);
                 a1.reduce();
                 expect(a1.toString()).to.equal(fp4pow.toString());
 
@@ -202,11 +184,11 @@ describe('TEST FP4 ARITHMETIC', function() {
                 expect(a1.toString()).to.equal(fp4mulj.toString());
 
                 // // test the XTR addition function r=w*x-conj(x)*y+z
-                // var fp4xtrA = readFP4(vectors[k].FP4_xtrA, ctx);
-                // a1.copy(fp41);
-                // a1.xtr_A(fp42,fp4add,fp4sub);
-                // a1.reduce();
-                // expect(a1.toString()+" "+k).to.equal(fp4xtrA.toString()+" "+k);
+                var fp4xtrA = readFP4(vectors[k].FP4xtrA, ctx);
+                a1.copy(fp42);
+                a1.xtr_A(fp41,fp4add,fp4sub);
+                a1.reduce();
+                expect(a1.toString()+" "+k).to.equal(fp4xtrA.toString()+" "+k);
 
                 // test the XTR addition function r=w*x-conj(x)*y+z
                 var fp4xtrD = readFP4(vectors[k].FP4xtrD, ctx);
@@ -215,6 +197,22 @@ describe('TEST FP4 ARITHMETIC', function() {
                 a1.reduce();
                 expect(a1.toString()).to.equal(fp4xtrD.toString());
 
+                // test the XTR single power r=Tr(x^e)
+                var fp4xtrpow = readFP4(vectors[k].FP4xtrpow, ctx);
+                var fp121 = readFP4(vectors[k].FP121, ctx);
+                a1 = fp121.xtr_pow(BIGsc1);
+                a1.reduce();
+                expect(a1.toString()).to.equal(fp4xtrpow.toString());
+
+                // test the XTR double power r=Tr(x^e)
+                var fp4xtrpow2 = readFP4(vectors[k].FP4xtrpow2, ctx);
+                var fp122 = readFP4(vectors[k].FP122, ctx);
+                var fp123 = readFP4(vectors[k].FP123, ctx);
+                var fp124 = readFP4(vectors[k].FP124, ctx);
+                var BIGsc2 = readBIG(vectors[k].BIGsc2, ctx);
+                a1 = fp121.xtr_pow2(fp122,fp123,fp124,BIGsc2,BIGsc1);
+                a1.reduce();
+                expect(a1.toString()).to.equal(fp4xtrpow2.toString());
             }
             done();
         });

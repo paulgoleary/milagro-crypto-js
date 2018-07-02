@@ -129,7 +129,7 @@ var PAIR = function(ctx) {
         /* Optimal R-ate pairing */
         ate: function(P, Q) {
             var fa, fb, f, x, n, n3, K, lv,
-                Qx, Qy, A, r, nb,
+                Qx, Qy, A, r, nb, bt,
                 i;
 
             fa = new ctx.BIG(0);
@@ -151,7 +151,7 @@ var PAIR = function(ctx) {
             if (ctx.ECP.CURVE_PAIRING_TYPE == ctx.ECP.BN) {
                 n.pmul(6);
                 if (ctx.ECP.SIGN_OF_X == ctx.ECP.POSITIVEX) {
-                    n.inc(2)
+                    n.inc(2);
                 } else {
                     n.dec(2);
                 }
@@ -175,13 +175,13 @@ var PAIR = function(ctx) {
             A.copy(P);
             nb = n3.nbits();
 
-            for (var i = nb - 2; i >= 1; i--) {
+            for (i = nb - 2; i >= 1; i--) {
                 r.sqr();
                 lv = PAIR.line(A, A, Qx, Qy);
 
                 r.smul(lv,ctx.ECP.SEXTIC_TWIST);
 
-                var bt=n3.bit(i)-n.bit(i);
+                bt=n3.bit(i)-n.bit(i);
 
                 if (bt == 1) {
                     lv = PAIR.line(A, P, Qx, Qy);
@@ -242,7 +242,7 @@ var PAIR = function(ctx) {
             if (ctx.ECP.CURVE_PAIRING_TYPE == ctx.ECP.BN) {
                 n.pmul(6);
                 if (ctx.ECP.SIGN_OF_X == ctx.ECP.POSITIVEX) {
-                    n.inc(2)
+                    n.inc(2);
                 } else {
                     n.dec(2);
                 }
@@ -269,7 +269,7 @@ var PAIR = function(ctx) {
             B.copy(R);
             nb = n3.nbits();
 
-            for (var i = nb - 2; i >= 1; i--) {
+            for (i = nb - 2; i >= 1; i--) {
                 r.sqr();
                 lv = PAIR.line(A, A, Qx, Qy);
                 r.smul(lv,ctx.ECP.SEXTIC_TWIST);
