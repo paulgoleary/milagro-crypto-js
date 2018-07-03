@@ -48,7 +48,7 @@ var Utils = function() {
         },
 
         bytestostring: function(b) {
-            return String.fromCharCode(...b);
+            return String.fromCharCode.apply(String,b);
         },
 
         stringtobytes: function(s) {
