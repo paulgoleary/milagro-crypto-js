@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC -//W3C//DTD HTML 4.01 Transitional//EN>
+<html>
+<head>
+<title>Browser test</title>
+<script src="../src/rand.js"></script>
+<script src="../src/rom_curve.js"></script>
+<script src="../src/rom_field.js"></script>
+<script src="../src/uint64.js"></script>
+<script src="../src/aes.js"></script>
+<script src="../src/big.js"></script>
+<script src="../src/gcm.js"></script>
+<script src="../src/hash256.js"></script>
+<script src="../src/hash384.js"></script>
+<script src="../src/hash512.js"></script>
+<script src="../src/sha3.js"></script>
+<script src="../src/newhope.js"></script>
+<script src="../src/nhs.js"></script>
+<script src="../src/fp.js"></script>
+<script src="../src/fp2.js"></script>
+<script src="../src/fp4.js"></script>
+<script src="../src/fp12.js"></script>
+<script src="../src/ff.js"></script>
+<script src="../src/rsa.js"></script>
+<script src="../src/ecp.js"></script>
+<script src="../src/ecp2.js"></script>
+<script src="../src/ecdh.js"></script>
+<script src="../src/pair.js"></script>
+<script src="../src/mpin.js"></script>
+<script src="../src/ctx.js"></script>
+</head>
+
+<body>
+<h1>Test AFGH Primitives</h1>
+
+<script type="text/javascript">
+
+    var ctx = new CTX("BN254");
+
+    var r = new ctx.BIG(0);
+    var x = new ctx.BIG(0);
+    var y = new ctx.BIG(0);
+
+    // Set curve order
+    r.rcopy(ctx.ROM_CURVE.CURVE_Order);
+
+    var G = new ctx.ECP(0);
+
+    // Set generator of G1
+    x.rcopy(ctx.ROM_CURVE.CURVE_Gx);
+    y.rcopy(ctx.ROM_CURVE.CURVE_Gy);
+    G.setxy(x,y);
+
+    var qx = new ctx.FP2(0);
+    var qy = new ctx.FP2(0);
+
+    var Q = new ctx.ECP2(0);
+
+    // Set generator of G2
+    x.rcopy(ctx.ROM_CURVE.CURVE_Pxa);
+    y.rcopy(ctx.ROM_CURVE.CURVE_Pxb);
+    qx.bset(x, y);
+    x.rcopy(ctx.ROM_CURVE.CURVE_Pya);
+    y.rcopy(ctx.ROM_CURVE.CURVE_Pyb);
+    qy.bset(x, y);
+    Q.setxy(qx, qy);
+
+    var Z = new ctx.FP12(0);
+
+    // e(genG2, genG1) = Z
+    Z = ctx.PAIR.ate(Q, G);
+
+    var zBytes = []
+    Z.toBytes(zBytes)
+    console.log("length of Z bytes: " + zBytes.length)
+    console.log("value of Z: " + Z.toString())
+
+    var zInv = new ctx.FP12(0);
+    zInv.copy(Z);
+    zInv.inverse();
+    zInv.reduce();
+    console.log("value of Z inv: " + zInv.toString())
+
+    // assume 100M data, 374 bytes per point = 268,817
+    // takes about 1m30sec to do this - might not cut it :/
+    var i;
+    for (i = 0; i < 268817; i++) {
+        var zMul;
+        // zExp = Z.pow(new ctx.BIG(i))
+        zMul = Z.mul(zInv) // TODO: test for 1 ???
+        if (i % 1000 == 0) {
+            console.log("Z exp: " + i)
+        }
+    }
+
+</script>
+</body>
+</html>
